@@ -3,13 +3,13 @@
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 .utmp/
-WanderingWarrior/[Ll]ibrary/
-WanderingWarrior/[Tt]emp/
-WanderingWarrior/[Oo]bj/
-WanderingWarrior/[Bb]uild/
-WanderingWarrior/[Bb]uilds/
-WanderingWarrior/[Ll]ogs/
-WanderingWarrior/[Uu]ser[Ss]ettings/
+IWP/[Ll]ibrary/
+IWP/[Tt]emp/
+IWP/[Oo]bj/
+IWP/[Bb]uild/
+IWP/[Bb]uilds/
+IWP/[Ll]ogs/
+IWP/[Uu]ser[Ss]ettings/
 *.log
 
 
