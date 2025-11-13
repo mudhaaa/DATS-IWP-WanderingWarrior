@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterKlass : ScriptableObject
 {
     [SerializeField] private int health;
+    [SerializeField] private int mana;
     [SerializeField] private int strength;
     [SerializeField] private int magic;
     [SerializeField] private int endurance;
@@ -20,6 +21,18 @@ public class CharacterKlass : ScriptableObject
     }
 
     public void SetHealth(int value)
+    {
+        health = value;
+    }
+    #endregion
+    // Mana
+    #region Health
+    public int GetMana()
+    {
+        return mana;
+    }
+
+    public void SetMana(int value)
     {
         health = value;
     }

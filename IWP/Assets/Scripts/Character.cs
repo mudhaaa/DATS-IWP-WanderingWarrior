@@ -1,37 +1,60 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Manages each Player character's in-game stats & input handling
+/// </summary>
 public class Character : MonoBehaviour
 {
     #region Stats
     [SerializeField] private CharacterKlass klass;
-    [SerializeField] public int currHealth;       
+
+    [SerializeField] private int currHealth;       
+    [SerializeField] private int currMana;       
     [SerializeField] private int currStrength;
     [SerializeField] private int currMagic;
     [SerializeField] private int currEndurance;
     [SerializeField] private int currSpeed;
 
-    [SerializeField] private Aktion unique1;
-    [SerializeField] private Aktion unique2;
-
     // Orignal Stats
     private int originalHealth;
+    private int originalMana;
     private int originalStrength;
     private int originalMagic;
     private int originalEndurance;
     private int originalSpeed;
     #endregion
 
+    [SerializeField] private Aktion unique1;
+    [SerializeField] private Aktion unique2;
+    [SerializeField] private List<Aktion> listOfAktions;
+
+    #region Inputs
     [SerializeField] private InputActionAsset playerActionAsset;
     private InputActionMap playerActionMap;
     private InputAction confirmAction;
+    private bool isConfirmPressed;
+    public bool IsConfirmPressed() { return  isConfirmPressed; }
 
-    public void OnStart(int playerNo)
+    private InputAction hitAction;
+    private bool isHitPressed;
+    public bool IsHitPressed() { return isHitPressed; }
+
+    private InputAction navigateAction;
+    public Vector2 GetNavigateInput() { return navigateAction.ReadValue<Vector2>(); }
+    #endregion
+
+    private CanvasManager canvasManager;
+    private AktionManager aktionManager;
+
+    public void OnStart(int playerNo, CanvasManager cm, AktionManager am)
     {
         #region Stats
         // Simpan original values dari klass
         originalHealth = klass.GetHealth();
+        originalMana = klass.GetMana();
         originalStrength = klass.GetStrength();
         originalMagic = klass.GetMagic();
         originalEndurance = klass.GetEndurance();
@@ -39,52 +62,95 @@ public class Character : MonoBehaviour
 
         // Set current stats sama dengan original
         currHealth = originalHealth;
+        currMana = originalMana;
         currStrength = originalStrength;
         currMagic = originalMagic;
         currEndurance = originalEndurance;
         currSpeed = originalSpeed;
-        unique1 = klass.GetUnique1();
-        unique2 = klass.GetUnique2();
         #endregion
 
+        unique1 = klass.GetUnique1();
+        unique2 = klass.GetUnique2();
+
+        listOfAktions = new List<Aktion>();
+        listOfAktions.Add(unique1);
+        listOfAktions.Add(unique2);
+
+        #region Inputs
         playerActionMap = playerActionAsset.FindActionMap(playerNo == 1 ? "player1" : "player2");
+
         confirmAction = playerActionMap.FindAction("Confirm");
         confirmAction.Enable();
+
+        hitAction = playerActionMap.FindAction("Hit");
+        hitAction.Enable();
+
+        navigateAction = playerActionMap.FindAction("Navigate");
+        navigateAction.Enable();
+        #endregion
+
+        canvasManager = cm;
+        aktionManager = am;
     }
 
-    // Update is called once per frame
+    // Update is called once per frame 
     public void OnUpdate()
     {
-        if (confirmAction.IsPressed())
+        isConfirmPressed = confirmAction.IsPressed();
+        isHitPressed = hitAction.triggered;
+
+        if (isConfirmPressed)
         {
             if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.P1turn)
-                BattleManager.instance.ChangeState(BattleManager.BattleStates.P2turn);
-            else 
-                BattleManager.instance.ChangeState(BattleManager.BattleStates.P1turn);
+            {
+                BattleManager.instance.ActivateBattleBarState();
+            }
+            else if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.P2turn)
+            {
+                BattleManager.instance.ActivateBattleBarState();
+            }
+        }
 
+    }
+
+    public void EnableActions()
+    {
+        foreach(InputAction action in playerActionMap)
+        {
+            action.Enable();
         }
     }
 
+    public void DisableActions()
+    {
+        foreach (InputAction action in playerActionMap)
+        {
+            action.Disable();
+        }
+    }
 
     #region Stat Getters
     // Getter untuk original stats
     public int GetOriginalHealth() { return originalHealth; }
+    public int GetOriginalMana() { return originalMana; }
     public int GetOriginalStrength() { return originalStrength; }
     public int GetOriginalMagic() { return originalMagic; }
     public int GetOriginalEndurance() { return originalEndurance; }
     public int GetOriginalSpeed() { return originalSpeed; }
 
     // Getter untuk current stats
+    public int GetHealth() { return currHealth; }
+    public int GetMana() { return currMana; }
     public int GetStrength() { return currStrength; }
     public int GetMagic() { return currMagic; }
     public int GetEndurance() { return currEndurance; }
     public int GetSpeed() { return currSpeed; }
-    public Aktion GetUnique1() { return unique1; }
-    public Aktion GetUnique2() { return unique2; }
+    public Aktion GetAktion(int i) { return listOfAktions[i]; }
     #endregion
     #region Stat Setter
     // Setter untuk current stats
     public void SetHealth(int value) { currHealth = value; }
+    public void SetMana(int value) { currMana = value; }
     public void SetStrength(int value) { currStrength = value; }
     public void SetMagic(int value) { currMagic = value; }
     public void SetEndurance(int value) { currEndurance = value; }
@@ -96,6 +162,7 @@ public class Character : MonoBehaviour
     public void ResetToOriginalStats()
     {
         currHealth = originalHealth;
+        currMana = originalMana;
         currStrength = originalStrength;
         currMagic = originalMagic;
         currEndurance = originalEndurance;

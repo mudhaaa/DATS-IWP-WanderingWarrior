@@ -25,7 +25,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Exit",
+                    "name": "Hit",
                     "type": "Button",
                     "id": "5f1d9791-edb8-4285-a526-94a5e1022985",
                     "expectedControlType": "",
@@ -108,7 +108,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit",
+                    "action": "Hit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -137,7 +137,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Exit",
+                    "name": "Hit",
                     "type": "Button",
                     "id": "bb127f06-7311-495d-9c17-5be859280698",
                     "expectedControlType": "",
@@ -220,7 +220,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Exit",
+                    "action": "Hit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.github.syedirfan74.vfxmaker": "https://github.com/SyedIrfan74/VFX-Maker.git?path=Assets/Package",
     "com.unity.ai.navigation": "2.0.7",
     "com.unity.cinemachine": "3.1.5",
     "com.unity.collab-proxy": "2.10.0",

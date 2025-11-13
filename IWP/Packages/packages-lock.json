@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.github.syedirfan74.vfxmaker": {
+      "version": "https://github.com/SyedIrfan74/VFX-Maker.git?path=Assets/Package",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.visualeffectgraph": "17.0.4"
+      },
+      "hash": "382901897e510602a0e4aa6884b3175d73ad6a88"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.7",
       "depth": 0,
@@ -219,6 +228,15 @@
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
+      }
+    },
+    "com.unity.visualeffectgraph": {
+      "version": "17.0.4",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.shadergraph": "17.0.4",
+        "com.unity.render-pipelines.core": "17.0.4"
       }
     },
     "com.unity.visualscripting": {

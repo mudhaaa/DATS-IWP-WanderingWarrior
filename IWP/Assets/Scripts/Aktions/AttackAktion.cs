@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
@@ -6,15 +7,8 @@ using UnityEngine;
 public class AttackAktion : Aktion
 {
 
-    [SerializeField] private float healthCost;
-    [SerializeField] private float manaCost;
-
-    public DamageMultiplier damageMultiplier;
-    public AttackType attackType;
-
-    public float GetHealthCost() { return healthCost; }
-    public float GetManaCost() { return manaCost; }
-    public float GetDamageMultiplier() 
+    [SerializeField] private DamageMultiplier damageMultiplier;
+    public float GetDamageMultiplier()
     {
         if (damageMultiplier == DamageMultiplier.Light) return 0.5f;
         else if (damageMultiplier == DamageMultiplier.Medium) return 1f;
@@ -22,7 +16,16 @@ public class AttackAktion : Aktion
         else return 0f;
     }
 
+    [SerializeField] private AttackType attackType;
     public AttackType GetAttackType() { return attackType; }
+
+    // crit effect
+    [SerializeField] private StatusType onCritEffect;
+    public StatusType GetCritEffect() { return onCritEffect; }
+
+    // stat change
+    [SerializeField] private List<Stat> statsChange;
+    public List<Stat> GetStatChange() { return statsChange; }
 
     public enum AttackType
     {
