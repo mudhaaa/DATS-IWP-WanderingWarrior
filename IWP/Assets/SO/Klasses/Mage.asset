@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   health: 440
-  strength: 50
-  magic: 175
-  endurance: 85
-  speed: 50
-  unique1: {fileID: 0}
-  unique2: {fileID: 0}
+  mana: 560
+  strength: 58
+  magic: 170
+  endurance: 80
+  speed: 92
+  unique1: {fileID: 11400000, guid: 249c95f4f9a91c14b95a0e9bd735f673, type: 2}
+  unique2: {fileID: 11400000, guid: 6fb160e1282507b45ae3c4e04a20b347, type: 2}

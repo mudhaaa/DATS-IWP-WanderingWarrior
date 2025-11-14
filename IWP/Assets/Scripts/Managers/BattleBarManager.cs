@@ -73,6 +73,7 @@ public class BattleBarManager : MonoBehaviour
             }
         }
     }
+
     bool p1pressed = false;
     bool p2pressed = false;
     public void WaitForInput()

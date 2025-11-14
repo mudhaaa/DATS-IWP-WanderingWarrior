@@ -19,17 +19,21 @@ public class Character : MonoBehaviour
     [SerializeField] private int currSpeed;
 
     // Orignal Stats
-    private int originalHealth;
-    private int originalMana;
-    private int originalStrength;
-    private int originalMagic;
-    private int originalEndurance;
-    private int originalSpeed;
+    [SerializeField] private int originalHealth;
+    [SerializeField] private int originalMana;
+    [SerializeField] private int originalStrength;
+    [SerializeField] private int originalMagic;
+    [SerializeField] private int originalEndurance;
+    [SerializeField] private int originalSpeed;
     #endregion
 
+    #region Aktion
     [SerializeField] private Aktion unique1;
     [SerializeField] private Aktion unique2;
     [SerializeField] private List<Aktion> listOfAktions;
+    public List<Aktion> GetAktionList() { return listOfAktions; }
+    public Aktion GetAktion(int i) { return listOfAktions[i]; }
+    #endregion
 
     #region Inputs
     [SerializeField] private InputActionAsset playerActionAsset;
@@ -69,12 +73,14 @@ public class Character : MonoBehaviour
         currSpeed = originalSpeed;
         #endregion
 
+        #region Aktion
         unique1 = klass.GetUnique1();
         unique2 = klass.GetUnique2();
 
         listOfAktions = new List<Aktion>();
         listOfAktions.Add(unique1);
         listOfAktions.Add(unique2);
+        #endregion
 
         #region Inputs
         playerActionMap = playerActionAsset.FindActionMap(playerNo == 1 ? "player1" : "player2");
@@ -96,7 +102,7 @@ public class Character : MonoBehaviour
     // Update is called once per frame 
     public void OnUpdate()
     {
-        isConfirmPressed = confirmAction.IsPressed();
+        isConfirmPressed = confirmAction.triggered;
         isHitPressed = hitAction.triggered;
 
         if (isConfirmPressed)
@@ -145,7 +151,6 @@ public class Character : MonoBehaviour
     public int GetMagic() { return currMagic; }
     public int GetEndurance() { return currEndurance; }
     public int GetSpeed() { return currSpeed; }
-    public Aktion GetAktion(int i) { return listOfAktions[i]; }
     #endregion
     #region Stat Setter
     // Setter untuk current stats

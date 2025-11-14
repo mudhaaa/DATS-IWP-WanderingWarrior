@@ -30,7 +30,7 @@ public class BattleManager : MonoBehaviour
     [Header("Battle States")]
     [SerializeField] private BattleStates currState;
     public BattleStates GetCurrState() { return currState; }
-    public bool IsAttackState() { return currState == BattleStates.P1attack || currState == BattleStates.P2attack; }    
+    public bool IsAttackState() { return currState == BattleStates.P1attack || currState == BattleStates.P2attack; }
     public enum BattleStates
     {
         RoundStart,
@@ -54,7 +54,7 @@ public class BattleManager : MonoBehaviour
     [Header("Players")]
     [SerializeField] private PlayerManager playerManager;
     [SerializeField] private bool player1start;
-      
+
 
     private int damageFormula1; // damage calculation done by player 1
     private int damageFormula2; // damage calculation done by player 2
@@ -68,7 +68,7 @@ public class BattleManager : MonoBehaviour
     {
         canvasManager.OnStart(playerManager);
         barManager.OnStart(playerManager);
-        aktionManager.OnStart(playerManager, barManager);
+        aktionManager.OnStart(playerManager, barManager, canvasManager);
     }
 
     public void OnFirstTurn()
@@ -77,6 +77,7 @@ public class BattleManager : MonoBehaviour
 
         cameraManager.OnStart();
 
+        canvasManager.OnFirstTurn();
     }
 
     // Update is called once per frame
@@ -86,19 +87,35 @@ public class BattleManager : MonoBehaviour
         canvasManager.OnUpdate();
         barManager.OnUpdate();
         cameraManager.OnUpdate();
-
+        aktionManager.OnUpdate();
     }
-    
+
     public void ActivateBattleBarState()
     {
-        if(currState == BattleStates.P1turn) currState = BattleStates.P1attack;
-        else if(currState == BattleStates.P2turn) currState = BattleStates.P2attack;
+        if (currState == BattleStates.P1turn) currState = BattleStates.P1attack;
+        else if (currState == BattleStates.P2turn) currState = BattleStates.P2attack;
 
     }
 
     public void EndAttackState()
     {
-        if (currState == BattleStates.P1attack) currState = BattleStates.P2turn;
-        else if (currState == BattleStates.P2attack) currState = BattleStates.P1turn;
+
+        if (currState == BattleStates.P1attack)
+        {
+            aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
+            currState = BattleStates.P2turn;
+        }
+        else if (currState == BattleStates.P2attack)
+        {
+            aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
+            currState = BattleStates.P1turn;
+        }
+        CheckForRoundWinner();
+    }
+
+    public void CheckForRoundWinner()
+    {
+        if(playerManager.GetPlayer1().GetHealth() <= 0) currState = BattleStates.P2winRound;
+        if(playerManager.GetPlayer2().GetHealth() <= 0) currState = BattleStates.P1winRound;
     }
 }

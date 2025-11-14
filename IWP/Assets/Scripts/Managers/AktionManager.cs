@@ -10,12 +10,14 @@ public class AktionManager : MonoBehaviour
     private BattleBarSlider sliderP1;
     private BattleBarSlider sliderP2;
 
+    private CanvasManager canvasManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void OnStart(PlayerManager pm, BattleBarManager bm)
+    public void OnStart(PlayerManager pm, BattleBarManager bm, CanvasManager cm)
     {
         playerManager = pm;
         battleBarManager = bm;
+        canvasManager = cm;
 
         player1 = pm.GetPlayer1();
         player2 = pm.GetPlayer2();
@@ -27,29 +29,43 @@ public class AktionManager : MonoBehaviour
     // Update is called once per frame
     public void OnUpdate()
     {
-        
+
+
     }
 
     public void AktionEffect(Character player, Aktion aktion)
     {
+        if (player == player1)
+        {
+            if (sliderP1.GetBarState() == BattleBarSlider.BarState.Bad) return;
+        }
+        else if (player == player2)
+        {
+            if (sliderP2.GetBarState() == BattleBarSlider.BarState.Bad) return;
+        }
+
         int newHealth = player.GetHealth() - Mathf.CeilToInt(player.GetOriginalHealth() * aktion.GetHealthCost());
         player.SetHealth(newHealth);
         int newMana = player.GetMana() - Mathf.CeilToInt(player.GetOriginalMana() * aktion.GetManaCost());
         player.SetMana(newMana);
 
+        canvasManager.UpdatePlayerBars(player); 
+
         AttackAktion attack = aktion as AttackAktion;
         if (attack != null) 
         { 
-            Debug.Log("This is attack");
+            Debug.Log("This is attack of name " + attack.GetName());
             if (player == player1)
             {
-                newHealth = DamageCalculation(attack, player1, player2, sliderP1.GetBarState(), sliderP2.GetBarState());
+                newHealth = player2.GetHealth() - DamageCalculation(attack, player1, player2, sliderP1.GetBarState(), sliderP2.GetBarState());
                 player2.SetHealth(newHealth);
+                canvasManager.UpdatePlayerBars(player2);
             }
             else if (player == player2)
             {
-                newHealth = DamageCalculation(attack, player2, player1, sliderP2.GetBarState(), sliderP1.GetBarState());
+                newHealth = player1.GetHealth() - DamageCalculation(attack, player2, player1, sliderP2.GetBarState(), sliderP1.GetBarState());
                 player1.SetHealth(newHealth);
+                canvasManager.UpdatePlayerBars(player1);
             }
         }
 
@@ -73,6 +89,13 @@ public class AktionManager : MonoBehaviour
             if (status.GetStatChange().Contains(Stat.Endurance)) OnBuffEndurance(target);   
             if (status.GetStatChange().Contains(Stat.Magic))         OnBuffMagic(target);
             if (status.GetStatChange().Contains(Stat.Speed))         OnBuffSpeed(target);
+        }
+        else if (status.GetStatusType() == StatusType.Decrease)
+        {
+            if (status.GetStatChange().Contains(Stat.Strength))   OnNerfStrength(target);
+            if (status.GetStatChange().Contains(Stat.Endurance)) OnNerfEndurance(target);   
+            if (status.GetStatChange().Contains(Stat.Magic))         OnNerfMagic(target);
+            if (status.GetStatChange().Contains(Stat.Speed))         OnNerfSpeed(target);
         }
     }
 
@@ -118,6 +141,48 @@ public class AktionManager : MonoBehaviour
     }
     #endregion
 
+    #region Decrease
+    void OnNerfStrength(Character target)
+    {
+        if (target.GetStrength() < target.GetOriginalStrength())
+        {
+            int newValue;
+            newValue = Mathf.CeilToInt(target.GetStrength() * 1.3f);
+            target.SetStrength(newValue);
+        }
+    }
+
+    void OnNerfMagic(Character target)
+    {
+        if (target.GetMagic() < target.GetOriginalMagic())
+        {
+            int newValue;
+            newValue = Mathf.CeilToInt(target.GetMagic() * 1.3f);
+            target.SetMagic(newValue);
+        }
+    }
+
+    void OnNerfEndurance(Character target)
+    {
+        if (target.GetEndurance() < target.GetOriginalEndurance())
+        {
+            int newValue;
+            newValue = Mathf.CeilToInt(target.GetEndurance() * 1.3f);
+            target.SetEndurance(newValue);
+        }
+    }
+
+    void OnNerfSpeed(Character target)
+    {
+        if (target.GetSpeed() < target.GetOriginalSpeed())
+        {
+            int newValue;
+            newValue = Mathf.CeilToInt(target.GetSpeed() * 1.3f);
+            target.SetSpeed(newValue);
+        }
+    }
+    #endregion
+
     #region Restore
     void OnRestoreHealth(Character target)
     {
@@ -131,6 +196,7 @@ public class AktionManager : MonoBehaviour
         target.SetMana(newValue);
     }
     #endregion
+
 
     int DamageCalculation(AttackAktion attack, Character atk, Character def, BattleBarSlider.BarState attackState, BattleBarSlider.BarState defenseState)
     {
@@ -168,6 +234,7 @@ public class AktionManager : MonoBehaviour
                 attackBar = 1f;
                 break;
             case BattleBarSlider.BarState.Bad:
+                attackBar = 0;
                 break;
         }
         float defenceBar = 0;
@@ -180,9 +247,11 @@ public class AktionManager : MonoBehaviour
                 defenceBar = 1f;
                 break;
             case BattleBarSlider.BarState.Good:
+                defenceBar = 0;
                 break;
         }
 
-        return Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar);
+        Debug.Log("Damage Dealt:" + Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 0, 999));
+        return Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 0, 999);
     }
 }

@@ -10,26 +10,34 @@ using static BattleManager;
 
 public class CanvasManager : MonoBehaviour
 {
-    [Header("Player 1")]
+    [Header("Player 1 Status Bar")]
+    [SerializeField] private Slider healthBarP1;
+    [SerializeField] private Slider manaBarP1;
+
+    [Header("Player 1 Aktion List")]
     [SerializeField] private Canvas canvasP1;
-    [SerializeField] private CanvasGroup aktionListP1;
     [SerializeField] private TMP_Text battleBarTextP1;
 
+    [SerializeField] private CanvasGroup aktionListP1;
     [SerializeField] private int aktionListIndexP1;
     [SerializeField] private Aktion currentAktionP1;
     [SerializeField] private List<GameObject> aktionUIListP1;
-    [SerializeField] private RectTransform selectionArrowP1;
+    public Aktion GetP1Aktion() {  return currentAktionP1; }
     public int GetP1ListIndex() { return aktionListIndexP1; }
 
-    [Header("Player 2")]
+    [Header("Player 2 Status Bar")]
+    [SerializeField] private Slider healthBarP2;
+    [SerializeField] private Slider manaBarP2;
+
+    [Header("Player 2 Aktion List")]
     [SerializeField] private Canvas canvasP2;
-    [SerializeField] private CanvasGroup aktionListP2;
     [SerializeField] private TMP_Text battleBarTextP2;
 
+    [SerializeField] private CanvasGroup aktionListP2;
     [SerializeField] private int aktionListIndexP2;
     [SerializeField] private Aktion currentAktionP2;
     [SerializeField] private List<GameObject> aktionUIListP2;
-    [SerializeField] private RectTransform selectionArrowP2;
+    public Aktion GetP2Aktion() { return currentAktionP2; }
     public int GetP2ListIndex() { return aktionListIndexP2; }
 
     [Header("HUD")]
@@ -55,6 +63,18 @@ public class CanvasManager : MonoBehaviour
         {
             aktionUIListP2.Add(aktionListP2.transform.GetChild(i).gameObject);
         }
+
+    }
+
+    public void OnFirstTurn()
+    {
+        healthBarP1.value = healthBarP1.maxValue = playerManager.GetPlayer1().GetOriginalHealth();
+        manaBarP1.value = manaBarP1.maxValue = playerManager.GetPlayer1().GetOriginalMana();
+
+        healthBarP2.value = healthBarP2.maxValue = playerManager.GetPlayer2().GetOriginalHealth();
+        manaBarP2.value = manaBarP2.maxValue = playerManager.GetPlayer2().GetOriginalMana();
+
+        SetAktionList();
     }
 
     // Update is called once per frame
@@ -64,10 +84,59 @@ public class CanvasManager : MonoBehaviour
 
         AktionListUpdate();
 
-        UpdateAktionListArrow();
+        UpdateSelectionAktionList();
     }
 
-    void UpdateAktionListArrow()
+    public void UpdatePlayerBars(Character player)
+    {
+        if (player == playerManager.GetPlayer1())
+        {
+            healthBarP1.DOValue(player.GetHealth(), 0.5f);
+            manaBarP1.DOValue(player.GetMana(), 0.5f);
+        }
+        else if (player == playerManager.GetPlayer2())
+        {
+            healthBarP2.DOValue(player.GetHealth(), 0.5f);
+            manaBarP2.DOValue(player.GetMana(), 0.5f);
+        }
+    }
+
+    void SetAktionList()
+    {
+        // player 1
+        for (int i = playerManager.GetPlayer1().GetAktionList().Count - 1; i >= 0; i--)
+        {
+            GameObject go = Instantiate(aktionSlotUIPrefab);
+
+            go.transform.SetParent(aktionListP1.transform);
+
+            go.transform.localScale = Vector3.one;
+            aktionUIListP1.Add(go);
+
+            AktionSlotUI ui = go.GetComponent<AktionSlotUI>();
+            ui.SetText(playerManager.GetPlayer1().GetAktion(i));
+
+            Debug.Log("Penis 1 added " + go.name);
+        }
+
+        //player 2
+        for (int x = playerManager.GetPlayer2().GetAktionList().Count - 1; x >= 0; x--)
+        {
+            GameObject go2 = Instantiate(aktionSlotUIPrefab);
+
+            go2.transform.SetParent(aktionListP2.transform);
+
+            go2.transform.localScale = Vector3.one;
+            aktionUIListP2.Add(go2);
+
+            AktionSlotUI ui2 = go2.GetComponent<AktionSlotUI>();
+            ui2.SetText(playerManager.GetPlayer2().GetAktion(x));
+
+            Debug.Log("Penis 2 added " + go2.name);
+        }
+    }
+
+    void UpdateSelectionAktionList()
     {
         if (BattleManager.instance.GetCurrState() == BattleStates.P1turn)
         {
@@ -75,14 +144,19 @@ public class CanvasManager : MonoBehaviour
             {
                 aktionListIndexP1 -= 1;
                 aktionListIndexP1 = Mathf.Clamp(aktionListIndexP1, 0, aktionUIListP1.Count - 1);
+                aktionUIListP1[aktionListIndexP1 + 1].transform.DOScale(Vector3.one, 1f);
+
             }
             else if (playerManager.GetPlayer1().GetNavigateInput() == Vector2.down)
             {
                 aktionListIndexP1 += 1;
                 aktionListIndexP1 = Mathf.Clamp(aktionListIndexP1, 0, aktionUIListP1.Count - 1);
+                aktionUIListP1[aktionListIndexP1 - 1].transform.DOScale(Vector3.one, 1f);
+
             }
-            selectionArrowP1.SetParent(aktionUIListP1[aktionListIndexP1].GetComponent<RectTransform>());
-            selectionArrowP1.anchoredPosition = new Vector2(700, 0);
+            aktionUIListP1[aktionListIndexP1].transform.DOScale(Vector3.one * .75f, 1f);
+
+            currentAktionP1 = playerManager.GetPlayer1().GetAktion(aktionListIndexP1);
         }
         else if (BattleManager.instance.GetCurrState() == BattleStates.P2turn)
         {
@@ -90,15 +164,19 @@ public class CanvasManager : MonoBehaviour
             {
                 aktionListIndexP2 -= 1;
                 aktionListIndexP2 = Mathf.Clamp(aktionListIndexP2, 0, aktionUIListP2.Count - 1);
+                aktionUIListP2[aktionListIndexP2 + 1].transform.DOScale(Vector3.one, 1f);
+
             }
             else if (playerManager.GetPlayer2().GetNavigateInput() == Vector2.down)
             {
                 aktionListIndexP2 += 1;
                 aktionListIndexP2 = Mathf.Clamp(aktionListIndexP2, 0, aktionUIListP2.Count - 1);
-            }
-            selectionArrowP2.SetParent(aktionUIListP2[aktionListIndexP2].GetComponent<RectTransform>());
-            selectionArrowP2.anchoredPosition = new Vector2(-100, 0);
+                aktionUIListP2[aktionListIndexP2 - 1].transform.DOScale(Vector3.one, 1f);
 
+            }
+            aktionUIListP2[aktionListIndexP2].transform.DOScale(Vector3.one * .75f, 1f);
+
+            currentAktionP2 = playerManager.GetPlayer2().GetAktion(aktionListIndexP2);
         }
     }
 
@@ -124,8 +202,23 @@ public class CanvasManager : MonoBehaviour
         aktionListP1.gameObject.SetActive(p1 == 1);
         aktionListP1.DOFade(p1, 1f);
 
+        if (p1 == 0)
+        {
+            foreach (GameObject t in aktionUIListP1)
+            {
+                t.transform.localScale = Vector3.one;
+            }
+        }
+
         aktionListP2.gameObject.SetActive(p2 == 1);
         aktionListP2.DOFade(p2, 1f);
+        if (p2 == 0)
+        {
+            foreach (GameObject t in aktionUIListP2)
+            {
+                t.transform.localScale = Vector3.one;
+            }
+        }
     }
 
     public void BattleBarTextChange(BattleStates whosAttacking)

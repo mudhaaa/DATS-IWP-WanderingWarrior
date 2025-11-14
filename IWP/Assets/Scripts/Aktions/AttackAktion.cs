@@ -10,7 +10,7 @@ public class AttackAktion : Aktion
     [SerializeField] private DamageMultiplier damageMultiplier;
     public float GetDamageMultiplier()
     {
-        if (damageMultiplier == DamageMultiplier.Light) return 0.5f;
+        if (damageMultiplier == DamageMultiplier.Weak) return 0.5f;
         else if (damageMultiplier == DamageMultiplier.Medium) return 1f;
         else if (damageMultiplier == DamageMultiplier.Heavy) return 1.5f;
         else return 0f;
@@ -38,7 +38,7 @@ public class AttackAktion : Aktion
     public enum DamageMultiplier
     {
         None,
-        Light,
+        Weak,
         Medium,
         Heavy
     }
