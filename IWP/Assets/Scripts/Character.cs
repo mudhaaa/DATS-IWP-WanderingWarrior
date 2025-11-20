@@ -11,20 +11,24 @@ public class Character : MonoBehaviour
     #region Stats
     [SerializeField] private CharacterKlass klass;
 
+    [Header("Current Stats")]
     [SerializeField] private int currHealth;       
     [SerializeField] private int currMana;       
     [SerializeField] private int currStrength;
     [SerializeField] private int currMagic;
     [SerializeField] private int currEndurance;
     [SerializeField] private int currSpeed;
+    [SerializeField] private float currCrit;
 
     // Orignal Stats
+    [Header("Original Stats")]
     [SerializeField] private int originalHealth;
     [SerializeField] private int originalMana;
     [SerializeField] private int originalStrength;
     [SerializeField] private int originalMagic;
     [SerializeField] private int originalEndurance;
     [SerializeField] private int originalSpeed;
+    [SerializeField] private float originalCrit;
     #endregion
 
     #region Aktion
@@ -33,6 +37,12 @@ public class Character : MonoBehaviour
     [SerializeField] private List<Aktion> listOfAktions;
     public List<Aktion> GetAktionList() { return listOfAktions; }
     public Aktion GetAktion(int i) { return listOfAktions[i]; }
+    #endregion
+
+    #region Enhancements
+    [SerializeField] private List<Enhancement> enhancementsList;
+
+    public List<Enhancement> GetEnhancementsList() { return enhancementsList; }
     #endregion
 
     #region Inputs
@@ -63,6 +73,7 @@ public class Character : MonoBehaviour
         originalMagic = klass.GetMagic();
         originalEndurance = klass.GetEndurance();
         originalSpeed = klass.GetSpeed();
+        originalCrit = 1.5f;
 
         // Set current stats sama dengan original
         currHealth = originalHealth;
@@ -71,6 +82,7 @@ public class Character : MonoBehaviour
         currMagic = originalMagic;
         currEndurance = originalEndurance;
         currSpeed = originalSpeed;
+        currCrit = originalCrit;
         #endregion
 
         #region Aktion
@@ -105,17 +117,7 @@ public class Character : MonoBehaviour
         isConfirmPressed = confirmAction.triggered;
         isHitPressed = hitAction.triggered;
 
-        if (isConfirmPressed)
-        {
-            if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.P1turn)
-            {
-                BattleManager.instance.ActivateBattleBarState();
-            }
-            else if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.P2turn)
-            {
-                BattleManager.instance.ActivateBattleBarState();
-            }
-        }
+
 
     }
 
@@ -143,6 +145,7 @@ public class Character : MonoBehaviour
     public int GetOriginalMagic() { return originalMagic; }
     public int GetOriginalEndurance() { return originalEndurance; }
     public int GetOriginalSpeed() { return originalSpeed; }
+    public float GetOriginalCrit() { return originalCrit; }
 
     // Getter untuk current stats
     public int GetHealth() { return currHealth; }
@@ -151,6 +154,7 @@ public class Character : MonoBehaviour
     public int GetMagic() { return currMagic; }
     public int GetEndurance() { return currEndurance; }
     public int GetSpeed() { return currSpeed; }
+    public float GetCrit() { return currCrit; }
     #endregion
     #region Stat Setter
     // Setter untuk current stats
@@ -160,18 +164,32 @@ public class Character : MonoBehaviour
     public void SetMagic(int value) { currMagic = value; }
     public void SetEndurance(int value) { currEndurance = value; }
     public void SetSpeed(int value) { currSpeed = value; }
+    public void SetCrit(float  value) { currCrit = value; }
     public void SetUnique1(Aktion value) { unique1 = value; }
     public void SetUnique2(Aktion value) { unique2 = value; }
 
+    //Setter untuk original stats
+    public void SetOriginalHealth(int value) { currHealth = value; }
+    public void SetOriginalMana(int value) { currMana = value; }
+    public void SetOriginalStrength(int value) { currStrength = value; }
+    public void SetOriginalMagic(int value) { currMagic = value; }
+    public void SetOriginalEndurance(int value) { currEndurance = value; }
+    public void SetOriginalSpeed(int value) { currSpeed = value; }
+    public void SetOriginalCrit(float value) { currCrit = value; }
+
     // Function untuk reset stats ke original
-    public void ResetToOriginalStats()
+    public void ResetHealthAndMana()
     {
         currHealth = originalHealth;
         currMana = originalMana;
+    }
+    public void ResetToOriginalStats()
+    {
         currStrength = originalStrength;
         currMagic = originalMagic;
         currEndurance = originalEndurance;
         currSpeed = originalSpeed;
+        currCrit = originalCrit;
     }
     #endregion
 }

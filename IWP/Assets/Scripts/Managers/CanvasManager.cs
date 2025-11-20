@@ -47,11 +47,13 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private Image fightImage;
 
     private PlayerManager playerManager;
+    private EnhancementManager enhancementManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void OnStart(PlayerManager pm)
+    public void OnStart(PlayerManager pm, EnhancementManager em)
     {
         playerManager = pm;
+        enhancementManager = em;
 
         StartCoroutine(IntroSequence());
 
@@ -64,6 +66,7 @@ public class CanvasManager : MonoBehaviour
             aktionUIListP2.Add(aktionListP2.transform.GetChild(i).gameObject);
         }
 
+        SetAktionList();
     }
 
     public void OnFirstTurn()
@@ -74,7 +77,6 @@ public class CanvasManager : MonoBehaviour
         healthBarP2.value = healthBarP2.maxValue = playerManager.GetPlayer2().GetOriginalHealth();
         manaBarP2.value = manaBarP2.maxValue = playerManager.GetPlayer2().GetOriginalMana();
 
-        SetAktionList();
     }
 
     // Update is called once per frame
@@ -87,6 +89,7 @@ public class CanvasManager : MonoBehaviour
         UpdateSelectionAktionList();
     }
 
+    #region BattleBars
     public void UpdatePlayerBars(Character player)
     {
         if (player == playerManager.GetPlayer1())
@@ -100,7 +103,23 @@ public class CanvasManager : MonoBehaviour
             manaBarP2.DOValue(player.GetMana(), 0.5f);
         }
     }
+    public void BattleBarTextChange(BattleStates whosAttacking)
+    {
 
+        if (whosAttacking == BattleStates.P1attack)
+        {
+            battleBarTextP1.text = "Attack!";
+            battleBarTextP2.text = "Defend!";
+        }
+        else if (whosAttacking == BattleStates.P2attack)
+        {
+            battleBarTextP2.text = "Attack!";
+            battleBarTextP1.text = "Defend!";
+        }
+    }
+    #endregion
+
+    #region AktionList
     void SetAktionList()
     {
         // player 1
@@ -157,6 +176,18 @@ public class CanvasManager : MonoBehaviour
             aktionUIListP1[aktionListIndexP1].transform.DOScale(Vector3.one * .75f, 1f);
 
             currentAktionP1 = playerManager.GetPlayer1().GetAktion(aktionListIndexP1);
+
+            if (playerManager.GetPlayer1().IsConfirmPressed())
+            {
+                if (currentAktionP1 as AttackAktion != null)
+                {
+                    BattleManager.instance.ChangeState(BattleStates.P1attack);
+                }
+                else
+                {
+                    BattleManager.instance.EnterStatusAktionState(1);
+                }
+            }
         }
         else if (BattleManager.instance.GetCurrState() == BattleStates.P2turn)
         {
@@ -177,6 +208,18 @@ public class CanvasManager : MonoBehaviour
             aktionUIListP2[aktionListIndexP2].transform.DOScale(Vector3.one * .75f, 1f);
 
             currentAktionP2 = playerManager.GetPlayer2().GetAktion(aktionListIndexP2);
+
+            if (playerManager.GetPlayer2().IsConfirmPressed())
+            {
+                if (currentAktionP2 as AttackAktion != null)
+                {
+                    BattleManager.instance.ChangeState(BattleStates.P2attack);
+                }
+                else
+                {
+                    BattleManager.instance.EnterStatusAktionState(2);
+                }
+            }
         }
     }
 
@@ -191,7 +234,7 @@ public class CanvasManager : MonoBehaviour
         {
             ActivateAktionLists(0, 1);
         }
-        else if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.P2attack || BattleManager.instance.GetCurrState() == BattleManager.BattleStates.P1attack)
+        else if (BattleManager.instance.IsAttackState() || BattleManager.instance.GetCurrState() == BattleStates.Enhancement || BattleManager.instance.GetCurrState() == BattleStates.StatusAktion)
         {
             ActivateAktionLists(0, 0);
         }
@@ -220,23 +263,17 @@ public class CanvasManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    public void BattleBarTextChange(BattleStates whosAttacking)
+    #region Enhancement
+    void ActivateEnhancement()
     {
 
-        if(whosAttacking == BattleStates.P1attack)
-        {
-            battleBarTextP1.text = "Attack!";
-            battleBarTextP2.text = "Defend!";
-        }
-        else if(whosAttacking == BattleStates.P2attack)
-        {
-            battleBarTextP2.text = "Attack!";
-            battleBarTextP1.text = "Defend!";
-        }
     }
 
-    IEnumerator IntroSequence()
+    #endregion
+
+    public IEnumerator IntroSequence()
     {
         canvasIntro.gameObject.SetActive(true);
         fightImage.gameObject.SetActive(false);

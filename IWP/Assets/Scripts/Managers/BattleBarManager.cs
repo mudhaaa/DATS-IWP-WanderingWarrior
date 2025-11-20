@@ -54,9 +54,9 @@ public class BattleBarManager : MonoBehaviour
                     if (battleBarP1.value >= battleBarP1.maxValue) p1barMax = true;
                     else if (battleBarP1.value <= battleBarP1.minValue) p1barMax = false;
                     if (!p1barMax)
-                        battleBarP1.value += Time.deltaTime * 100 / (playerManager.GetPlayer1().GetSpeed());
+                        battleBarP1.value += Time.deltaTime * 100 / (playerManager.GetPlayer1().GetSpeed() /2);
                     else
-                        battleBarP1.value -= Time.deltaTime * 100 / (playerManager.GetPlayer1().GetSpeed());
+                        battleBarP1.value -= Time.deltaTime * 100 / (playerManager.GetPlayer1().GetSpeed() / 2);
                 }
 
                 if (!p2pressed)
@@ -65,9 +65,9 @@ public class BattleBarManager : MonoBehaviour
                     else if (battleBarP2.value <= battleBarP2.minValue) p2barMax = false;
 
                     if (!p2barMax)
-                        battleBarP2.value += Time.deltaTime * 100 / (playerManager.GetPlayer2().GetSpeed());
+                        battleBarP2.value += Time.deltaTime * 100 / (playerManager.GetPlayer2().GetSpeed() / 2);
                     else
-                        battleBarP2.value -= Time.deltaTime * 100 / (playerManager.GetPlayer2().GetSpeed());
+                        battleBarP2.value -= Time.deltaTime * 100 / (playerManager.GetPlayer2().GetSpeed() / 2);
                 }
 
             }

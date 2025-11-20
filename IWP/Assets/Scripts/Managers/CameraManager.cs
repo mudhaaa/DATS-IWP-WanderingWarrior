@@ -14,16 +14,14 @@ public class CameraManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnStart()
     {
-        //cinemachine.Follow = cameraTransforms[0];
-        //cinemachine.LookAt = cameraTransforms[0];
         Camera.main.transform.DOLocalRotateQuaternion(cameraTransforms[0].localRotation, 0.5f);
         Camera.main.transform.DOMove(cameraTransforms[0].position, 0.5f);
     }
 
     public void ChangeCameraPos(int i)
     {
-        Camera.main.transform.DOLocalRotateQuaternion(cameraTransforms[i].localRotation, 1f);
-        Camera.main.transform.DOMove(cameraTransforms[i].position, 1f);
+        Camera.main.transform.DOLocalRotateQuaternion(cameraTransforms[i].localRotation, .5f);
+        Camera.main.transform.DOMove(cameraTransforms[i].position, .5f);
     }
 
     // Update is called once per frame
@@ -37,7 +35,9 @@ public class CameraManager : MonoBehaviour
         {
             ChangeCameraPos(2);
         }
-        else if (BattleManager.instance.IsAttackState())
+        else if (BattleManager.instance.IsAttackState() || 
+                 BattleManager.instance.GetCurrState() == BattleStates.Enhancement || 
+                 BattleManager.instance.GetCurrState() == BattleStates.StatusAktion)
         {
             ChangeCameraPos(0);
         }

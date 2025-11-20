@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: PhysHeavy
+  m_Name: KnightUnique_FierceSlash
   m_EditorClassIdentifier: 
-  aktionName: Assault
-  description: A Heavy Strength attack. On Crit, it reduces your Endurance.
-  healthCost: 0.09
+  aktionName: Fierce Slash
+  description: Heavy Strength attack.
+  healthCost: 0.13
   manaCost: 0
   damageMultiplier: 3
   attackType: 1
   critEffects:
-  - changeType: 4
-    statType: 3
+  - changeType: 1
+    statType: 1
     isSelfTarget: 1
   hitEffects: []

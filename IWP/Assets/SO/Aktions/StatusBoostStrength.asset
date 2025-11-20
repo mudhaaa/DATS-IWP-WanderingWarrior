@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: PhysMed
+  m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
+  m_Name: StatusBoostStrength
   m_EditorClassIdentifier: 
-  aktionName: Strike
-  description: A Medium Strength attack. On Crit, it increases your speed.
-  healthCost: 0.06
-  manaCost: 0
-  damageMultiplier: 2
-  attackType: 1
-  critEffects:
+  aktionName: Strength Up
+  description: Status Aktion that increases Strength
+  healthCost: 0
+  manaCost: 0.1
+  statusEffects:
   - changeType: 1
-    statType: 4
+    statType: 1
     isSelfTarget: 1
-  hitEffects: []

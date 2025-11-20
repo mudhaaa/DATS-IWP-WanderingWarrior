@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Status",
+                    "type": "Button",
+                    "id": "0e56509a-730d-4646-ac29-0c1eeef7981c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -111,6 +120,17 @@
                     "action": "Hit",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ec7db93-878d-49df-8b17-502651992163",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Status",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -144,13 +164,22 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Status",
+                    "type": "Button",
+                    "id": "3a8e03aa-85d3-4afe-9786-d858d4fbfad5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "b0f8f8b9-ae30-4b46-a2f4-648996da4a09",
-                    "path": "<Keyboard>/p",
+                    "path": "<Keyboard>/o",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -221,6 +250,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Hit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42f64b00-a4cf-4541-9864-c7af21bf10f5",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Status",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

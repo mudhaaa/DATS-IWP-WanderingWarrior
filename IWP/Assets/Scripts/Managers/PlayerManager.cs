@@ -1,9 +1,11 @@
+using NUnit.Framework;
 using UnityEngine;
 using static BattleManager;
 using static UnityEditor.Rendering.InspectorCurveEditor;
 
 public class PlayerManager : MonoBehaviour
 {
+
     [SerializeField] private Character player1;
     public Character GetPlayer1() {  return player1; }
 
@@ -19,8 +21,14 @@ public class PlayerManager : MonoBehaviour
         canvasManager = cm;
         aktionManager = am;
 
-        player1.OnStart(1, cm, am);
-        player2.OnStart(2, cm, am);
+        player1.OnStart(1, canvasManager, aktionManager);
+        player2.OnStart(2, canvasManager, aktionManager);
+    }
+
+    public void OnFirstTurn()
+    {
+
+
 
         SpeedCheck();
     }
@@ -29,11 +37,13 @@ public class PlayerManager : MonoBehaviour
     public void OnUpdate()
     {
         if(BattleManager.instance.GetCurrState() == BattleStates.P1turn || 
-            BattleManager.instance.IsAttackState()) 
+            BattleManager.instance.IsAttackState() || 
+            BattleManager.instance.GetCurrState() == BattleStates.Enhancement) 
             player1.OnUpdate();
 
         if (BattleManager.instance.GetCurrState() == BattleStates.P2turn ||
-            BattleManager.instance.IsAttackState()) 
+            BattleManager.instance.IsAttackState() ||
+            BattleManager.instance.GetCurrState() == BattleStates.Enhancement) 
             player2.OnUpdate();
     }
     public void SpeedCheck()

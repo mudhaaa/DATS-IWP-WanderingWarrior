@@ -13,6 +13,7 @@ public class AttackAktion : Aktion
         if (damageMultiplier == DamageMultiplier.Weak) return 0.5f;
         else if (damageMultiplier == DamageMultiplier.Medium) return 1f;
         else if (damageMultiplier == DamageMultiplier.Heavy) return 1.5f;
+        else if(damageMultiplier == DamageMultiplier.Massive) return 1.75f;
         else return 0f;
     }
 
@@ -20,12 +21,14 @@ public class AttackAktion : Aktion
     public AttackType GetAttackType() { return attackType; }
 
     // crit effect
-    [SerializeField] private StatusType onCritEffect;
-    public StatusType GetCritEffect() { return onCritEffect; }
+    [SerializeField] private List<StatusEffect> critEffects;
+    public List<StatusEffect> GetCritEffectList() { return critEffects; }
+    public StatusEffect GetCritEffect(int i) { return critEffects[i]; }
 
-    // stat change
-    [SerializeField] private List<Stat> statsChange;
-    public List<Stat> GetStatChange() { return statsChange; }
+    // hit effect
+    [SerializeField] private List<StatusEffect> hitEffects;
+    public List<StatusEffect> GetHitEffectList() { return hitEffects; }
+    public StatusEffect GetHitEffect(int i) { return hitEffects[i]; }
 
     public enum AttackType
     {
@@ -40,6 +43,7 @@ public class AttackAktion : Aktion
         None,
         Weak,
         Medium,
-        Heavy
+        Heavy,
+        Massive
     }
 }

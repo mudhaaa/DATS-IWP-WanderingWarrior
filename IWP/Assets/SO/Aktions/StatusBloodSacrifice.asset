@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: PhysHeavy
+  m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
+  m_Name: StatusBloodSacrifice
   m_EditorClassIdentifier: 
-  aktionName: Assault
-  description: A Heavy Strength attack. On Crit, it reduces your Endurance.
-  healthCost: 0.09
+  aktionName: Blood Sacrifice
+  description: Status Aktion that restores Mana in exchange for Health
+  healthCost: 0.05
   manaCost: 0
-  damageMultiplier: 3
-  attackType: 1
-  critEffects:
-  - changeType: 4
-    statType: 3
+  statusEffects:
+  - changeType: 3
+    statType: 7
     isSelfTarget: 1
-  hitEffects: []

@@ -10,16 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: PhysHeavy
+  m_Name: BulwarkUnique_ShieldBash
   m_EditorClassIdentifier: 
-  aktionName: Assault
-  description: A Heavy Strength attack. On Crit, it reduces your Endurance.
-  healthCost: 0.09
+  aktionName: Shield Bash
+  description: Medium Endurance attack. On Hit, it reduces enemy Speed. On Crit,
+    it reduces attacking stats.
+  healthCost: 0.1
   manaCost: 0
-  damageMultiplier: 3
-  attackType: 1
+  damageMultiplier: 2
+  attackType: 2
   critEffects:
-  - changeType: 4
-    statType: 3
-    isSelfTarget: 1
-  hitEffects: []
+  - changeType: 2
+    statType: 2
+    isSelfTarget: 0
+  - changeType: 2
+    statType: 1
+    isSelfTarget: 0
+  hitEffects:
+  - changeType: 2
+    statType: 4
+    isSelfTarget: 0

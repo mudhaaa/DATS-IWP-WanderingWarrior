@@ -10,16 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: PhysHeavy
+  m_Name: MageUnique_HellBlast
   m_EditorClassIdentifier: 
-  aktionName: Assault
-  description: A Heavy Strength attack. On Crit, it reduces your Endurance.
-  healthCost: 0.09
-  manaCost: 0
-  damageMultiplier: 3
-  attackType: 1
+  aktionName: Hell Blast
+  description: A Massive Magic attack. On Hit, it reduces Magic.
+  healthCost: 0
+  manaCost: 0.2
+  damageMultiplier: 4
+  attackType: 3
   critEffects:
   - changeType: 4
-    statType: 3
+    statType: 6
     isSelfTarget: 1
-  hitEffects: []
+  hitEffects:
+  - changeType: 2
+    statType: 2
+    isSelfTarget: 1

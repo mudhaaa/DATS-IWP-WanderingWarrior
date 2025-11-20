@@ -18,5 +18,5 @@ MonoBehaviour:
   magic: 55
   endurance: 165
   speed: 75
-  unique1: {fileID: 11400000, guid: 35d0fe2e0bf2ffc4597496e83227fde7, type: 2}
-  unique2: {fileID: 11400000, guid: 6b09dab4eb93ed343a657d0f3e4e4a5a, type: 2}
+  unique1: {fileID: 11400000, guid: cce80c2032348814d93b780ffe54d822, type: 2}
+  unique2: {fileID: 11400000, guid: 35d0fe2e0bf2ffc4597496e83227fde7, type: 2}

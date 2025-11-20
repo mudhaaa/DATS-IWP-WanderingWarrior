@@ -35,16 +35,16 @@ public class AktionManager : MonoBehaviour
 
     public void AktionEffect(Character player, Aktion aktion)
     {
-        if (player == player1)
+        if (player == player1 && aktion as AttackAktion != null)
         {
             if (sliderP1.GetBarState() == BattleBarSlider.BarState.Bad) return;
         }
-        else if (player == player2)
+        else if (player == player2 && aktion as AttackAktion != null)
         {
             if (sliderP2.GetBarState() == BattleBarSlider.BarState.Bad) return;
         }
 
-        int newHealth = player.GetHealth() - Mathf.CeilToInt(player.GetOriginalHealth() * aktion.GetHealthCost());
+        int newHealth = Mathf.Max(player.GetHealth() - Mathf.CeilToInt(player.GetOriginalHealth() * aktion.GetHealthCost()) , 1);
         player.SetHealth(newHealth);
         int newMana = player.GetMana() - Mathf.CeilToInt(player.GetOriginalMana() * aktion.GetManaCost());
         player.SetMana(newMana);
@@ -57,45 +57,166 @@ public class AktionManager : MonoBehaviour
             Debug.Log("This is attack of name " + attack.GetName());
             if (player == player1)
             {
-                newHealth = player2.GetHealth() - DamageCalculation(attack, player1, player2, sliderP1.GetBarState(), sliderP2.GetBarState());
-                player2.SetHealth(newHealth);
-                canvasManager.UpdatePlayerBars(player2);
+                AttackMove(attack, player1, player2);
             }
             else if (player == player2)
             {
-                newHealth = player1.GetHealth() - DamageCalculation(attack, player2, player1, sliderP2.GetBarState(), sliderP1.GetBarState());
-                player1.SetHealth(newHealth);
-                canvasManager.UpdatePlayerBars(player1);
+                AttackMove(attack, player2, player1);
             }
+
         }
 
         StatusAktion status = aktion as StatusAktion;
         if (status != null)
         {
+            Debug.Log("This is status of name " + status.GetName());
             StatusMove(status, player);
         }
     }
 
-    void StatusMove(StatusAktion status, Character target)
+    void AttackMove(AttackAktion attack, Character attacker, Character defender)
     {
-        if (status.GetStatusType() == StatusType.Restore)
+        BattleBarSlider.BarState defenceSlider = defender == player1 ? sliderP1.GetBarState() : sliderP2.GetBarState();
+        BattleBarSlider.BarState attackSlider = attacker == player1 ? sliderP1.GetBarState() : sliderP2.GetBarState();
+
+        //damage calculation
+        int newHealth = defender.GetHealth() - DamageCalculation(attack, attacker, defender, attackSlider, defenceSlider);
+        defender.SetHealth(newHealth);
+        canvasManager.UpdatePlayerBars(defender);
+
+        // call crit effects
+        if (attack.GetCritEffectList().Count > 0 && attackSlider == BattleBarSlider.BarState.Good)
         {
-            if (status.GetStatChange().Contains(Stat.Health))  OnRestoreHealth(target);            
-            else if (status.GetStatChange().Contains(Stat.Mana)) OnRestoreMana(target);            
+            Debug.Log("Activating OnCrit effects");
+            foreach (StatusEffect effect in attack.GetCritEffectList())
+            {
+                StatusMove(effect, attacker, effect.IsSelfTarget());
+            }
         }
-        else if (status.GetStatusType() == StatusType.Increase)
+
+        // call hit effects
+        if (attack.GetHitEffectList().Count > 0 && (attackSlider == BattleBarSlider.BarState.Good || attackSlider == BattleBarSlider.BarState.Mid) )
         {
-            if (status.GetStatChange().Contains(Stat.Strength))   OnBuffStrength(target);
-            if (status.GetStatChange().Contains(Stat.Endurance)) OnBuffEndurance(target);   
-            if (status.GetStatChange().Contains(Stat.Magic))         OnBuffMagic(target);
-            if (status.GetStatChange().Contains(Stat.Speed))         OnBuffSpeed(target);
+            Debug.Log("Activating OnHit effects");
+            foreach (StatusEffect effect in attack.GetHitEffectList())
+            {
+                StatusMove(effect, attacker, effect.IsSelfTarget());
+            }
         }
-        else if (status.GetStatusType() == StatusType.Decrease)
+    }
+
+    void StatusMove(StatusEffect effect, Character user, bool isSelfTarget)
+    {
+        Character target;
+        if (isSelfTarget)
         {
-            if (status.GetStatChange().Contains(Stat.Strength))   OnNerfStrength(target);
-            if (status.GetStatChange().Contains(Stat.Endurance)) OnNerfEndurance(target);   
-            if (status.GetStatChange().Contains(Stat.Magic))         OnNerfMagic(target);
-            if (status.GetStatChange().Contains(Stat.Speed))         OnNerfSpeed(target);
+            // target is if user is player1, player1, else, player2
+            target = user == player1 ? player1 : player2;
+        }
+        else
+        {
+            // target is if user is player1, player2, else, player1
+            target = user == player1 ? player2 : player1;
+        }
+
+        if (effect.GetStatusType() == StatusType.Restore)
+        {
+            Debug.Log("Activating Restore effect");
+            if (effect.GetStatType() == Stat.Health)    OnRestoreHealth(target);
+            if (effect.GetStatType() == Stat.Mana)      OnRestoreMana(target);
+        }
+        else if (effect.GetStatusType() == StatusType.Reduce)
+        {
+            Debug.Log("Activating Reduce effect");
+
+            if (effect.GetStatType() == Stat.Health)    OnReduceHealth(target);
+            if (effect.GetStatType() == Stat.Mana)      OnReduceMana(target);
+        }
+        else if (effect.GetStatusType() == StatusType.Increase)
+        {
+            Debug.Log("Activating Increase effect");
+
+            if (effect.GetStatType() == Stat.Strength)  OnBuffStrength(target);
+            if (effect.GetStatType() == Stat.Endurance) OnBuffEndurance(target);
+            if (effect.GetStatType() == Stat.Magic)     OnBuffMagic(target);
+            if (effect.GetStatType() == Stat.Speed)     OnBuffSpeed(target);
+            if (effect.GetStatType() == Stat.Crit)      OnBuffCrit(target);
+        }
+        else if (effect.GetStatusType() == StatusType.Decrease)
+        {
+            Debug.Log("Activating Decrease effect");
+
+            if (effect.GetStatType() == Stat.Strength)  OnNerfStrength(target);
+            if (effect.GetStatType() == Stat.Endurance) OnNerfEndurance(target);
+            if (effect.GetStatType() == Stat.Magic)     OnNerfMagic(target);
+            if (effect.GetStatType() == Stat.Speed)     OnNerfSpeed(target);
+            if (effect.GetStatType() == Stat.Crit)      OnNerfCrit(target);
+        }
+        else if (effect.GetStatusType() == StatusType.Reset)
+        {
+            Debug.Log("Activating Reset effect");
+
+            target.ResetToOriginalStats();
+        }
+    }
+    void StatusMove(StatusAktion status, Character user)
+    {
+        foreach (StatusEffect effect in status.GetStatusEffectList())
+        {
+            Character target;
+            if (effect.IsSelfTarget())
+            {
+                // target is if user is player1, player1, else, player2
+                target = user == player1 ? player1 : player2;
+            }
+            else
+            {
+                // target is if user is player1, player2, else, player1
+                target = user == player1 ? player2 : player1;
+            }
+
+
+            if (effect.GetStatusType() == StatusType.Restore)
+            {
+                Debug.Log("Activating Restore effect");
+
+                if (effect.GetStatType() == Stat.Health)    OnRestoreHealth(target);
+                if (effect.GetStatType() == Stat.Mana)      OnRestoreMana(target);
+            }
+            else if (effect.GetStatusType() == StatusType.Reduce)
+            {
+                Debug.Log("Activating Reduce effect");
+
+                if (effect.GetStatType() == Stat.Health)    OnReduceHealth(target);
+                if (effect.GetStatType() == Stat.Mana)      OnReduceMana(target);
+            }
+            else if (effect.GetStatusType() == StatusType.Increase)
+            {
+                Debug.Log("Activating Increase effect");
+
+                if (effect.GetStatType() == Stat.Strength)  OnBuffStrength(target);
+                if (effect.GetStatType() == Stat.Endurance) OnBuffEndurance(target);
+                if (effect.GetStatType() == Stat.Magic)     OnBuffMagic(target);
+                if (effect.GetStatType() == Stat.Speed)     OnBuffSpeed(target);
+                if (effect.GetStatType() == Stat.Crit)      OnBuffCrit(target);
+
+            }
+            else if (effect.GetStatusType() == StatusType.Decrease)
+            {
+                Debug.Log("Activating Decrease effect");
+
+                if (effect.GetStatType() == Stat.Strength)  OnNerfStrength(target);
+                if (effect.GetStatType() == Stat.Endurance) OnNerfEndurance(target);
+                if (effect.GetStatType() == Stat.Magic)     OnNerfMagic(target);
+                if (effect.GetStatType() == Stat.Speed)     OnNerfSpeed(target);
+                if (effect.GetStatType() == Stat.Crit)      OnNerfCrit(target);
+            }
+            else if (effect.GetStatusType() == StatusType.Reset)
+            {
+                Debug.Log("Activating Reset effect");
+
+                target.ResetToOriginalStats();
+            }
         }
     }
 
@@ -107,6 +228,7 @@ public class AktionManager : MonoBehaviour
             int newValue;
             newValue = Mathf.CeilToInt(target.GetStrength() * 1.3f);
             target.SetStrength(newValue);
+            Debug.Log($"[BUFF] {target.name}'s Strength increased");
         }
     }
 
@@ -117,6 +239,7 @@ public class AktionManager : MonoBehaviour
             int newValue;
             newValue = Mathf.CeilToInt(target.GetMagic() * 1.3f);
             target.SetMagic(newValue);
+            Debug.Log($"[BUFF] {target.name}'s Magic increased");
         }
     }
 
@@ -127,6 +250,7 @@ public class AktionManager : MonoBehaviour
             int newValue;
             newValue = Mathf.CeilToInt(target.GetEndurance() * 1.3f);
             target.SetEndurance(newValue);
+            Debug.Log($"[BUFF] {target.name}'s Endurance increased");
         }
     }
 
@@ -137,49 +261,53 @@ public class AktionManager : MonoBehaviour
             int newValue;
             newValue = Mathf.CeilToInt(target.GetSpeed() * 1.3f);
             target.SetSpeed(newValue);
+            Debug.Log($"[BUFF] {target.name}'s Speed increased");
         }
+    }
+
+    void OnBuffCrit(Character target)
+    {
+        target.SetCrit(2);
+        Debug.Log($"[BUFF] {target.name}'s Crit increased");
     }
     #endregion
 
     #region Decrease
     void OnNerfStrength(Character target)
     {
-        if (target.GetStrength() < target.GetOriginalStrength())
-        {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetStrength() * 1.3f);
-            target.SetStrength(newValue);
-        }
+        int newValue;
+        newValue = Mathf.CeilToInt(target.GetStrength() * 0.7f);
+        target.SetStrength(newValue);
+        Debug.Log($"[NERF] {target.name}'s Strength decreased");
     }
 
     void OnNerfMagic(Character target)
     {
-        if (target.GetMagic() < target.GetOriginalMagic())
-        {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetMagic() * 1.3f);
-            target.SetMagic(newValue);
-        }
+        int newValue;
+        newValue = Mathf.CeilToInt(target.GetMagic() * 0.7f);
+        target.SetMagic(newValue);
+        Debug.Log($"[NERF] {target.name}'s Magic decreased");
     }
 
     void OnNerfEndurance(Character target)
     {
-        if (target.GetEndurance() < target.GetOriginalEndurance())
-        {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetEndurance() * 1.3f);
-            target.SetEndurance(newValue);
-        }
+        int newValue;
+        newValue = Mathf.CeilToInt(target.GetEndurance() * 0.7f);
+        target.SetEndurance(newValue);
+        Debug.Log($"[NERF] {target.name}'s Endurance decreased");
     }
 
     void OnNerfSpeed(Character target)
     {
-        if (target.GetSpeed() < target.GetOriginalSpeed())
-        {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetSpeed() * 1.3f);
-            target.SetSpeed(newValue);
-        }
+        int newValue;
+        newValue = Mathf.CeilToInt(target.GetSpeed() * 0.7f);
+        target.SetSpeed(newValue);
+        Debug.Log($"[NERF] {target.name}'s Speed decreased");
+    }
+    void OnNerfCrit(Character target)
+    {
+        target.SetCrit(1.5f);
+        Debug.Log($"[NERF] {target.name}'s Crit decreased");
     }
     #endregion
 
@@ -188,12 +316,34 @@ public class AktionManager : MonoBehaviour
     {
         int newValue = Mathf.CeilToInt(target.GetHealth() + target.GetOriginalMana() * .07f);
         target.SetHealth(newValue);
+        canvasManager.UpdatePlayerBars(target);
+        Debug.Log($"[RESTORE] {target.name}'s Health restored");
     }
 
     void OnRestoreMana(Character target)
     {
         int newValue = Mathf.CeilToInt(target.GetMana() + target.GetOriginalHealth() * .05f);
         target.SetMana(newValue);
+        canvasManager.UpdatePlayerBars(target);
+        Debug.Log($"[RESTORE] {target.name}'s Mana restored");
+    }
+    #endregion
+
+    #region Reduce
+    void OnReduceHealth(Character target)
+    {
+        int newValue = Mathf.CeilToInt(target.GetHealth() - target.GetOriginalMana() * .07f);
+        target.SetHealth(newValue);
+        canvasManager.UpdatePlayerBars(target);
+        Debug.Log($"[REDUCE] {target.name}'s Health reduced");
+    }
+
+    void OnReduceMana(Character target)
+    {
+        int newValue = Mathf.CeilToInt(target.GetMana() - target.GetOriginalHealth() * .05f);
+        target.SetMana(newValue);
+        canvasManager.UpdatePlayerBars(target);
+        Debug.Log($"[REDUCE] {target.name}'s Mana reduced");
     }
     #endregion
 
@@ -227,31 +377,39 @@ public class AktionManager : MonoBehaviour
         float attackBar = 0;
         switch (attackState)
         {
+            // critical hit
             case BattleBarSlider.BarState.Good:
-                attackBar = 1.5f;
+                attackBar = atk.GetCrit();
                 break;
+            // normal hit
             case BattleBarSlider.BarState.Mid:
                 attackBar = 1f;
                 break;
+            // miss
             case BattleBarSlider.BarState.Bad:
                 attackBar = 0;
                 break;
         }
-        float defenceBar = 0;
+
+
+        float defenceBar = 0.5f;
         switch (defenseState)
         {
+            // full damage
             case BattleBarSlider.BarState.Bad:
                 defenceBar = 1.5f;
                 break;
+            // block
             case BattleBarSlider.BarState.Mid:
                 defenceBar = 1f;
                 break;
+            // full block
             case BattleBarSlider.BarState.Good:
-                defenceBar = 0;
+                defenceBar = 0.5f;
                 break;
         }
 
-        Debug.Log("Damage Dealt:" + Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 0, 999));
-        return Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 0, 999);
+        Debug.Log("Damage Dealt:" + Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 1, 999));
+        return Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 1, 999);
     }
 }

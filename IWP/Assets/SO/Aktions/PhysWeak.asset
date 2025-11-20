@@ -18,5 +18,8 @@ MonoBehaviour:
   manaCost: 0
   damageMultiplier: 1
   attackType: 1
-  onCritEffect: 0
-  statsChange: 
+  critEffects: []
+  hitEffects:
+  - changeType: 2
+    statType: 3
+    isSelfTarget: 0

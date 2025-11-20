@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: MagicWeak
+  m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
+  m_Name: StatusHealthRestore
   m_EditorClassIdentifier: 
-  aktionName: Gust
-  description: A Weak Magic attack. On Hit, it increases your Speed.
+  aktionName: Health Restore
+  description: Status Aktion that restores 10% Health
   healthCost: 0
-  manaCost: 0.07
-  damageMultiplier: 1
-  attackType: 3
-  critEffects: []
-  hitEffects:
-  - changeType: 1
-    statType: 4
+  manaCost: 0.1
+  statusEffects:
+  - changeType: 3
+    statType: 6
     isSelfTarget: 1
