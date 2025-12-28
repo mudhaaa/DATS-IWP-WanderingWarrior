@@ -25,7 +25,6 @@ public class BattleManager : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] private CameraManager cameraManager;
 
     #region States
     [Header("Battle States")]
@@ -51,29 +50,56 @@ public class BattleManager : MonoBehaviour
     {
         currState = state;
     }
+
+    [SerializeField] private int turnCounter;
+    public int GetTurnCounter() { return turnCounter; }
+
+    [SerializeField] private int p1wins;
+    public int GetP1Wins() { return p1wins; }
+    [SerializeField] private int p2wins;
+    public int GetP2Wins() { return p2wins; }
+    #endregion
+
+    #region Events
+    public System.Action OnTurn1;
+    public System.Action OnEndOfTurn;
     #endregion
 
     [Header("Players")]
-    [SerializeField] private PlayerManager playerManager;
+    [SerializeField] private PlayerManager playerManager; 
+    public PlayerManager PlayerManager() { return playerManager; }
+
+
+
     [SerializeField] private bool player1start;
 
 
-    private int damageFormula1; // damage calculation done by player 1
-    private int damageFormula2; // damage calculation done by player 2
+    [SerializeField] private CameraManager cameraManager;
+    public CameraManager CameraManager() { return cameraManager; }
 
     [SerializeField] private CanvasManager canvasManager;
+    public CanvasManager CanvasManager() { return canvasManager; }
+
     [SerializeField] private BattleBarManager barManager;
+    public BattleBarManager BattleBarManager() { return barManager; }
+
     [SerializeField] private AktionManager aktionManager;
+    public AktionManager AktionManager() {  return aktionManager; }
+
     [SerializeField] private EnhancementManager enhancementManager;
- 
+    public EnhancementManager EnhancementManager() { return enhancementManager; }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerManager.OnStart(canvasManager, aktionManager);
         enhancementManager.OnStart(playerManager, canvasManager);
-        canvasManager.OnStart(playerManager, enhancementManager);
-        barManager.OnStart(playerManager);
+        canvasManager.OnStart(playerManager, enhancementManager, barManager);
+        barManager.OnStart(playerManager, aktionManager);
         aktionManager.OnStart(playerManager, barManager, canvasManager);
+        ChangeState(BattleStates.Enhancement);
+
+        //StartCoroutine(canvasManager.IntroSequence());
     }
 
     public void OnFirstTurn()
@@ -82,8 +108,9 @@ public class BattleManager : MonoBehaviour
 
         cameraManager.OnStart();
 
-        canvasManager.OnFirstTurn();
+        enhancementManager.OnFirstTurn();
 
+        canvasManager.OnFirstTurn();
     }
 
     // Update is called once per frame
@@ -99,25 +126,68 @@ public class BattleManager : MonoBehaviour
 
     public void ActivateBattleBarState()
     {
-        if (currState == BattleStates.P1turn) currState = BattleStates.P1attack;
-        else if (currState == BattleStates.P2turn) currState = BattleStates.P2attack;
+        if (currState == BattleStates.P1turn)
+        {
+            playerManager.GetPlayer2().PlayAnimation("Block Idle");
+            currState = BattleStates.P1attack;
+        }
+        else if (currState == BattleStates.P2turn)
+        {
+            playerManager.GetPlayer1().PlayAnimation("Block Idle");
+            currState = BattleStates.P2attack; 
+        }
+
+        //if (currState == BattleStates.P2attack) 
+
+        //else if (currState == BattleStates.P1attack) 
 
     }
 
+    private Coroutine currentAttackCoroutine = null;
+
     public void EndAttackState()
     {
+        // Guard against multiple calls
+        if (currentAttackCoroutine != null)
+        {
+            return; // Already processing, ignore
+        }
+
+        Debug.Log($"[EndAttackState] Starting - State: {currState}, Turn: {turnCounter}");
+
+        currentAttackCoroutine = StartCoroutine(EndOfAttackState());
+    }
+
+    IEnumerator EndOfAttackState()
+    {
+        yield return new WaitForSeconds(3);
 
         if (currState == BattleStates.P1attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
+            yield return new WaitForSeconds(4);
             currState = BattleStates.P2turn;
         }
         else if (currState == BattleStates.P2attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
+            yield return new WaitForSeconds(4);
             currState = BattleStates.P1turn;
         }
-        CheckForRoundWinner();
+        else
+        {
+            Debug.LogWarning($"[EndOfAttackState] Unexpected state: {currState}");
+        }
+
+        barManager.ActivateBattleBars(false);
+        barManager.SetInputAcceptState(1, false);
+        barManager.SetInputAcceptState(2, false);
+        EndOfTurn();
+        currentAttackCoroutine = null;
+
+        playerManager.GetPlayer1().PlayAnimation("Idle");
+        playerManager.GetPlayer2().PlayAnimation("Idle");
+
     }
 
     public void EnterStatusAktionState(int i)
@@ -128,10 +198,9 @@ public class BattleManager : MonoBehaviour
     IEnumerator StatusAktion(int i)
     {
         currState = BattleStates.StatusAktion;
-
         if (i == 1)
         {
-            Debug.Log("p2 status move");
+            Debug.Log("p1 status move");
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
         }
         else if (i == 2)
@@ -140,9 +209,18 @@ public class BattleManager : MonoBehaviour
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
         }
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4);
+
         if (i == 1) currState = BattleStates.P2turn;
-        else if(i == 2) currState= BattleStates.P1turn;
+        else if (i == 2) currState = BattleStates.P1turn;
+
+        EndOfTurn();
+    }
+
+    void EndOfTurn()
+    {
+        turnCounter = turnCounter + 1;
+        CheckForRoundWinner();
     }
 
     public void CheckForRoundWinner()
@@ -150,15 +228,19 @@ public class BattleManager : MonoBehaviour
         if (playerManager.GetPlayer1().GetHealth() <= 0)
         {
             StartCoroutine(EndRound(2));
+            p2wins++;
+            canvasManager.UpdateWinIcons(2);
         }
         else if (playerManager.GetPlayer2().GetHealth() <= 0)
         {
             StartCoroutine(EndRound(1));
+            p1wins++;
+            canvasManager.UpdateWinIcons(1);
         }
     }
     IEnumerator EndRound(int i)
     {
-        if (i == 1) currState = BattleStates.P1winRound;
+        if (i == 1) currState = BattleStates.P1winRound; 
         else if (i == 2) currState = BattleStates.P2winRound;
 
         yield return new WaitForSecondsRealtime(5);

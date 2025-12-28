@@ -1,6 +1,8 @@
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnhancementManager : MonoBehaviour
 {
@@ -11,34 +13,157 @@ public class EnhancementManager : MonoBehaviour
     private PlayerManager playerManager;
     private CanvasManager canvasManager;
 
+    [Header("Player 1")]
+    [SerializeField] private HorizontalLayoutGroup uiChoicesGroupP1;
+    [SerializeField] private List<EnhancementUI> uiChoicesP1;
+    [SerializeField] private List<Enhancement> enhRandChoicesP1;
+    [SerializeField] private int choiceIndexP1;
+    [SerializeField] private Enhancement currChoiceP1;
+
+    [Header("Player 2")]
+    [SerializeField] private HorizontalLayoutGroup uiChoicesGroupP2;
+    [SerializeField] private List<EnhancementUI> uiChoicesP2; // list of ui
+    [SerializeField] private List<Enhancement> enhRandChoicesP2; // list of enhancement SO
+    [SerializeField] private int choiceIndexP2;
+    [SerializeField] private Enhancement currChoiceP2;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnStart(PlayerManager pm, CanvasManager cm)
     {
         playerManager = pm;
         canvasManager = cm;
+
+        SetEnhancementChoices();
+
+        for (int i = 0; i < uiChoicesGroupP1.transform.childCount; i++)
+        {
+            EnhancementUI ui = uiChoicesGroupP1.transform.GetChild(i).GetComponent<EnhancementUI>();
+            if (ui != null)
+            {
+                uiChoicesP1.Add(ui);
+            }
+        }
+        for (int i = 0; i < uiChoicesGroupP2.transform.childCount; i++)
+        {
+            EnhancementUI ui = uiChoicesGroupP2.transform.GetChild(i).GetComponent<EnhancementUI>();
+            if (ui != null)
+            {
+                uiChoicesP2.Add(ui);
+            }
+        }
+
+        SetUIList();
+    }
+
+    public void OnFirstTurn()
+    {
+        SetEnhancementChoices();
+        SetUIList();
+        p1HasPressed = false;
+        p2HasPressed = false;
     }
 
     // Update is called once per frame
     public void OnUpdate()
     {
         FadeEnhancementCanvas();
-
-        GetInput();
+        if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement)
+        {
+            UpdateSelectionEnhancements();
+            GetInput();
+        }
     }
+
+
+    private Vector2 previousInputP1 = Vector2.zero;
+    private Vector2 previousInputP2 = Vector2.zero;
+    void UpdateSelectionEnhancements()
+    {
+        // player 1
+        if (!p1HasPressed)
+        {
+            Vector2 currInputP1 = playerManager.GetPlayer1().GetNavigateInput();
+
+            if (currInputP1 == Vector2.right && previousInputP1 != Vector2.right)
+            {
+                choiceIndexP1 += 1;
+                choiceIndexP1 = Mathf.Clamp(choiceIndexP1, 0, uiChoicesP1.Count - 1);
+            }
+            else if (currInputP1 == Vector2.left && previousInputP1 != Vector2.left)
+            {
+                choiceIndexP1 -= 1;
+                choiceIndexP1 = Mathf.Clamp(choiceIndexP1, 0, uiChoicesP1.Count - 1);
+
+            }
+            uiChoicesP1[choiceIndexP1].gameObject.transform.DOScale(Vector3.one, .2f);
+            foreach (EnhancementUI ui in uiChoicesP1)
+            {
+                ui.gameObject.transform.DOScale(Vector3.one * .75f, .2f);
+            }
+
+            currChoiceP1 = enhRandChoicesP1[choiceIndexP1];
+
+            // Store current input for next frame
+            previousInputP1 = currInputP1;
+        }
+        // player 2
+        if (!p2HasPressed)
+        {
+            Vector2 currInputP2 = playerManager.GetPlayer2().GetNavigateInput();
+
+            if (currInputP2 == Vector2.right && previousInputP2 != Vector2.right)
+            {
+                choiceIndexP2 += 1;
+                choiceIndexP2 = Mathf.Clamp(choiceIndexP2, 0, uiChoicesP2.Count - 1);
+            }
+            else if (currInputP2 == Vector2.left && previousInputP2 != Vector2.left)
+            {
+                choiceIndexP2 -= 1;
+                choiceIndexP2 = Mathf.Clamp(choiceIndexP2, 0, uiChoicesP2.Count - 1);
+
+            }
+            uiChoicesP2[choiceIndexP2].gameObject.transform.DOScale(Vector3.one, .2f);
+            foreach (EnhancementUI ui in uiChoicesP2)
+            {
+                ui.gameObject.transform.DOScale(Vector3.one * .75f, .2f);
+            }
+
+            currChoiceP2 = enhRandChoicesP2[choiceIndexP2];
+
+            // Store current input for next frame
+            previousInputP2 = currInputP2;
+        }    
+    }
+
+
+    bool p1HasPressed;
+    bool p2HasPressed;
 
     void GetInput()
     {
-        if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement)
+        if (playerManager.GetPlayer1().IsConfirmPressed() && !p1HasPressed)
         {
-            if (playerManager.GetPlayer1().IsConfirmPressed() || playerManager.GetPlayer2().IsConfirmPressed()) StartNextRound();
+            playerManager.GetPlayer1().AddEnhancement(currChoiceP1);
+            p1HasPressed = true;
+        }
+        if (playerManager.GetPlayer2().IsConfirmPressed() && !p2HasPressed)
+        {
+            playerManager.GetPlayer2().AddEnhancement(currChoiceP2);
+            p2HasPressed = true;
+        }
+        if (p1HasPressed && p2HasPressed)
+        {
+            StartNextRound();
         }
     }
+
     void StartNextRound()
     {
         Debug.Log("New Round start");
         BattleManager.instance.ChangeState(BattleManager.BattleStates.RoundStart);
         StartCoroutine(canvasManager.IntroSequence());
     }
+
 
     void FadeEnhancementCanvas()
     {
@@ -47,5 +172,52 @@ public class EnhancementManager : MonoBehaviour
             mainCanvas.DOFade(1, 0.5f);
         }
         else mainCanvas.DOFade(0, 0.5f);
+    }
+
+    void SetUIList()
+    {
+        // player 1
+        for (int i = 0; i < uiChoicesP1.Count; i++)
+        {
+            uiChoicesP1[i].SetUI(enhRandChoicesP1[i]);
+        }
+
+        // player 2
+        for (int i = 0; i < uiChoicesP2.Count; i++)
+        {
+            uiChoicesP2[i].SetUI(enhRandChoicesP2[i]);
+
+        }
+    }
+    public void SetEnhancementChoices()
+    {
+        enhRandChoicesP1.Clear();
+        enhRandChoicesP2.Clear();
+
+        // Player 1 choices
+        enhRandChoicesP1 = GetRandomUniqueEnhancements(3);
+        Debug.Log($"P1 Choices: {string.Join(", ", enhRandChoicesP1.Select(e => e.EnhancementName()))}");
+
+        // Player 2 choices
+        enhRandChoicesP2 = GetRandomUniqueEnhancements(3);
+        Debug.Log($"P2 Choices: {string.Join(", ", enhRandChoicesP2.Select(e => e.EnhancementName()))}");
+    }
+
+    List<Enhancement> GetRandomUniqueEnhancements(int count)
+    {
+        // Create a shuffled copy of the enhancements list
+        List<Enhancement> shuffled = new List<Enhancement>(enhancements);
+
+        // Shuffle using Fisher-Yates algorithm
+        for (int i = shuffled.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            Enhancement temp = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = temp;
+        }
+
+        // Take the first 'count' items (guaranteed unique)
+        return shuffled.GetRange(0, Mathf.Min(count, shuffled.Count));
     }
 }

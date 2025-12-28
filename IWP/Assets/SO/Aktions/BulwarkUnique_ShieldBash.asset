@@ -17,6 +17,7 @@ MonoBehaviour:
     it reduces attacking stats.
   healthCost: 0.1
   manaCost: 0
+  isUnique: 1
   damageMultiplier: 2
   attackType: 2
   critEffects:

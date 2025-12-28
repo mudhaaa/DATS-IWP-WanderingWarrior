@@ -16,6 +16,7 @@ MonoBehaviour:
   description: A Massive Magic attack. On Hit, it reduces Magic.
   healthCost: 0
   manaCost: 0.2
+  isUnique: 1
   damageMultiplier: 4
   attackType: 3
   critEffects:

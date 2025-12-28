@@ -1,7 +1,7 @@
+using DG.Tweening;
 using NUnit.Framework;
 using UnityEngine;
 using static BattleManager;
-using static UnityEditor.Rendering.InspectorCurveEditor;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -27,9 +27,8 @@ public class PlayerManager : MonoBehaviour
 
     public void OnFirstTurn()
     {
-
-
-
+        player1.OnFirstTurn();
+        player2.OnFirstTurn();
         SpeedCheck();
     }
 
@@ -45,6 +44,18 @@ public class PlayerManager : MonoBehaviour
             BattleManager.instance.IsAttackState() ||
             BattleManager.instance.GetCurrState() == BattleStates.Enhancement) 
             player2.OnUpdate();
+    }
+
+    public void MoveTowardsEnemy()
+    {
+        if (BattleManager.instance.GetCurrState() == BattleStates.P1attack)
+        {
+            player1.transform.DOMove(player2.transform.position - Vector3.right, 0.1f);
+        }
+        else if (BattleManager.instance.GetCurrState() == BattleStates.P1attack)
+        {
+            player2.transform.DOMove(player1.transform.position - Vector3.left, 0.1f);
+        }
     }
     public void SpeedCheck()
     {

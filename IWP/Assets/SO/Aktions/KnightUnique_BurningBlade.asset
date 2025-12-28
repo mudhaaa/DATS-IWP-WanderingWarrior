@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: KnightUnique_BurningBlade
   m_EditorClassIdentifier: 
   aktionName: Burning Blade
-  description: Status Aktion that increases Critical Hit multiplier.
-  healthCost: 0
-  manaCost: 0.15
+  description: Status Aktion that increases your Critical Hit multiplier & Magic,
+    but reduces your Endurance.
+  pointCost: 5
+  isUnique: 1
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
   - changeType: 1
     statType: 5
+    isSelfTarget: 1
+  - changeType: 1
+    statType: 2
     isSelfTarget: 1
   - changeType: 2
     statType: 3

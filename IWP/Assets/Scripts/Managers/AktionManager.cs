@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AktionManager : MonoBehaviour
@@ -11,6 +13,13 @@ public class AktionManager : MonoBehaviour
     private BattleBarSlider sliderP2;
 
     private CanvasManager canvasManager;
+
+    public Character currentAttacker { private set; get; }
+    public Character currentDefender { private set; get; }
+    public int currentDamageDealt { private set; get; }
+    public BattleBarSlider.BarState currentAttackerState { private set; get; }
+    public BattleBarSlider.BarState currentDefenderState { private set; get; }
+    public Aktion currentAktion { private set; get; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnStart(PlayerManager pm, BattleBarManager bm, CanvasManager cm)
@@ -44,12 +53,12 @@ public class AktionManager : MonoBehaviour
             if (sliderP2.GetBarState() == BattleBarSlider.BarState.Bad) return;
         }
 
-        int newHealth = Mathf.Max(player.GetHealth() - Mathf.CeilToInt(player.GetOriginalHealth() * aktion.GetHealthCost()) , 1);
-        player.SetHealth(newHealth);
-        int newMana = player.GetMana() - Mathf.CeilToInt(player.GetOriginalMana() * aktion.GetManaCost());
-        player.SetMana(newMana);
+        int newAP = player.GetAP() - Mathf.CeilToInt(player.GetOriginalAP() * aktion.GetAPCost());
+        player.SetAP(newAP);
 
         canvasManager.UpdatePlayerBars(player); 
+
+        currentAktion = aktion;
 
         AttackAktion attack = aktion as AttackAktion;
         if (attack != null) 
@@ -63,26 +72,41 @@ public class AktionManager : MonoBehaviour
             {
                 AttackMove(attack, player2, player1);
             }
-
         }
 
         StatusAktion status = aktion as StatusAktion;
         if (status != null)
         {
             Debug.Log("This is status of name " + status.GetName());
-            StatusMove(status, player);
+
+            foreach(StatusEffect effect in status.GetStatusEffectList())
+            {
+                StatusMove(effect, player, effect.IsSelfTarget());
+            }
+
+            if (status.IsUnique()) player.PlayAnimation("UniqueStatus");
+           
+            else player.PlayAnimation("Magic");
         }
     }
+
 
     void AttackMove(AttackAktion attack, Character attacker, Character defender)
     {
         BattleBarSlider.BarState defenceSlider = defender == player1 ? sliderP1.GetBarState() : sliderP2.GetBarState();
         BattleBarSlider.BarState attackSlider = attacker == player1 ? sliderP1.GetBarState() : sliderP2.GetBarState();
 
+        currentAttacker = attacker;
+        currentDefender = defender;
+        currentDefenderState = defenceSlider;
+        currentAttackerState = attackSlider;
+
         //damage calculation
-        int newHealth = defender.GetHealth() - DamageCalculation(attack, attacker, defender, attackSlider, defenceSlider);
+        currentDamageDealt = DamageCalculation(attack, attacker, defender, attackSlider, defenceSlider);
+        int newHealth = defender.GetHealth() - currentDamageDealt;
         defender.SetHealth(newHealth);
-        canvasManager.UpdatePlayerBars(defender);
+
+        StartAttackFeedbackCoroutine(attack, attacker, defender, currentDamageDealt, defenceSlider);
 
         // call crit effects
         if (attack.GetCritEffectList().Count > 0 && attackSlider == BattleBarSlider.BarState.Good)
@@ -105,6 +129,60 @@ public class AktionManager : MonoBehaviour
         }
     }
 
+    Coroutine currentAktionCoroutine = null;
+
+    public void StartAttackFeedbackCoroutine(AttackAktion attack, Character attacker, Character defender, int damage, BattleBarSlider.BarState defenceSlider)
+    {
+
+        currentAktionCoroutine = StartCoroutine(AttackAktionFeedback(attack, attacker, defender, damage, defenceSlider));
+    }
+
+    IEnumerator AttackAktionFeedback(AttackAktion attack, Character attacker, Character defender, int damage, BattleBarSlider.BarState defenceSlider)
+    {
+        // animation play
+        if(attack.GetName() == "Fierce Slash")
+        {
+            attacker.PlayAnimation("UniqueAttack");
+        }
+        else if (attack.GetAttackType() == AttackAktion.AttackType.Strength || attack.GetAttackType() == AttackAktion.AttackType.Endurance)
+        {
+            attacker.PlayAnimation("Strength");
+        }
+        else if (attack.GetAttackType() == AttackAktion.AttackType.Magic)
+        {
+            attacker.PlayAnimation("Magic");
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        
+    }
+
+    public void AttackAktionFeedback()
+    {
+        canvasManager.UpdatePlayerBars(currentDefender);
+
+        canvasManager.ActivateDamageNumber(currentDefender == player1 ? 1 : 2, currentDamageDealt);
+
+        if (currentAktion.GetVFX() != null)
+        {
+            GameObject vfxGo = Instantiate(currentAktion.GetVFX());
+            Vector3 vfxOffset = currentAktion.GetVFXOffset();
+            if (currentDefender == player1) vfxOffset = vfxOffset * -1;
+            vfxGo.transform.position = currentDefender.transform.position - vfxOffset;
+            vfxGo.transform.LookAt(currentDefender.transform);
+            ParticleSystem vfx = vfxGo.GetComponentInChildren<ParticleSystem>();
+            vfx.Play();
+        }
+        
+        if (currentDefenderState == BattleBarSlider.BarState.Bad || currentDefender.GetHealth() <= currentDamageDealt)
+        {
+            currentDefender.PlayAnimation("Block Fail");
+        }
+
+        currentAktionCoroutine = null;
+    }
+
     void StatusMove(StatusEffect effect, Character user, bool isSelfTarget)
     {
         Character target;
@@ -123,14 +201,14 @@ public class AktionManager : MonoBehaviour
         {
             Debug.Log("Activating Restore effect");
             if (effect.GetStatType() == Stat.Health)    OnRestoreHealth(target);
-            if (effect.GetStatType() == Stat.Mana)      OnRestoreMana(target);
+            if (effect.GetStatType() == Stat.AP)      OnRestoreAP(target);
         }
         else if (effect.GetStatusType() == StatusType.Reduce)
         {
             Debug.Log("Activating Reduce effect");
 
             if (effect.GetStatType() == Stat.Health)    OnReduceHealth(target);
-            if (effect.GetStatType() == Stat.Mana)      OnReduceMana(target);
+            if (effect.GetStatType() == Stat.AP)      OnReduceAP(target);
         }
         else if (effect.GetStatusType() == StatusType.Increase)
         {
@@ -159,71 +237,11 @@ public class AktionManager : MonoBehaviour
             target.ResetToOriginalStats();
         }
     }
-    void StatusMove(StatusAktion status, Character user)
-    {
-        foreach (StatusEffect effect in status.GetStatusEffectList())
-        {
-            Character target;
-            if (effect.IsSelfTarget())
-            {
-                // target is if user is player1, player1, else, player2
-                target = user == player1 ? player1 : player2;
-            }
-            else
-            {
-                // target is if user is player1, player2, else, player1
-                target = user == player1 ? player2 : player1;
-            }
-
-
-            if (effect.GetStatusType() == StatusType.Restore)
-            {
-                Debug.Log("Activating Restore effect");
-
-                if (effect.GetStatType() == Stat.Health)    OnRestoreHealth(target);
-                if (effect.GetStatType() == Stat.Mana)      OnRestoreMana(target);
-            }
-            else if (effect.GetStatusType() == StatusType.Reduce)
-            {
-                Debug.Log("Activating Reduce effect");
-
-                if (effect.GetStatType() == Stat.Health)    OnReduceHealth(target);
-                if (effect.GetStatType() == Stat.Mana)      OnReduceMana(target);
-            }
-            else if (effect.GetStatusType() == StatusType.Increase)
-            {
-                Debug.Log("Activating Increase effect");
-
-                if (effect.GetStatType() == Stat.Strength)  OnBuffStrength(target);
-                if (effect.GetStatType() == Stat.Endurance) OnBuffEndurance(target);
-                if (effect.GetStatType() == Stat.Magic)     OnBuffMagic(target);
-                if (effect.GetStatType() == Stat.Speed)     OnBuffSpeed(target);
-                if (effect.GetStatType() == Stat.Crit)      OnBuffCrit(target);
-
-            }
-            else if (effect.GetStatusType() == StatusType.Decrease)
-            {
-                Debug.Log("Activating Decrease effect");
-
-                if (effect.GetStatType() == Stat.Strength)  OnNerfStrength(target);
-                if (effect.GetStatType() == Stat.Endurance) OnNerfEndurance(target);
-                if (effect.GetStatType() == Stat.Magic)     OnNerfMagic(target);
-                if (effect.GetStatType() == Stat.Speed)     OnNerfSpeed(target);
-                if (effect.GetStatType() == Stat.Crit)      OnNerfCrit(target);
-            }
-            else if (effect.GetStatusType() == StatusType.Reset)
-            {
-                Debug.Log("Activating Reset effect");
-
-                target.ResetToOriginalStats();
-            }
-        }
-    }
 
     #region Increase
     void OnBuffStrength(Character target)
     {
-        if (target.GetStrength() < target.GetOriginalStrength())
+        if (target.GetStrength() <= target.GetOriginalStrength())
         {
             int newValue;
             newValue = Mathf.CeilToInt(target.GetStrength() * 1.3f);
@@ -234,7 +252,7 @@ public class AktionManager : MonoBehaviour
 
     void OnBuffMagic(Character target)
     {
-        if (target.GetMagic() < target.GetOriginalMagic())
+        if (target.GetMagic() <= target.GetOriginalMagic())
         {
             int newValue;
             newValue = Mathf.CeilToInt(target.GetMagic() * 1.3f);
@@ -245,7 +263,7 @@ public class AktionManager : MonoBehaviour
 
     void OnBuffEndurance(Character target)
     {
-        if (target.GetEndurance() < target.GetOriginalEndurance())
+        if (target.GetEndurance() <= target.GetOriginalEndurance())
         {
             int newValue;
             newValue = Mathf.CeilToInt(target.GetEndurance() * 1.3f);
@@ -256,7 +274,7 @@ public class AktionManager : MonoBehaviour
 
     void OnBuffSpeed(Character target)
     {
-        if (target.GetSpeed() < target.GetOriginalSpeed())
+        if (target.GetSpeed() <= target.GetOriginalSpeed())
         {
             int newValue;
             newValue = Mathf.CeilToInt(target.GetSpeed() * 1.3f);
@@ -314,36 +332,36 @@ public class AktionManager : MonoBehaviour
     #region Restore
     void OnRestoreHealth(Character target)
     {
-        int newValue = Mathf.CeilToInt(target.GetHealth() + target.GetOriginalMana() * .07f);
+        int newValue = Mathf.CeilToInt(target.GetHealth() + target.GetOriginalHealth() * .07f);
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
         Debug.Log($"[RESTORE] {target.name}'s Health restored");
     }
 
-    void OnRestoreMana(Character target)
+    void OnRestoreAP(Character target)
     {
-        int newValue = Mathf.CeilToInt(target.GetMana() + target.GetOriginalHealth() * .05f);
-        target.SetMana(newValue);
+        int newValue = Mathf.CeilToInt(target.GetAP() + 1);
+        target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
-        Debug.Log($"[RESTORE] {target.name}'s Mana restored");
+        Debug.Log($"[RESTORE] {target.name}'s AP restored");
     }
     #endregion
 
     #region Reduce
     void OnReduceHealth(Character target)
     {
-        int newValue = Mathf.CeilToInt(target.GetHealth() - target.GetOriginalMana() * .07f);
+        int newValue = Mathf.CeilToInt(target.GetHealth() - target.GetOriginalHealth() * .03f);
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
         Debug.Log($"[REDUCE] {target.name}'s Health reduced");
     }
 
-    void OnReduceMana(Character target)
+    void OnReduceAP(Character target)
     {
-        int newValue = Mathf.CeilToInt(target.GetMana() - target.GetOriginalHealth() * .05f);
-        target.SetMana(newValue);
+        int newValue = Mathf.CeilToInt(target.GetAP() - 1);
+        target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
-        Debug.Log($"[REDUCE] {target.name}'s Mana reduced");
+        Debug.Log($"[REDUCE] {target.name}'s AP reduced");
     }
     #endregion
 
@@ -412,4 +430,6 @@ public class AktionManager : MonoBehaviour
         Debug.Log("Damage Dealt:" + Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 1, 999));
         return Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 1, 999);
     }
+
+
 }

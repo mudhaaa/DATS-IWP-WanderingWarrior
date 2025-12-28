@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: KnightUnique_FierceSlash
   m_EditorClassIdentifier: 
   aktionName: Fierce Slash
-  description: Heavy Strength attack.
+  description: Heavy Strength attack. On Crit, it increases Strength.
   healthCost: 0.13
   manaCost: 0
+  isUnique: 1
+  aktionVFXPrefab: {fileID: 5545173171955001552, guid: 7ac879c2caac1ca41b6c438e77d8b25d, type: 3}
+  vfxOffset: {x: 1, y: 0, z: 0}
   damageMultiplier: 3
   attackType: 1
   critEffects:

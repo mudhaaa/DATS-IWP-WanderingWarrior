@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,35 +10,41 @@ public class BattleBarManager : MonoBehaviour
     [SerializeField] private BattleBarSlider bbSliderP1;
     public BattleBarSlider GetSliderP1() {  return bbSliderP1; }
 
+    [SerializeField] private FloatingTextUI floatingTextP1;
+
     [Header("Player 2")]
     [SerializeField] private Slider battleBarP2;
     [SerializeField] private BattleBarSlider bbSliderP2;
     public BattleBarSlider GetSliderP2() { return bbSliderP2; }
 
+    [SerializeField] private FloatingTextUI floatingTextP2;
+
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private PlayerManager playerManager;
+    private AktionManager aktionManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void OnStart(PlayerManager pm)
+    public void OnStart(PlayerManager pm, AktionManager am)
     {
         playerManager = pm;
+        aktionManager = am;
 
-        battleBarP1.gameObject.SetActive(false);
-        battleBarP2.gameObject.SetActive(false);
+        canvasGroup.alpha = 0;
     }
 
     // Update is called once per frame
     public void OnUpdate()
     {
-        ActivateBattleBars();
         BattleBarSliderMoving();
         WaitForInput();
     }
 
-    public void ActivateBattleBars()
+    public void ActivateBattleBars(bool b)
     {
-        battleBarP1.gameObject.SetActive(BattleManager.instance.IsAttackState());
-        battleBarP2.gameObject.SetActive(BattleManager.instance.IsAttackState());
+
+        if (b) canvasGroup.DOFade(1, 0.2f);
+        else canvasGroup.DOFade(0, 0.1f);
 
     }
 
@@ -82,26 +89,53 @@ public class BattleBarManager : MonoBehaviour
         {
             if (playerManager.GetPlayer1().IsHitPressed())
             {
-                p1pressed = true;
+                SetInputAcceptState(1, true);
                 Debug.Log("P1: " + bbSliderP1.GetBarState().ToString());
+                SetBarResultText(1, bbSliderP1.GetBarState());
             }
             if (playerManager.GetPlayer2().IsHitPressed())
             {
-                p2pressed = true; 
+                SetInputAcceptState(2, true);
                 Debug.Log("P2: " + bbSliderP2.GetBarState().ToString());
+                SetBarResultText(2, bbSliderP2.GetBarState());
             }
-            if (p1pressed && p2pressed) StartCoroutine(EndWaitForInput());
+            if (p1pressed && p2pressed)
+            {
+                BattleManager.instance.EndAttackState();
+            }
         }
         else
         {
-            p1pressed = false;
-            p2pressed = false;
+            SetInputAcceptState(1, false);
+            SetInputAcceptState(2, false);
         }
     }
 
-    IEnumerator EndWaitForInput()
+    public void SetInputAcceptState(int i, bool b)
     {
-        yield return new WaitForSeconds(3);
-        BattleManager.instance.EndAttackState();
+        if (i == 1) p1pressed = b;
+        else if (i == 2) p2pressed = b;
+    }
+
+    void SetBarResultText(int i, BattleBarSlider.BarState barState)
+    {
+        if (i == 1) 
+        {
+            float l;
+            if (barState == BattleBarSlider.BarState.Good) l = .75f;
+            else if (barState == BattleBarSlider.BarState.Mid) l = .65f;
+            else l = .55f;
+
+            floatingTextP1.SetText(barState.ToString(), l);
+        }
+        else if (i == 2) 
+        {
+            float l;
+            if (barState == BattleBarSlider.BarState.Good) l = .75f;
+            else if (barState == BattleBarSlider.BarState.Mid) l = .65f;
+            else l = .55f;
+
+            floatingTextP2.SetText(barState.ToString(), l);
+        }
     }
 }

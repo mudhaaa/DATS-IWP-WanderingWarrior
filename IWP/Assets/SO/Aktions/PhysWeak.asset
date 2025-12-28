@@ -16,6 +16,8 @@ MonoBehaviour:
   description: A Weak Strength attack. On Hit, it reduces enemy Endurance.
   healthCost: 0.02
   manaCost: 0
+  isUnique: 0
+  aktionVFXPrefab: {fileID: 1096893136476370, guid: 24b82347924701148a13c746edfb6b22, type: 3}
   damageMultiplier: 1
   attackType: 1
   critEffects: []
