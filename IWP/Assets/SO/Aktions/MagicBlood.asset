@@ -12,12 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
   m_Name: MagicBlood
   m_EditorClassIdentifier: 
-  aktionName: 
-  description: 
-  healthCost: 0
-  manaCost: 0
+  aktionName: Blood Arts
+  description: A Medium Magic attack. On Hit, Restore 10% Health.
+  pointCost: 3
   isUnique: 0
-  damageMultiplier: 0
-  attackType: 0
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
+  damageMultiplier: 2
+  attackType: 3
   critEffects: []
-  hitEffects: []
+  hitEffects:
+  - changeType: 3
+    statType: 6
+    isSelfTarget: 1
+    boost:
+      timer: 0
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

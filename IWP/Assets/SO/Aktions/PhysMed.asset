@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
   m_Name: PhysMed
   m_EditorClassIdentifier: 
-  aktionName: Strike
+  aktionName: Concentrated Blow
   description: A Medium Strength attack. On Crit, it increases your speed.
-  healthCost: 0.06
-  manaCost: 0
+  pointCost: 0
+  isUnique: 0
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 2
   attackType: 1
   critEffects:

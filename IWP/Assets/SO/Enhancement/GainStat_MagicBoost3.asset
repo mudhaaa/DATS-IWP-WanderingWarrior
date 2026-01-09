@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
-  m_Name: GetAktion_Divergent
+  m_Name: GainStat_MagicBoost3
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: Vessel's Power
-  enhancementDesc: 
+  enhancementName: Magic Boost III
+  enhancementDesc: Gain 30% Magic, but lose 5% Health & 5% Endurance
   effects:
-  - enhancementType: 2
-    changedStat: 0
-    flatStatChangeValue: 0
-    percentageStatChangeValue: 0
-    gainedAktion: {fileID: 11400000, guid: 74fe226545bdf6a46b4be8ba580c51b1, type: 2}
   - enhancementType: 0
-    changedStat: 6
-    flatStatChangeValue: 25
-    percentageStatChangeValue: 0
-    gainedAktion: {fileID: 11400000, guid: 74fe226545bdf6a46b4be8ba580c51b1, type: 2}
+    changedStat: 2
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.3
+    gainedAktion: {fileID: 0}
+  - enhancementType: 1
+    changedStat: 3
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.05
+    gainedAktion: {fileID: 0}

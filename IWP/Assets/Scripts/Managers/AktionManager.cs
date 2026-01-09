@@ -46,14 +46,23 @@ public class AktionManager : MonoBehaviour
     {
         if (player == player1 && aktion as AttackAktion != null)
         {
-            if (sliderP1.GetBarState() == BattleBarSlider.BarState.Bad) return;
+            if (sliderP1.GetBarState() == BattleBarSlider.BarState.Bad)
+            {
+                Debug.Log("Player 1 failed the attack");
+
+                return;
+            }
         }
         else if (player == player2 && aktion as AttackAktion != null)
         {
-            if (sliderP2.GetBarState() == BattleBarSlider.BarState.Bad) return;
+            if (sliderP2.GetBarState() == BattleBarSlider.BarState.Bad)
+            {
+                Debug.Log("Player 2 failed the attack");
+                return;
+            }
         }
 
-        int newAP = player.GetAP() - Mathf.CeilToInt(player.GetOriginalAP() * aktion.GetAPCost());
+        int newAP = player.GetAP() - aktion.GetAPCost();
         player.SetAP(newAP);
 
         canvasManager.UpdatePlayerBars(player); 
@@ -66,10 +75,13 @@ public class AktionManager : MonoBehaviour
             Debug.Log("This is attack of name " + attack.GetName());
             if (player == player1)
             {
+                RefundAP(player2, sliderP2.GetBarState());
                 AttackMove(attack, player1, player2);
             }
             else if (player == player2)
             {
+                RefundAP(player1, sliderP1.GetBarState());
+
                 AttackMove(attack, player2, player1);
             }
         }
@@ -90,7 +102,14 @@ public class AktionManager : MonoBehaviour
         }
     }
 
-
+    public void RefundAP(Character player, BattleBarSlider.BarState barState)
+    {
+        if (barState == BattleBarSlider.BarState.Good)
+        {
+            int newAP = player.GetAP() + 1;
+            player.SetAP(newAP);
+        }
+    }
     void AttackMove(AttackAktion attack, Character attacker, Character defender)
     {
         BattleBarSlider.BarState defenceSlider = defender == player1 ? sliderP1.GetBarState() : sliderP2.GetBarState();
@@ -200,35 +219,35 @@ public class AktionManager : MonoBehaviour
         if (effect.GetStatusType() == StatusType.Restore)
         {
             Debug.Log("Activating Restore effect");
-            if (effect.GetStatType() == Stat.Health)    OnRestoreHealth(target);
-            if (effect.GetStatType() == Stat.AP)      OnRestoreAP(target);
+            if (effect.GetStatType() == Stat.Health)  OnRestoreHealth(target, effect);
+            if (effect.GetStatType() == Stat.AP)      OnRestoreAP(target, effect);
         }
         else if (effect.GetStatusType() == StatusType.Reduce)
         {
             Debug.Log("Activating Reduce effect");
 
-            if (effect.GetStatType() == Stat.Health)    OnReduceHealth(target);
-            if (effect.GetStatType() == Stat.AP)      OnReduceAP(target);
+            if (effect.GetStatType() == Stat.Health)  OnReduceHealth(target, effect);
+            if (effect.GetStatType() == Stat.AP)      OnReduceAP(target, effect);
         }
         else if (effect.GetStatusType() == StatusType.Increase)
         {
             Debug.Log("Activating Increase effect");
 
-            if (effect.GetStatType() == Stat.Strength)  OnBuffStrength(target);
-            if (effect.GetStatType() == Stat.Endurance) OnBuffEndurance(target);
-            if (effect.GetStatType() == Stat.Magic)     OnBuffMagic(target);
-            if (effect.GetStatType() == Stat.Speed)     OnBuffSpeed(target);
-            if (effect.GetStatType() == Stat.Crit)      OnBuffCrit(target);
+            if (effect.GetStatType() == Stat.Strength)  OnBuffStrength(target, effect);
+            if (effect.GetStatType() == Stat.Endurance) OnBuffEndurance(target, effect);
+            if (effect.GetStatType() == Stat.Magic)     OnBuffMagic(target, effect);
+            if (effect.GetStatType() == Stat.Speed)     OnBuffSpeed(target, effect);
+            if (effect.GetStatType() == Stat.Crit)      OnBuffCrit(target, effect);
         }
         else if (effect.GetStatusType() == StatusType.Decrease)
         {
             Debug.Log("Activating Decrease effect");
 
-            if (effect.GetStatType() == Stat.Strength)  OnNerfStrength(target);
-            if (effect.GetStatType() == Stat.Endurance) OnNerfEndurance(target);
-            if (effect.GetStatType() == Stat.Magic)     OnNerfMagic(target);
-            if (effect.GetStatType() == Stat.Speed)     OnNerfSpeed(target);
-            if (effect.GetStatType() == Stat.Crit)      OnNerfCrit(target);
+            if (effect.GetStatType() == Stat.Strength)  OnNerfStrength(target, effect);
+            if (effect.GetStatType() == Stat.Endurance) OnNerfEndurance(target, effect);
+            if (effect.GetStatType() == Stat.Magic)     OnNerfMagic(target, effect);
+            if (effect.GetStatType() == Stat.Speed)     OnNerfSpeed(target, effect);
+            if (effect.GetStatType() == Stat.Crit)      OnNerfCrit(target, effect);
         }
         else if (effect.GetStatusType() == StatusType.Reset)
         {
@@ -239,129 +258,360 @@ public class AktionManager : MonoBehaviour
     }
 
     #region Increase
-    void OnBuffStrength(Character target)
+    void OnBuffStrength(Character target, StatusEffect effect)
     {
-        if (target.GetStrength() <= target.GetOriginalStrength())
+        if (target.GetStrengthBuffTimer() == 0)
+        { 
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetStrength() * 1.3f);
+                target.SetStrength(newValue);
+            }
+
+            target.SetStrengthBuffTimer(effect.GetBoost().GetTimer());
+            target.SetStrengthNerfTimer(0);
+
+            string msg = $"{target.name}'s Strength increased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
         {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetStrength() * 1.3f);
-            target.SetStrength(newValue);
-            Debug.Log($"[BUFF] {target.name}'s Strength increased");
+            // Extends on timer
+            target.SetStrengthBuffTimer(target.GetStrengthBuffTimer() + effect.GetBoost().GetTimer());
+
+            string msg = $"{target.name}'s Strength increase extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
     }
 
-    void OnBuffMagic(Character target)
+    void OnBuffMagic(Character target, StatusEffect effect)
     {
-        if (target.GetMagic() <= target.GetOriginalMagic())
+        if (target.GetMagicBuffTimer() == 0)
         {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetMagic() * 1.3f);
-            target.SetMagic(newValue);
-            Debug.Log($"[BUFF] {target.name}'s Magic increased");
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetMagic() * 1.3f);
+                target.SetMagic(newValue);
+            }
+
+            target.SetMagicBuffTimer(effect.GetBoost().GetTimer());
+            target.SetMagicNerfTimer(0);
+
+            string msg = $"{target.name}'s Magic increased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetMagicBuffTimer(target.GetMagicBuffTimer() + effect.GetBoost().GetTimer());
+
+            string msg = $"{target.name}'s Magic increase extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
     }
 
-    void OnBuffEndurance(Character target)
+    void OnBuffEndurance(Character target, StatusEffect effect)
     {
-        if (target.GetEndurance() <= target.GetOriginalEndurance())
+        if (target.GetEnduranceBuffTimer() == 0)
         {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetEndurance() * 1.3f);
-            target.SetEndurance(newValue);
-            Debug.Log($"[BUFF] {target.name}'s Endurance increased");
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetEndurance() * 1.3f);
+                target.SetEndurance(newValue);
+            }
+
+            target.SetEnduranceBuffTimer(effect.GetBoost().GetTimer());
+            target.SetEnduranceNerfTimer(0);
+
+            string msg = $"{target.name}'s Endurance increased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetEnduranceBuffTimer(target.GetEnduranceBuffTimer() + effect.GetBoost().GetTimer());
+
+            string msg = $"{target.name}'s Endurance increase extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
     }
 
-    void OnBuffSpeed(Character target)
+    void OnBuffSpeed(Character target, StatusEffect effect)
     {
-        if (target.GetSpeed() <= target.GetOriginalSpeed())
+        if (target.GetSpeedBuffTimer() == 0)
         {
-            int newValue;
-            newValue = Mathf.CeilToInt(target.GetSpeed() * 1.3f);
-            target.SetSpeed(newValue);
-            Debug.Log($"[BUFF] {target.name}'s Speed increased");
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetSpeed() * 1.3f);
+                target.SetSpeed(newValue);
+            }
+
+            target.SetSpeedBuffTimer(effect.GetBoost().GetTimer());
+            target.SetSpeedNerfTimer(0);
+
+            string msg = $"{target.name}'s Speed increased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetSpeedBuffTimer(target.GetSpeedBuffTimer() + effect.GetBoost().GetTimer());
+
+            string msg = $"{target.name}'s Speed increase extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
     }
 
-    void OnBuffCrit(Character target)
+    void OnBuffCrit(Character target, StatusEffect effect)
     {
-        target.SetCrit(2);
-        Debug.Log($"[BUFF] {target.name}'s Crit increased");
+        if (target.GetCritBuffTimer() == 0)
+        {
+            target.SetCrit(2);
+
+            target.SetCritBuffTimer(effect.GetBoost().GetTimer());
+            target.SetCritNerfTimer(0);
+
+            string msg = $"{target.name}'s Crit increased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetCritBuffTimer(target.GetCritBuffTimer() + effect.GetBoost().GetTimer());
+
+            string msg = $"{target.name}'s Crit increase extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
+        }
     }
     #endregion
 
     #region Decrease
-    void OnNerfStrength(Character target)
+    void OnNerfStrength(Character target, StatusEffect effect)
     {
-        int newValue;
-        newValue = Mathf.CeilToInt(target.GetStrength() * 0.7f);
-        target.SetStrength(newValue);
-        Debug.Log($"[NERF] {target.name}'s Strength decreased");
+        if (target.GetStrengthNerfTimer() == 0)
+        {
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetStrength() * 0.7f);
+                target.SetStrength(newValue);
+            }
+
+            target.SetStrengthNerfTimer(effect.GetBoost().GetTimer());
+            target.SetStrengthBuffTimer(0);
+
+            string msg = $"{target.name}'s Strength decreased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetStrengthNerfTimer(target.GetStrengthNerfTimer() + effect.GetBoost().GetTimer());
+            string msg = $"{target.name}'s Strength decrease extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
+        }
     }
 
-    void OnNerfMagic(Character target)
+    void OnNerfMagic(Character target, StatusEffect effect)
     {
-        int newValue;
-        newValue = Mathf.CeilToInt(target.GetMagic() * 0.7f);
-        target.SetMagic(newValue);
-        Debug.Log($"[NERF] {target.name}'s Magic decreased");
+        if (target.GetMagicNerfTimer() == 0)
+        {
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetMagic() * 0.7f);
+                target.SetMagic(newValue);
+            }
+
+            target.SetMagicNerfTimer(effect.GetBoost().GetTimer());
+            target.SetMagicBuffTimer(0);
+
+            string msg = $"{target.name}'s Magic decreased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetMagicNerfTimer(target.GetMagicNerfTimer() + effect.GetBoost().GetTimer());
+            string msg = $"{target.name}'s Magic decrease extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
+        }
     }
 
-    void OnNerfEndurance(Character target)
+    void OnNerfEndurance(Character target, StatusEffect effect)
     {
-        int newValue;
-        newValue = Mathf.CeilToInt(target.GetEndurance() * 0.7f);
-        target.SetEndurance(newValue);
-        Debug.Log($"[NERF] {target.name}'s Endurance decreased");
+        if (target.GetEnduranceNerfTimer() == 0)
+        {
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetEndurance() * 0.7f);
+                target.SetEndurance(newValue);
+            }
+
+            target.SetEnduranceNerfTimer(effect.GetBoost().GetTimer());
+            target.SetEnduranceBuffTimer(0);
+
+            string msg = $"{target.name}'s Endurance decreased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetEnduranceNerfTimer(target.GetEnduranceNerfTimer() + effect.GetBoost().GetTimer());
+            string msg = $"{target.name}'s Endurance decrease extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
+        }
     }
 
-    void OnNerfSpeed(Character target)
+    void OnNerfSpeed(Character target, StatusEffect effect)
     {
-        int newValue;
-        newValue = Mathf.CeilToInt(target.GetSpeed() * 0.7f);
-        target.SetSpeed(newValue);
-        Debug.Log($"[NERF] {target.name}'s Speed decreased");
+        if (target.GetSpeedNerfTimer() == 0)
+        {
+            // Checks if the boost gives a unique amount
+            if (!effect.GetBoost().IsUniqueAmount())
+            {
+                int newValue;
+                newValue = Mathf.CeilToInt(target.GetSpeed() * 0.7f);
+                target.SetSpeed(newValue);
+            }
+
+            target.SetSpeedNerfTimer(effect.GetBoost().GetTimer());
+            target.SetSpeedBuffTimer(0);
+
+            string msg = $"{target.name}'s Speed decreased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetSpeedNerfTimer(target.GetSpeedNerfTimer() + effect.GetBoost().GetTimer());
+            string msg = $"{target.name}'s Speed decrease extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
+        }
     }
-    void OnNerfCrit(Character target)
+    void OnNerfCrit(Character target, StatusEffect effect)
     {
-        target.SetCrit(1.5f);
-        Debug.Log($"[NERF] {target.name}'s Crit decreased");
+        if (target.GetCritNerfTimer() == 0)
+        {
+            target.SetCrit(1);
+
+            target.SetCritNerfTimer(effect.GetBoost().GetTimer());
+            target.SetCritBuffTimer(0);
+
+            string msg = $"{target.name}'s Crit decreased!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+        }
+        else
+        {
+            // Extends on timer
+            target.SetCritNerfTimer(target.GetCritNerfTimer() + effect.GetBoost().GetTimer());
+            string msg = $"{target.name}'s Crit decrease extended!";
+            target.GetTurnUpdateLists().Add(msg);
+            Debug.Log(msg);
+            // Refreshes timer to base
+            //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
+        }
     }
     #endregion
 
     #region Restore
-    void OnRestoreHealth(Character target)
+    void OnRestoreHealth(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetHealth() + target.GetOriginalHealth() * .07f);
+        int newValue = Mathf.CeilToInt(target.GetHealth() + target.GetHealth() * effect.GetBoost().GetEffectAmount());
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
-        Debug.Log($"[RESTORE] {target.name}'s Health restored");
+
+        string msg = $"{target.name}'s Health restored!";
+        target.GetTurnUpdateLists().Add(msg);
+        Debug.Log(msg);
     }
 
-    void OnRestoreAP(Character target)
+    void OnRestoreAP(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetAP() + 1);
+        int newValue = Mathf.CeilToInt(target.GetAP() + target.GetAP() * effect.GetBoost().GetEffectAmount());
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
-        Debug.Log($"[RESTORE] {target.name}'s AP restored");
+
+        string msg = $"{target.name}'s AP restored!";
+        target.GetTurnUpdateLists().Add(msg);
+        Debug.Log(msg);
     }
     #endregion
 
     #region Reduce
-    void OnReduceHealth(Character target)
+    void OnReduceHealth(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetHealth() - target.GetOriginalHealth() * .03f);
+        int newValue = Mathf.CeilToInt(target.GetHealth() - target.GetOriginalHealth() * effect.GetBoost().GetEffectAmount());
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
-        Debug.Log($"[REDUCE] {target.name}'s Health reduced");
+
+        string msg = $"{target.name}'s Health restored!";
+        target.GetTurnUpdateLists().Add(msg);
+        Debug.Log(msg);
     }
 
-    void OnReduceAP(Character target)
+    void OnReduceAP(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetAP() - 1);
+        int newValue = Mathf.CeilToInt(target.GetAP() - target.GetAP() * effect.GetBoost().GetEffectAmount());
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
-        Debug.Log($"[REDUCE] {target.name}'s AP reduced");
+
+        string msg = $"{target.name}'s AP restored!";
+        target.GetTurnUpdateLists().Add(msg);
+        Debug.Log(msg);
     }
     #endregion
 

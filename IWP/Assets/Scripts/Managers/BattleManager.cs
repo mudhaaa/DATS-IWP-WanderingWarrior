@@ -160,19 +160,17 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator EndOfAttackState()
     {
-        yield return new WaitForSeconds(3);
-
         if (currState == BattleStates.P1attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
             yield return new WaitForSeconds(4);
-            currState = BattleStates.P2turn;
+            EndOfTurn(1);
         }
         else if (currState == BattleStates.P2attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
             yield return new WaitForSeconds(4);
-            currState = BattleStates.P1turn;
+            EndOfTurn(2);
         }
         else
         {
@@ -182,7 +180,7 @@ public class BattleManager : MonoBehaviour
         barManager.ActivateBattleBars(false);
         barManager.SetInputAcceptState(1, false);
         barManager.SetInputAcceptState(2, false);
-        EndOfTurn();
+
         currentAttackCoroutine = null;
 
         playerManager.GetPlayer1().PlayAnimation("Idle");
@@ -200,26 +198,47 @@ public class BattleManager : MonoBehaviour
         currState = BattleStates.StatusAktion;
         if (i == 1)
         {
-            Debug.Log("p1 status move");
+            Debug.Log("P1 status move");
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
         }
         else if (i == 2)
         {
-            Debug.Log("p2 status move");
+            Debug.Log("P2 status move");
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
         }
 
         yield return new WaitForSeconds(4);
 
-        if (i == 1) currState = BattleStates.P2turn;
-        else if (i == 2) currState = BattleStates.P1turn;
-
-        EndOfTurn();
+        EndOfTurn(i);
     }
 
-    void EndOfTurn()
+    void EndOfTurn(int i)
     {
+        if (i == 1)
+        {
+            currState = BattleStates.P2turn;
+            int newAP = playerManager.GetPlayer2().GetAP() + 1;
+            playerManager.GetPlayer2().SetAP(newAP);
+            canvasManager.UpdatePlayerBars(playerManager.GetPlayer2());
+
+            playerManager.GetPlayer2().DownStatChangeTimers();
+            
+            Debug.Log("Starting P2 turn");
+        }
+        else if (i == 2)
+        {
+            currState = BattleStates.P1turn;
+            int newAP = playerManager.GetPlayer1().GetAP() + 1;
+            playerManager.GetPlayer1().SetAP(newAP);
+            canvasManager.UpdatePlayerBars(playerManager.GetPlayer1());
+            
+            playerManager.GetPlayer1().DownStatChangeTimers();
+
+            Debug.Log("Starting P1 turn");
+
+        }
         turnCounter = turnCounter + 1;
+
         CheckForRoundWinner();
     }
 

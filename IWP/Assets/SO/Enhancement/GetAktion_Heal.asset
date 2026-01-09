@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: GetAktion_Heal
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: Heal
-  enhancementDesc: 
+  enhancementName: Emergency Aid
+  enhancementDesc: Gain the Aktion 'Health Restore' & +5 Speed
   effects:
   - enhancementType: 0
-    changedStat: 7
-    flatStatChangeValue: 30
+    changedStat: 4
+    flatStatChangeValue: 5
     percentageStatChangeValue: 0
     gainedAktion: {fileID: 0}
   - enhancementType: 2
     changedStat: 7
-    flatStatChangeValue: 30
+    flatStatChangeValue: 0
     percentageStatChangeValue: 0
     gainedAktion: {fileID: 11400000, guid: d7aa3d2af977b1a4e82b2d94a38c83c9, type: 2}

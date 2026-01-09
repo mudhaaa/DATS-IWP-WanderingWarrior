@@ -9,6 +9,8 @@ public class Aktion : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private int pointCost;
     [SerializeField] private bool isUnique;
+    
+    [Header("VFX")]
     [SerializeField] private GameObject aktionVFXPrefab;
     [SerializeField] private Vector3 vfxOffset;
     public virtual int GetAPCost() { return pointCost; } 
@@ -25,9 +27,26 @@ public struct StatusEffect
     [SerializeField] private StatusType changeType;
     [SerializeField] private Stat statType;
     [SerializeField] private bool isSelfTarget; // true for self, false for enemy
+    [SerializeField] private StatBoost boost;
     public StatusType GetStatusType() { return changeType; }
     public Stat GetStatType() { return statType; }
     public bool IsSelfTarget() { return isSelfTarget; }
+    public StatBoost GetBoost() { return boost; }
+
+}
+
+[Serializable]
+public struct StatBoost
+{
+    [SerializeField] private int timer;
+    [SerializeField] private bool uniqueEffectAmount; // For scenarios that use damage or another stat etc.
+    [SerializeField] private string uniqueBoostType; // "Damage", "Stat" etc.
+    [SerializeField] private float effectAmount; // Percentage 
+
+    public int GetTimer() { return timer; }
+    public bool IsUniqueAmount() { return uniqueEffectAmount; }
+    public string GetBoostType() { return uniqueBoostType; }
+    public float GetEffectAmount() { return effectAmount; }
 }
 
 public enum Stat

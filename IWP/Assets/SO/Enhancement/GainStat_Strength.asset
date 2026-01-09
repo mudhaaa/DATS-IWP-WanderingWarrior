@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GainStat_Strength
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: Strength Boost
-  enhancementDesc: Gain 10% Strength
+  enhancementName: Strength Boost I
+  enhancementDesc: Gain +10% Strength
   effects:
   - enhancementType: 0
     changedStat: 1

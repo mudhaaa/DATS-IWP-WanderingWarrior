@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GetAktion_BloodSac
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: Blood Sacrifice
-  enhancementDesc: 
+  enhancementName: Tribute To The Gods
+  enhancementDesc: 'Gain the Aktion ''Blood Sacrifice'' and +50 Health '
   effects:
   - enhancementType: 0
     changedStat: 6

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GetAktion_MagicHeavy
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: Lightning
-  enhancementDesc: Gain Lightning & +5 Speed
+  enhancementName: Heavenly Thunder
+  enhancementDesc: Gain the Aktion 'Lightning' & +5 Speed
   effects:
   - enhancementType: 2
     changedStat: 0

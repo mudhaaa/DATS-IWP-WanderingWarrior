@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
   m_Name: PhysWeak
   m_EditorClassIdentifier: 
-  aktionName: Jab
+  aktionName: Piercing Jab
   description: A Weak Strength attack. On Hit, it reduces enemy Endurance.
-  healthCost: 0.02
-  manaCost: 0
+  pointCost: 0
   isUnique: 0
   aktionVFXPrefab: {fileID: 1096893136476370, guid: 24b82347924701148a13c746edfb6b22, type: 3}
+  vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   attackType: 1
   critEffects: []

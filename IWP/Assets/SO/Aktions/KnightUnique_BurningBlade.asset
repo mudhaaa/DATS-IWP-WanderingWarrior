@@ -15,7 +15,7 @@ MonoBehaviour:
   aktionName: Burning Blade
   description: Status Aktion that increases your Critical Hit multiplier & Magic,
     but reduces your Endurance.
-  pointCost: 5
+  pointCost: 4
   isUnique: 1
   aktionVFXPrefab: {fileID: 0}
   vfxOffset: {x: 0, y: 0, z: 0}

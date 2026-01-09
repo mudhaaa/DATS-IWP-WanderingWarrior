@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GetAktion_PhysWeak
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: 'Jab '
-  enhancementDesc: Gain Jab & +5 Strength
+  enhancementName: Ancient Technique
+  enhancementDesc: Gain the Aktion 'Piercing Jab'  & +5 Strength
   effects:
   - enhancementType: 2
     changedStat: 0

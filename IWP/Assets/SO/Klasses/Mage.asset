@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   health: 440
-  mana: 560
+  aktionPoints: 5
   strength: 58
   magic: 170
   endurance: 80
   speed: 92
   unique1: {fileID: 11400000, guid: 385cc60eb8e6dca4188ade38347c1f7f, type: 2}
   unique2: {fileID: 11400000, guid: 7afbfb4d9c58b7e4c8c78201bb4976e2, type: 2}
+  characterPrefab: {fileID: 0}

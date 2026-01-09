@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GainStat_Magic
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
-  enhancementName: Magic Boost
-  enhancementDesc: Gain 10% Magic
+  enhancementName: Magic Boost I
+  enhancementDesc: Gain +10% Magic
   effects:
   - enhancementType: 0
     changedStat: 2

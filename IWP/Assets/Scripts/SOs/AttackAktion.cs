@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class AttackAktion : Aktion
 {
-
+    [Header("Attack")]
     [SerializeField] private DamageMultiplier damageMultiplier;
     public float GetDamageMultiplier()
     {

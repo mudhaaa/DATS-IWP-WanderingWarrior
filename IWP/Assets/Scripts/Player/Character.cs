@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// Manages each Player character's in-game stats & input handling
@@ -30,14 +31,19 @@ public class Character : MonoBehaviour
     [SerializeField] private int originalSpeed;
     [SerializeField] private float originalCrit;
 
-    // Stat Change Turn Counter
-    [SerializeField] private int healthChangeTimer;
-    [SerializeField] private int APChangeTimer;
-    [SerializeField] private int strengthChangeTimer;
-    [SerializeField] private int magicChangeTimer;
-    [SerializeField] private int enduranceChangeTimer;
-    [SerializeField] private int speedChangeTimer;
-    [SerializeField] private float critChangeTimer;
+    // Stat Buff Turn Counter
+    [SerializeField] private int strengthBuffTimer;
+    [SerializeField] private int magicBuffTimer;
+    [SerializeField] private int enduranceBuffTimer;
+    [SerializeField] private int speedBuffTimer;
+    [SerializeField] private int critBuffTimer;
+
+    // Stat Nerf Turn Counter
+    [SerializeField] private int strengthNerfTimer;
+    [SerializeField] private int magicNerfTimer;
+    [SerializeField] private int enduranceNerfTimer;
+    [SerializeField] private int speedNerfTimer;
+    [SerializeField] private int critNerfTimer;
     #endregion
 
     #region Aktion
@@ -83,6 +89,8 @@ public class Character : MonoBehaviour
 
     #endregion
 
+    [SerializeField] private List<string> turnUpdateTexts = new List<string>();
+    public List<string> GetTurnUpdateLists() { return turnUpdateTexts; }
     [SerializeField] public CanvasManager canvasManager { private set; get; }
     [SerializeField] public  AktionManager aktionManager { private set; get; }
 
@@ -106,6 +114,8 @@ public class Character : MonoBehaviour
         currEndurance = originalEndurance;
         currSpeed = originalSpeed;
         currCrit = originalCrit;
+
+        Debug.Log($"HP: {currHealth}, AP: {currAP}, ST: {currStrength}, MA: {currMagic}, EN: {currEndurance}, SP: {currSpeed}");
         #endregion
 
         #region Aktion
@@ -142,8 +152,10 @@ public class Character : MonoBehaviour
     {
         ResetHealthAndMana();
         ResetToOriginalStats();
+        ResetStatChangeTimers();
+        CheckForEnhancement(); 
+        Debug.Log($"HP: {currHealth}, AP: {currAP}, ST: {currStrength}, MA: {currMagic}, EN: {currEndurance}, SP: {currSpeed}");
 
-        CheckForEnhancement();
     }
 
     public void ResetAktionList()
@@ -226,11 +238,23 @@ public class Character : MonoBehaviour
     public int GetEndurance() { return currEndurance; }
     public int GetSpeed() { return currSpeed; }
     public float GetCrit() { return currCrit; }
+    // Getter untuk stat buff timers
+    public int GetStrengthBuffTimer() { return strengthBuffTimer; }
+    public int GetMagicBuffTimer() { return magicBuffTimer; }
+    public int GetEnduranceBuffTimer() { return enduranceBuffTimer; }
+    public int GetSpeedBuffTimer() { return speedBuffTimer; }
+    public int GetCritBuffTimer() { return critBuffTimer; }
+    // Getter untuk stat nerf timers
+    public int GetStrengthNerfTimer() { return strengthNerfTimer; }
+    public int GetMagicNerfTimer() { return magicNerfTimer; }
+    public int GetEnduranceNerfTimer() { return enduranceNerfTimer; }
+    public int GetSpeedNerfTimer() { return speedNerfTimer; }
+    public int GetCritNerfTimer() { return critNerfTimer; }
     #endregion
     #region Stat Setter
     // Setter untuk current stats
     public void SetHealth(int value) { currHealth = value; }
-    public void SetAP(int value) { currAP = value; }
+    public void SetAP(int value) { Mathf.Clamp(currAP = value, 0, originalAP); }
     public void SetStrength(int value) { currStrength = value; }
     public void SetMagic(int value) { currMagic = value; }
     public void SetEndurance(int value) { currEndurance = value; }
@@ -240,13 +264,25 @@ public class Character : MonoBehaviour
     public void SetUnique2(Aktion value) { unique2 = value; }
 
     //Setter untuk original stats
-    public void SetOriginalHealth(int value) { currHealth = value; }
-    public void SetOriginalAP(int value) { currAP = value; }
-    public void SetOriginalStrength(int value) { currStrength = value; }
-    public void SetOriginalMagic(int value) { currMagic = value; }
-    public void SetOriginalEndurance(int value) { currEndurance = value; }
-    public void SetOriginalSpeed(int value) { currSpeed = value; }
-    public void SetOriginalCrit(float value) { currCrit = value; }
+    public void SetOriginalHealth(int value) { originalHealth = value; }
+    public void SetOriginalAP(int value) { originalAP = value; }
+    public void SetOriginalStrength(int value) { originalStrength = value; }
+    public void SetOriginalMagic(int value) { originalMagic = value; }
+    public void SetOriginalEndurance(int value) { originalEndurance = value; }
+    public void SetOriginalSpeed(int value) { originalSpeed = value; }
+    public void SetOriginalCrit(float value) { originalCrit = value; }
+    // Setter untuk stat buff timers
+    public void SetStrengthBuffTimer(int value) { strengthBuffTimer = value; }
+    public void SetMagicBuffTimer(int value) { magicBuffTimer = value; }
+    public void SetEnduranceBuffTimer(int value) { enduranceBuffTimer = value; }
+    public void SetSpeedBuffTimer(int value) { speedBuffTimer = value; }
+    public void SetCritBuffTimer(int value) { critBuffTimer = value; }
+    // Setter untuk stat nerf timers
+    public void SetStrengthNerfTimer(int value) { strengthNerfTimer = value; }
+    public void SetMagicNerfTimer(int value) { magicNerfTimer = value; }
+    public void SetEnduranceNerfTimer(int value) { enduranceNerfTimer = value; }
+    public void SetSpeedNerfTimer(int value) { speedNerfTimer = value; }
+    public void SetCritNerfTimer(int value) { critNerfTimer = value; }
 
     // Function untuk reset stats ke original
     public void ResetHealthAndMana()
@@ -261,6 +297,146 @@ public class Character : MonoBehaviour
         currEndurance = originalEndurance;
         currSpeed = originalSpeed;
         currCrit = originalCrit;
+    }
+
+    public void DownStatChangeTimers()
+    {
+        if (strengthBuffTimer > 0)
+        {
+            strengthBuffTimer--;
+            if (strengthBuffTimer <= 0)
+            {
+                currStrength = originalStrength;
+
+                string msg = $"{name}'s Strength is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (magicBuffTimer > 0)
+        {
+            magicBuffTimer--;
+            if (magicBuffTimer <= 0)
+            {
+                currMagic = originalMagic;
+                string msg = $"{name}'s Magic is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (enduranceBuffTimer > 0)
+        {
+            enduranceBuffTimer--;
+            if (enduranceBuffTimer <= 0)
+            {
+                currEndurance = originalEndurance;
+
+                string msg = $"{name}'s Endurance is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (speedBuffTimer > 0)
+        {
+            speedBuffTimer--;
+            if (speedBuffTimer <= 0)
+            {
+                currSpeed = originalSpeed;
+
+                string msg = $"{name}'s Speed is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (critBuffTimer > 0)
+        {
+            critBuffTimer--;
+            if (critBuffTimer <= 0)
+            {
+                currCrit = originalCrit;
+
+                string msg = $"{name}'s Crit is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+
+        if (strengthNerfTimer > 0)
+        {
+            strengthNerfTimer--;
+            if (strengthNerfTimer <= 0)
+            {
+                currStrength = originalStrength;
+
+                string msg = $"{name}'s Strength is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (magicNerfTimer > 0)
+        {
+            magicNerfTimer--;
+            if (magicNerfTimer <= 0)
+            {
+                currMagic = originalMagic;
+
+                string msg = $"{name}'s Magic is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (enduranceNerfTimer > 0)
+        {
+            enduranceNerfTimer--;
+            if (enduranceNerfTimer <= 0)
+            {
+                currEndurance = originalEndurance;
+
+                string msg = $"{name}'s Endurance is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (speedNerfTimer > 0)
+        {
+            speedNerfTimer--;
+            if (speedNerfTimer <= 0)
+            {
+                currSpeed = originalSpeed;
+
+                string msg = $"{name}'s Speed is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+        if (critNerfTimer > 0)
+        {
+            critNerfTimer--;
+            if (critNerfTimer <= 0)
+            {
+                currCrit = originalCrit;
+
+                string msg = $"{name}'s Crit is back to normal.";
+                turnUpdateTexts.Add(msg);
+                Debug.Log(msg);
+            }
+        }
+
+    }
+
+    public void ResetStatChangeTimers()
+    {
+        strengthBuffTimer = 0;
+        magicBuffTimer = 0;
+        enduranceBuffTimer = 0;
+        speedBuffTimer = 0;
+        critBuffTimer = 0;
+
+        strengthNerfTimer = 0;
+        magicNerfTimer = 0;
+        enduranceNerfTimer = 0;
+        speedNerfTimer = 0;
+        critNerfTimer = 0;
     }
     #endregion
 }
