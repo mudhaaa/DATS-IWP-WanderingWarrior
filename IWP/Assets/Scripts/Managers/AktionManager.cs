@@ -275,7 +275,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Strength increased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -284,7 +284,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Strength increase extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
 
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
@@ -308,7 +308,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Magic increased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -317,7 +317,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Magic increase extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
 
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
@@ -341,7 +341,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Endurance increased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -350,7 +350,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Endurance increase extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
 
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
@@ -374,7 +374,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Speed increased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -383,7 +383,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Speed increase extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
 
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
@@ -401,7 +401,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Crit increased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -410,7 +410,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Crit increase extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
@@ -435,7 +435,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Strength decreased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -443,7 +443,7 @@ public class AktionManager : MonoBehaviour
             target.SetStrengthNerfTimer(target.GetStrengthNerfTimer() + effect.GetBoost().GetTimer());
             string msg = $"{target.name}'s Strength decrease extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
@@ -466,7 +466,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Magic decreased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -474,7 +474,7 @@ public class AktionManager : MonoBehaviour
             target.SetMagicNerfTimer(target.GetMagicNerfTimer() + effect.GetBoost().GetTimer());
             string msg = $"{target.name}'s Magic decrease extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
@@ -497,7 +497,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Endurance decreased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -505,7 +505,7 @@ public class AktionManager : MonoBehaviour
             target.SetEnduranceNerfTimer(target.GetEnduranceNerfTimer() + effect.GetBoost().GetTimer());
             string msg = $"{target.name}'s Endurance decrease extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
@@ -528,7 +528,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Speed decreased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -536,7 +536,7 @@ public class AktionManager : MonoBehaviour
             target.SetSpeedNerfTimer(target.GetSpeedNerfTimer() + effect.GetBoost().GetTimer());
             string msg = $"{target.name}'s Speed decrease extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
@@ -552,7 +552,7 @@ public class AktionManager : MonoBehaviour
 
             string msg = $"{target.name}'s Crit decreased!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
         }
         else
         {
@@ -560,7 +560,7 @@ public class AktionManager : MonoBehaviour
             target.SetCritNerfTimer(target.GetCritNerfTimer() + effect.GetBoost().GetTimer());
             string msg = $"{target.name}'s Crit decrease extended!";
             target.GetTurnUpdateLists().Add(msg);
-            Debug.Log(msg);
+            //Debug.Log(msg);
             // Refreshes timer to base
             //target.SetStrengthBuffTimer(effect.GetBoost().GetTimer()); 
         }
@@ -576,7 +576,7 @@ public class AktionManager : MonoBehaviour
 
         string msg = $"{target.name}'s Health restored!";
         target.GetTurnUpdateLists().Add(msg);
-        Debug.Log(msg);
+        //Debug.Log(msg);
     }
 
     void OnRestoreAP(Character target, StatusEffect effect)
@@ -587,7 +587,7 @@ public class AktionManager : MonoBehaviour
 
         string msg = $"{target.name}'s AP restored!";
         target.GetTurnUpdateLists().Add(msg);
-        Debug.Log(msg);
+        //Debug.Log(msg);
     }
     #endregion
 
@@ -598,9 +598,9 @@ public class AktionManager : MonoBehaviour
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
 
-        string msg = $"{target.name}'s Health restored!";
+        string msg = $"{target.name}'s Health reduced!";
         target.GetTurnUpdateLists().Add(msg);
-        Debug.Log(msg);
+        //Debug.Log(msg);
     }
 
     void OnReduceAP(Character target, StatusEffect effect)
@@ -609,9 +609,9 @@ public class AktionManager : MonoBehaviour
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
 
-        string msg = $"{target.name}'s AP restored!";
+        string msg = $"{target.name}'s AP reduced!";
         target.GetTurnUpdateLists().Add(msg);
-        Debug.Log(msg);
+        //Debug.Log(msg);
     }
     #endregion
 

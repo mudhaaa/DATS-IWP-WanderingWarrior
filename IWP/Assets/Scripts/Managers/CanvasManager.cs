@@ -36,6 +36,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private FloatingTextUI damageNumberUIP1;
     [SerializeField] private HorizontalLayoutGroup winIconsP1;
     [SerializeField] private List<GameObject> winIconsListP1;
+    [SerializeField] private TMP_Text turnUpdateP1;
 
     [Header("Player 2 Status Bar")]
     [SerializeField] private Slider healthBarP2; 
@@ -63,6 +64,7 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private FloatingTextUI damageNumberUIP2;
     [SerializeField] private HorizontalLayoutGroup winIconsP2;
     [SerializeField] private List<GameObject> winIconsListP2;
+    [SerializeField] private TMP_Text turnUpdateP2;
 
     [Header("HUD")]
     [SerializeField] private GameObject aktionSlotUIPrefab;
@@ -191,7 +193,7 @@ public class CanvasManager : MonoBehaviour
         RectTransform aktionListRTP1 = aktionListP1.GetComponent<RectTransform>();
         //Vector3 ogPos = new Vector3(aktionListRTP1.localPosition.x, aktionListRTP1.localPosition.y - 100, 0);
         //aktionListRTP1.SetLocalPositionAndRotation(ogPos, aktionListP2.transform.localRotation);
-        moveDistanceP1 = aktionUIListP1[0].rect.height * 0.25f + vlgP1.spacing * 0.25f;
+        moveDistanceP1 = aktionUIListP1[0].rect.height * 0.5f + vlgP1.spacing * 0.25f;
 
         aktionUIListP1.Reverse();
 
@@ -215,7 +217,7 @@ public class CanvasManager : MonoBehaviour
         RectTransform aktionListRTP2 = aktionListP2.GetComponent<RectTransform>();
         //ogPos = new Vector3(aktionListRTP2.localPosition.x, aktionListRTP2.localPosition.y - 100, 0);
         //aktionListRTP2.SetLocalPositionAndRotation(ogPos, aktionListP2.transform.localRotation);
-        moveDistanceP2 = aktionUIListP2[0].rect.height * 0.25f + vlgP2.spacing * 0.25f;
+        moveDistanceP2 = aktionUIListP2[0].rect.height * 0.5f + vlgP2.spacing * 0.25f;
 
         aktionUIListP2.Reverse();
 
@@ -464,6 +466,59 @@ public class CanvasManager : MonoBehaviour
     }
 
     #endregion
+
+    #region Turn Update 
+
+
+    public IEnumerator TurnUpdates(int n)
+    {
+        Debug.Log("Activating Turn Updates");
+
+        if (playerManager.GetPlayer1().GetTurnUpdateLists().Count > 0)
+        {
+            turnUpdateP1.gameObject.transform.parent.gameObject.SetActive(true);
+
+            for (int i = 0; i < playerManager.GetPlayer1().GetTurnUpdateLists().Count; i++)
+            {
+                turnUpdateP1.text = playerManager.GetPlayer1().GetTurnUpdateLists()[i];
+                yield return new WaitForSeconds(2);
+                turnUpdateP1.text = "";
+                yield return new WaitForSeconds(.5f);
+
+            }
+        }
+
+        turnUpdateP1.gameObject.transform.parent.gameObject.SetActive(false);
+
+        yield return null;
+
+        if (playerManager.GetPlayer2().GetTurnUpdateLists().Count > 0)
+        {
+            turnUpdateP2.gameObject.transform.parent.gameObject.SetActive(true);
+
+            for (int i = 0; i < playerManager.GetPlayer2().GetTurnUpdateLists().Count; i++)
+            {
+                turnUpdateP2.text = playerManager.GetPlayer2().GetTurnUpdateLists()[i];
+                yield return new WaitForSeconds(2);
+                turnUpdateP2.text = "";
+                yield return new WaitForSeconds(.5f);
+
+            }
+        }
+
+        turnUpdateP2.gameObject.transform.parent.gameObject.SetActive(false);
+
+        yield return null;
+
+        playerManager.GetPlayer1().GetTurnUpdateLists().Clear();
+        playerManager.GetPlayer2().GetTurnUpdateLists().Clear();
+        BattleManager.instance.EndOfTurn(n);
+
+        yield return null;
+
+    }
+    #endregion
+
     public void ActivateDamageNumber(int i, int damage)
     {
         if (i == 1)

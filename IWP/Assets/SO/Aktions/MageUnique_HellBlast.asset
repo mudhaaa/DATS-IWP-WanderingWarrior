@@ -14,16 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aktionName: Hell Blast
   description: A Massive Magic attack. On Hit, it reduces Magic.
-  healthCost: 0
-  manaCost: 0.2
+  pointCost: 5
   isUnique: 1
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 4
   attackType: 3
   critEffects:
   - changeType: 4
     statType: 6
     isSelfTarget: 1
+    boost:
+      timer: 0
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0.05
   hitEffects:
   - changeType: 2
     statType: 2
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

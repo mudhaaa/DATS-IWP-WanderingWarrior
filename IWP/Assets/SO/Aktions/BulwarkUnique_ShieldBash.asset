@@ -15,19 +15,35 @@ MonoBehaviour:
   aktionName: Shield Bash
   description: Medium Endurance attack. On Hit, it reduces enemy Speed. On Crit,
     it reduces attacking stats.
-  healthCost: 0.1
-  manaCost: 0
+  pointCost: 3
   isUnique: 1
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 2
   attackType: 2
   critEffects:
   - changeType: 2
     statType: 2
     isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   - changeType: 2
     statType: 1
     isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   hitEffects:
   - changeType: 2
     statType: 4
     isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aktionName: Tailwind
   description: A Weak Magic attack. On Hit, it increases your Speed.
-  pointCost: 0
+  pointCost: 1
   isUnique: 0
   aktionVFXPrefab: {fileID: 0}
   vfxOffset: {x: 0, y: 0, z: 0}
@@ -25,3 +25,8 @@ MonoBehaviour:
   - changeType: 1
     statType: 4
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

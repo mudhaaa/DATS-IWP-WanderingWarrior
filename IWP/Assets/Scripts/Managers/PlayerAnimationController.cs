@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
 {
-
-    [SerializeField] private PlayerManager playerManager;
     [SerializeField] private AktionManager aktionManager;
     [SerializeField] private ParticleSystem knightBurningBlade;
 
@@ -11,7 +9,6 @@ public class PlayerAnimationController : MonoBehaviour
     void Start()
     {
         aktionManager = BattleManager.instance.AktionManager();
-        playerManager = BattleManager.instance.PlayerManager();
 
         knightBurningBlade = GetComponentInChildren<ParticleSystem>();
         knightBurningBlade.gameObject.SetActive(false);
@@ -20,7 +17,11 @@ public class PlayerAnimationController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement) { knightBurningBlade.Stop(); }
+        if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement ||
+            GetComponentInParent<Character>().InBurningBlade())
+        {
+            knightBurningBlade.Stop();
+        }
     }
 
     public void PlayerAttackFeedback()

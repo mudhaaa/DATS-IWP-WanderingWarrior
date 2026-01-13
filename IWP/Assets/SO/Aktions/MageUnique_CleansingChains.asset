@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
   m_Name: MageUnique_CleansingChains
   m_EditorClassIdentifier: 
-  aktionName: Cleansing Chains
-  description: Status Aktion that removes all enemy stat changes
-  healthCost: 0
-  manaCost: 0.1
+  aktionName: Darkness Cleanse
+  description: A Status Aktion that removes all enemy stat changes
+  pointCost: 1
   isUnique: 1
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
   - changeType: 5
     statType: 0
     isSelfTarget: 0
+    boost:
+      timer: 0
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

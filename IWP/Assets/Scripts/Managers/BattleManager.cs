@@ -66,7 +66,7 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     [Header("Players")]
-    [SerializeField] private PlayerManager playerManager; 
+    [SerializeField] private PlayerManager playerManager;
     public PlayerManager PlayerManager() { return playerManager; }
 
 
@@ -84,7 +84,7 @@ public class BattleManager : MonoBehaviour
     public BattleBarManager BattleBarManager() { return barManager; }
 
     [SerializeField] private AktionManager aktionManager;
-    public AktionManager AktionManager() {  return aktionManager; }
+    public AktionManager AktionManager() { return aktionManager; }
 
     [SerializeField] private EnhancementManager enhancementManager;
     public EnhancementManager EnhancementManager() { return enhancementManager; }
@@ -134,7 +134,7 @@ public class BattleManager : MonoBehaviour
         else if (currState == BattleStates.P2turn)
         {
             playerManager.GetPlayer1().PlayAnimation("Block Idle");
-            currState = BattleStates.P2attack; 
+            currState = BattleStates.P2attack;
         }
 
         //if (currState == BattleStates.P2attack) 
@@ -158,19 +158,26 @@ public class BattleManager : MonoBehaviour
         currentAttackCoroutine = StartCoroutine(EndOfAttackState());
     }
 
+    Coroutine currentCoroutine = null;
     IEnumerator EndOfAttackState()
     {
         if (currState == BattleStates.P1attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
             yield return new WaitForSeconds(4);
-            EndOfTurn(1);
+            if (currentCoroutine == null)
+            {
+                currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(1));
+            }
         }
         else if (currState == BattleStates.P2attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
             yield return new WaitForSeconds(4);
-            EndOfTurn(2);
+            if (currentCoroutine == null)
+            {
+                currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(2));
+            }
         }
         else
         {
@@ -200,20 +207,31 @@ public class BattleManager : MonoBehaviour
         {
             Debug.Log("P1 status move");
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
+            
+            yield return new WaitForSeconds(4);
+
+            if (currentCoroutine == null)
+            {
+                currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(i));
+            }
         }
         else if (i == 2)
         {
             Debug.Log("P2 status move");
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
+
+            yield return new WaitForSeconds(4);
+
+            if (currentCoroutine == null)
+            {
+                currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(i));
+            }
         }
-
-        yield return new WaitForSeconds(4);
-
-        EndOfTurn(i);
     }
 
-    void EndOfTurn(int i)
+    public void EndOfTurn(int i)
     {
+        currentCoroutine = null;
         if (i == 1)
         {
             currState = BattleStates.P2turn;
@@ -222,7 +240,7 @@ public class BattleManager : MonoBehaviour
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer2());
 
             playerManager.GetPlayer2().DownStatChangeTimers();
-            
+
             Debug.Log("Starting P2 turn");
         }
         else if (i == 2)
@@ -231,7 +249,7 @@ public class BattleManager : MonoBehaviour
             int newAP = playerManager.GetPlayer1().GetAP() + 1;
             playerManager.GetPlayer1().SetAP(newAP);
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer1());
-            
+
             playerManager.GetPlayer1().DownStatChangeTimers();
 
             Debug.Log("Starting P1 turn");
@@ -247,23 +265,42 @@ public class BattleManager : MonoBehaviour
         if (playerManager.GetPlayer1().GetHealth() <= 0)
         {
             StartCoroutine(EndRound(2));
-            p2wins++;
-            canvasManager.UpdateWinIcons(2);
         }
         else if (playerManager.GetPlayer2().GetHealth() <= 0)
         {
             StartCoroutine(EndRound(1));
+
+        }
+    }
+
+    IEnumerator EndRound(int i)
+    {
+        if (i == 1)
+        {
+            currState = BattleStates.P1winRound;
             p1wins++;
             canvasManager.UpdateWinIcons(1);
         }
-    }
-    IEnumerator EndRound(int i)
-    {
-        if (i == 1) currState = BattleStates.P1winRound; 
-        else if (i == 2) currState = BattleStates.P2winRound;
+        else if (i == 2)
+        {
+            currState = BattleStates.P2winRound;
+            p2wins++;
+            canvasManager.UpdateWinIcons(2);
+        }
 
         yield return new WaitForSecondsRealtime(5);
 
-        currState = BattleStates.Enhancement;
+        if (p1wins == 3)
+        {
+            currState = BattleStates.P1winBattle;
+        }
+        else if (p2wins == 3)
+        {
+            currState = BattleStates.P2winBattle;
+        }
+        else
+        {
+            currState = BattleStates.Enhancement;
+        }
     }
 }

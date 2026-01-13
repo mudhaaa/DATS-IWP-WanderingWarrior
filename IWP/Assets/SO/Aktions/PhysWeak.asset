@@ -20,8 +20,21 @@ MonoBehaviour:
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   attackType: 1
-  critEffects: []
+  critEffects:
+  - changeType: 2
+    statType: 3
+    isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   hitEffects:
   - changeType: 2
     statType: 3
     isSelfTarget: 0
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

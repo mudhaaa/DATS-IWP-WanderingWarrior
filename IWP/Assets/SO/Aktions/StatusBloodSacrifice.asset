@@ -23,9 +23,24 @@ MonoBehaviour:
   - changeType: 1
     statType: 1
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   - changeType: 1
     statType: 2
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   - changeType: 4
     statType: 6
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

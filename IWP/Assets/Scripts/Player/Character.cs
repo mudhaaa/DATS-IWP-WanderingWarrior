@@ -55,10 +55,10 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Enhancements
-    [SerializeField] private List<Enhancement> enhancementsList;
-
+    [SerializeField] private List<Enhancement> enhancementsList = new List<Enhancement>();
+    [SerializeField] private List<bool> enhancementAppliedList = new List<bool>();
     public List<Enhancement> GetEnhancementsList() { return enhancementsList; }
-    public void AddEnhancement(Enhancement e) {  enhancementsList.Add(e); }
+    public void AddEnhancement(Enhancement e) {  enhancementsList.Add(e); enhancementAppliedList.Add(false); }
     #endregion
 
     #region Inputs
@@ -153,7 +153,8 @@ public class Character : MonoBehaviour
         ResetHealthAndMana();
         ResetToOriginalStats();
         ResetStatChangeTimers();
-        CheckForEnhancement(); 
+        CheckForEnhancement();
+        canvasManager.UpdatePlayerBars(this);
         Debug.Log($"HP: {currHealth}, AP: {currAP}, ST: {currStrength}, MA: {currMagic}, EN: {currEndurance}, SP: {currSpeed}");
 
     }
@@ -169,9 +170,10 @@ public class Character : MonoBehaviour
     {
         if (enhancementsList.Count > 0)
         {
-            ResetAktionList();
-            foreach (Enhancement enhancement in enhancementsList)
+            Debug.Log("Checking Enhancements");
+            for (int i = 0; i < enhancementsList.Count; i++)
             {
+                Enhancement enhancement = enhancementsList[i];
                 foreach (EnhancementEffect effect in enhancement.EnhancementEffects())
                 {
                     if (effect.GetEnhancementType() == EnhancementType.AktionGain)
@@ -180,28 +182,143 @@ public class Character : MonoBehaviour
                         canvasManager.ResetList();
                         Debug.Log($"Added Aktion Gain type Enhancement of name {enhancement.EnhancementName()}");
                     }
-                    else if (effect.GetEnhancementType() == EnhancementType.StatBoost)
+                    if (effect.GetEnhancementType() == EnhancementType.StatBoost)
                     {
-                        if (effect.GetChangedStat() == Stat.Strength) SetOriginalStrength(Mathf.CeilToInt(originalStrength + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
-                        if (effect.GetChangedStat() == Stat.Magic) SetOriginalMagic(Mathf.CeilToInt(originalMagic + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
-                        if (effect.GetChangedStat() == Stat.Endurance) SetOriginalEndurance(Mathf.CeilToInt(originalEndurance + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
-                        if (effect.GetChangedStat() == Stat.Speed) SetOriginalSpeed(Mathf.CeilToInt(originalSpeed + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
-                        if (effect.GetChangedStat() == Stat.Health) SetOriginalHealth(Mathf.CeilToInt(originalHealth + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
-                        if (effect.GetChangedStat() == Stat.AP) SetOriginalAP(Mathf.CeilToInt(originalAP + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
-                        if (effect.GetChangedStat() == Stat.Crit) SetOriginalCrit(Mathf.CeilToInt(originalCrit + effect.GetFlatStatChangeValue() * (1 + effect.GetPercentageStatChangeValue())));
+                        if (effect.GetChangedStat() == Stat.Strength)
+                        {
+                            int newValue = Mathf.CeilToInt(originalStrength * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalStrength(newValue);
+                            SetStrength(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Magic)
+                        {
+                            int newValue = Mathf.CeilToInt(originalMagic * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalMagic(newValue);
+                            SetMagic(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Endurance)
+                        {
+                            int newValue = Mathf.CeilToInt(originalEndurance * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalEndurance(newValue);
+                            SetEndurance(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Speed)
+                        {
+                            int newValue = Mathf.CeilToInt(originalSpeed * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalSpeed(newValue);
+                            SetSpeed(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Health)
+                        {
+                            int newValue = Mathf.CeilToInt(originalHealth * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalHealth(newValue);
+                            SetHealth(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.AP)
+                        {
+                            int newValue = Mathf.CeilToInt(originalAP * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalAP(newValue);
+                            SetAP(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Crit)
+                        {
+                            int newValue = Mathf.CeilToInt(originalCrit * (1 + effect.GetPercentageStatChangeValue()) + effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalCrit(newValue);
+                            SetCrit(newValue);
+                        }
+
+                        ResetToOriginalStats();
 
                         Debug.Log($"Added Stat Boost type Enhancement of name {enhancement.EnhancementName()}");
+                    }
+                    if(effect.GetEnhancementType() == EnhancementType.StatDrop)
+                    {
+                        if (effect.GetChangedStat() == Stat.Strength)
+                        {
+                            int newValue = Mathf.CeilToInt(originalStrength * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalStrength(newValue);
+                            SetStrength(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Magic)
+                        {
+                            int newValue = Mathf.CeilToInt(originalMagic * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalMagic(newValue);
+                            SetMagic(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Endurance)
+                        {
+                            int newValue = Mathf.CeilToInt(originalEndurance * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalEndurance(newValue);
+                            SetEndurance(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Speed)
+                        {
+                            int newValue = Mathf.CeilToInt(originalSpeed * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalSpeed(newValue);
+                            SetSpeed(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Health)
+                        {
+                            int newValue = Mathf.CeilToInt(originalHealth * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalHealth(newValue);
+                            SetHealth(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.AP)
+                        {
+                            int newValue = Mathf.CeilToInt(originalAP * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalAP(newValue);
+                            SetAP(newValue);
+                        }
+                        if (effect.GetChangedStat() == Stat.Crit)
+                        {
+                            int newValue = Mathf.CeilToInt(originalCrit * (1 - effect.GetPercentageStatChangeValue()) - effect.GetFlatStatChangeValue());
+                            Debug.Log($"New value of {effect.GetChangedStat().ToString()} is {newValue}");
+                            SetOriginalCrit(newValue);
+                            SetCrit(newValue);
+                        }
+
+                        ResetToOriginalStats();
+
+                        Debug.Log($"Added Stat Drop type Enhancement of name {enhancement.EnhancementName()}");
                     }
                 }
             }
         }
     }
-
     // Update is called once per frame 
     public void OnUpdate()
     {
         isConfirmPressed = confirmAction.triggered;
         isHitPressed = hitAction.triggered;
+    }
+
+    [SerializeField] private bool inBurningBlade;
+    public bool InBurningBlade() { return inBurningBlade; }
+    public void CheckForBurningBlade()
+    {
+        if (currCrit > originalCrit && 
+            currMagic > originalMagic && 
+            currEndurance < originalEndurance)
+        {
+            inBurningBlade = true;
+        }
+        else
+        {
+            inBurningBlade = false;
+        }
     }
 
     public void EnableActions()
@@ -310,7 +427,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Strength is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (magicBuffTimer > 0)
@@ -321,7 +438,7 @@ public class Character : MonoBehaviour
                 currMagic = originalMagic;
                 string msg = $"{name}'s Magic is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (enduranceBuffTimer > 0)
@@ -333,7 +450,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Endurance is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (speedBuffTimer > 0)
@@ -345,7 +462,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Speed is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (critBuffTimer > 0)
@@ -357,7 +474,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Crit is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
 
@@ -370,7 +487,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Strength is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (magicNerfTimer > 0)
@@ -382,7 +499,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Magic is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (enduranceNerfTimer > 0)
@@ -394,7 +511,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Endurance is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (speedNerfTimer > 0)
@@ -406,7 +523,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Speed is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
         if (critNerfTimer > 0)
@@ -418,7 +535,7 @@ public class Character : MonoBehaviour
 
                 string msg = $"{name}'s Crit is back to normal.";
                 turnUpdateTexts.Add(msg);
-                Debug.Log(msg);
+                //Debug.Log(msg);
             }
         }
 

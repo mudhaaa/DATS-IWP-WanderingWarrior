@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
   m_Name: KnightUnique_BurningBlade
   m_EditorClassIdentifier: 
-  aktionName: Burning Blade
+  aktionName: Flaming Honour
   description: Status Aktion that increases your Critical Hit multiplier & Magic,
     but reduces your Endurance.
   pointCost: 4
@@ -23,9 +23,24 @@ MonoBehaviour:
   - changeType: 1
     statType: 5
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   - changeType: 1
     statType: 2
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   - changeType: 2
     statType: 3
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

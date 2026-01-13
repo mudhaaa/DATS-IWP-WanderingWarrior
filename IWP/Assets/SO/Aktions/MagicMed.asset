@@ -14,12 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aktionName: Fireball
   description: A Medium Magic attack. On Crit, it decreases enemy Strength.
-  healthCost: 0
-  manaCost: 0.14
+  pointCost: 3
+  isUnique: 0
+  aktionVFXPrefab: {fileID: 0}
+  vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 2
   attackType: 3
   critEffects:
   - changeType: 2
     statType: 1
     isSelfTarget: 0
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   hitEffects: []

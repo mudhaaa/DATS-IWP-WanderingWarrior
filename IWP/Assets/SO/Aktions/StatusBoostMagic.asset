@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aktionName: Magic Up
   description: A Status Aktion that increases Magic
-  pointCost: 0
+  pointCost: 2
   isUnique: 0
   aktionVFXPrefab: {fileID: 0}
   vfxOffset: {x: 0, y: 0, z: 0}
@@ -22,3 +22,8 @@ MonoBehaviour:
   - changeType: 1
     statType: 2
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

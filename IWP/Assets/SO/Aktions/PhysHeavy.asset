@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aktionName: Reckless Assault
   description: A Heavy Strength attack. On Crit, it reduces your Endurance.
-  pointCost: 0
+  pointCost: 3
   isUnique: 0
   aktionVFXPrefab: {fileID: 0}
   vfxOffset: {x: 0, y: 0, z: 0}
@@ -24,4 +24,9 @@ MonoBehaviour:
   - changeType: 4
     statType: 3
     isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   hitEffects: []

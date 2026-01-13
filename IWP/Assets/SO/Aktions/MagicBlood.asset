@@ -29,4 +29,4 @@ MonoBehaviour:
       timer: 0
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0
+      effectAmount: 0.1
