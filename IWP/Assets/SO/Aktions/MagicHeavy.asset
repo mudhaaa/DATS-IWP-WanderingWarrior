@@ -17,6 +17,7 @@ MonoBehaviour:
   pointCost: 5
   isUnique: 0
   aktionVFXPrefab: {fileID: 3958596659431381315, guid: c50f9e2c685970e4c8ebcd5fc8c7b3e4, type: 3}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 3
   attackType: 3

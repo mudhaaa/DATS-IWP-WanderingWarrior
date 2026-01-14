@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: BulwarkUnique_ShieldBash
   m_EditorClassIdentifier: 
   aktionName: Shield Bash
-  description: Medium Endurance attack. On Hit, it reduces enemy Speed. On Crit,
+  description: A Medium Endurance attack. On Hit, it reduces enemy Speed. On Crit,
     it reduces attacking stats.
   pointCost: 3
   isUnique: 1
   aktionVFXPrefab: {fileID: 0}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 2
   attackType: 2

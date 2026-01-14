@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
   enhancementName: Endurance Boost
-  enhancementDesc: Gain 10% Endurance, but lose 5% Speed
+  enhancementDesc: Gain +10% Endurance, but lose -5% Speed
   effects:
   - enhancementType: 0
     changedStat: 3

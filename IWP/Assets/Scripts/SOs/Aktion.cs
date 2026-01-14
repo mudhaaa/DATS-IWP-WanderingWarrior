@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
 
 [CreateAssetMenu()]
@@ -9,14 +10,16 @@ public class Aktion : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private int pointCost;
     [SerializeField] private bool isUnique;
-    
-    [Header("VFX")]
-    [SerializeField] private GameObject aktionVFXPrefab;
-    [SerializeField] private Vector3 vfxOffset;
-    public virtual int GetAPCost() { return pointCost; } 
-    public virtual string GetName() {  return aktionName; }
+    public virtual int GetAPCost() { return pointCost; }
+    public virtual string GetName() { return aktionName; }
     public virtual string GetDesc() { return description; }
     public virtual bool IsUnique() { return isUnique; }
+
+    [Header("VFX")]
+    [SerializeField] private GameObject aktionVFXPrefab;
+    [SerializeField] private bool isOnUser; // bool to check for if the vfx plays on the user or not
+    [SerializeField] private Vector3 vfxOffset;
+    public virtual bool IsOnUser() { return isOnUser; }
     public virtual GameObject GetVFX() { return aktionVFXPrefab; }
     public virtual Vector3 GetVFXOffset() { return vfxOffset; }
 }

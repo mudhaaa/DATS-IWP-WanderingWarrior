@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
   enhancementName: Strength Boost II
-  enhancementDesc: Gain 20% Strength, but lose 2.5% Health & 2.5% Endurance
+  enhancementDesc: Gain +20% Strength, but lose -2.5% Health & -2.5% Endurance
   effects:
   - enhancementType: 0
     changedStat: 1

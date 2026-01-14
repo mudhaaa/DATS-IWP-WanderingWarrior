@@ -101,6 +101,9 @@ public class CanvasManager : MonoBehaviour
 
     public void OnFirstTurn()
     {
+        UpdatePlayerBars(playerManager.GetPlayer1());
+        UpdatePlayerBars(playerManager.GetPlayer2());
+
         healthBarP1.value = healthBarP1.maxValue = playerManager.GetPlayer1().GetOriginalHealth();
         apBarP1.value = playerManager.GetPlayer1().GetOriginalAP();
         apBarP1.maxValue = 10;

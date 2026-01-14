@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
   enhancementName: Speed Boost
-  enhancementDesc: Gain 25% Speed, but lose 3% Strength & 3% Magic
+  enhancementDesc: Gain +25% Speed, but lose -3% Strength & -3% Magic
   effects:
   - enhancementType: 0
     changedStat: 4

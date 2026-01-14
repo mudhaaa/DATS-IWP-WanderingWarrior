@@ -18,6 +18,7 @@ MonoBehaviour:
   pointCost: 0
   isUnique: 0
   aktionVFXPrefab: {fileID: 0}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
   - changeType: 1
@@ -43,4 +44,4 @@ MonoBehaviour:
       timer: 3
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0
+      effectAmount: 0.15

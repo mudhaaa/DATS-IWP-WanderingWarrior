@@ -12,6 +12,8 @@ public class CharacterKlass : ScriptableObject
     [SerializeField] private int speed;
     [SerializeField] private Aktion unique1;
     [SerializeField] private Aktion unique2;
+    [SerializeField] private Aktion basicStrength;
+    [SerializeField] private Aktion basicMagic;
 
     [SerializeField] private GameObject characterPrefab;
 
@@ -86,7 +88,16 @@ public class CharacterKlass : ScriptableObject
     }
     #endregion
 
-    #region Uniques
+    #region Aktions
+    public Aktion GetBasic1()
+    {
+        return basicStrength;
+    }
+    public Aktion GetBasic2()
+    {
+        return basicMagic;
+    }
+
     public Aktion GetUnique1()
     {
         return unique1;

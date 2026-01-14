@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class AktionManager : MonoBehaviour
 {
@@ -159,7 +160,7 @@ public class AktionManager : MonoBehaviour
     IEnumerator AttackAktionFeedback(AttackAktion attack, Character attacker, Character defender, int damage, BattleBarSlider.BarState defenceSlider)
     {
         // animation play
-        if(attack.GetName() == "Fierce Slash")
+        if(attack.IsUnique())
         {
             attacker.PlayAnimation("UniqueAttack");
         }
@@ -185,21 +186,45 @@ public class AktionManager : MonoBehaviour
 
         if (currentAktion.GetVFX() != null)
         {
-            GameObject vfxGo = Instantiate(currentAktion.GetVFX());
-            Vector3 vfxOffset = currentAktion.GetVFXOffset();
-            if (currentDefender == player1) vfxOffset = vfxOffset * -1;
-            vfxGo.transform.position = currentDefender.transform.position - vfxOffset;
-            vfxGo.transform.LookAt(currentDefender.transform);
-            ParticleSystem vfx = vfxGo.GetComponentInChildren<ParticleSystem>();
-            vfx.Play();
+            PlayVFX();
         }
-        
+
+
         if (currentDefenderState == BattleBarSlider.BarState.Bad || currentDefender.GetHealth() <= currentDamageDealt)
         {
             currentDefender.PlayAnimation("Block Fail");
         }
+        else
+        {
+            currentDefender.PlayAnimation("Block Success", 0.05f);
+        }
 
         currentAktionCoroutine = null;
+    }
+
+    void PlayVFX()
+    {
+        GameObject vfxGo = Instantiate(currentAktion.GetVFX());
+        Vector3 vfxOffset = currentAktion.GetVFXOffset();
+
+        if (currentDefender == player1) vfxOffset = vfxOffset * -1;
+
+        if (!currentAktion.IsOnUser())
+        {
+            vfxGo.transform.position = currentDefender.transform.position - vfxOffset;
+            vfxGo.transform.LookAt(currentDefender.transform);
+        }
+        else
+        {
+            vfxGo.transform.position = currentAttacker.transform.position - vfxOffset;
+            vfxGo.transform.LookAt(currentDefender.transform);
+        }
+
+        VisualEffect vfx = vfxGo.GetComponent<VisualEffect>();
+        if (vfx != null) vfx.Play();
+
+        ParticleSystem ps = vfxGo.GetComponentInChildren<ParticleSystem>();
+        if (ps != null) ps.Play();
     }
 
     void StatusMove(StatusEffect effect, Character user, bool isSelfTarget)
@@ -254,6 +279,8 @@ public class AktionManager : MonoBehaviour
             Debug.Log("Activating Reset effect");
 
             target.ResetToOriginalStats();
+
+            target.ResetStatChangeTimers();
         }
     }
 
@@ -598,6 +625,7 @@ public class AktionManager : MonoBehaviour
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
 
+        Debug.Log(newValue);
         string msg = $"{target.name}'s Health reduced!";
         target.GetTurnUpdateLists().Add(msg);
         //Debug.Log(msg);

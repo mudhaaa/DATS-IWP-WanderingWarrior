@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 0}
   enhancementName: Strength Boost III
-  enhancementDesc: Gain 30% Strength, but lose 5% Health & 5% Endurance
+  enhancementDesc: Gain +30% Strength, but lose -5% Health & -5% Endurance
   effects:
   - enhancementType: 0
     changedStat: 1

@@ -1,24 +1,31 @@
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class PlayerAnimationController : MonoBehaviour
 {
+    [SerializeField] Character character;
     [SerializeField] private AktionManager aktionManager;
     [SerializeField] private ParticleSystem knightBurningBlade;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        character = GetComponentInParent<Character>();
+
         aktionManager = BattleManager.instance.AktionManager();
 
         knightBurningBlade = GetComponentInChildren<ParticleSystem>();
-        knightBurningBlade.gameObject.SetActive(false);
-        knightBurningBlade.Stop();
-       
+        if (knightBurningBlade != null)
+        {
+            knightBurningBlade.gameObject.SetActive(false);
+            knightBurningBlade.Stop();
+
+        }
     }
     private void FixedUpdate()
     {
-        if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement ||
-            GetComponentInParent<Character>().InBurningBlade())
+        if ((BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement ||
+            !character.InBurningBlade()) && knightBurningBlade != null)
         {
             knightBurningBlade.Stop();
         }
