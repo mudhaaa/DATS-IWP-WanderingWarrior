@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GetAktion_MagicUp
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: 0f182fb2863faa7449e020de33b77e68, type: 3}
   enhancementName: Sacred Texts
   enhancementDesc: Gain the Aktion 'Magic Up' & +1 AP
   effects:

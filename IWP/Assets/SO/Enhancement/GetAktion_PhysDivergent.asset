@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GetAktion_PhysDivergent
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: c0c621637e6ca054cb6f00c56255ade7, type: 3}
   enhancementName: Vessel's Technique
   enhancementDesc: Gain the Aktion 'Divergent Strike' & +5 Endurance
   effects:

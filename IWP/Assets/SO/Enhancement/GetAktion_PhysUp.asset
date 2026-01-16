@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GetAktion_PhysUp
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: 7184252199212cf4a9288a2a2d70dee1, type: 3}
   enhancementName: Pure Power
   enhancementDesc: Gain the Aktion 'Strength Up' & +25 Health
   effects:

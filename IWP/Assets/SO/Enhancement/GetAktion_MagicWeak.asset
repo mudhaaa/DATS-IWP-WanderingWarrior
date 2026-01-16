@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GetAktion_MagicWeak
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: feb8709f10385a94095b55fe8d0f625c, type: 3}
   enhancementName: Holy Winds
   enhancementDesc: Gain the Aktion 'Tailwind' & +5 Magic
   effects:

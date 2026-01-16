@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GetAktion_PhysMed
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: b066c869b51f9384fa8ac9cce36b4648, type: 3}
   enhancementName: Spiritual Instinct
   enhancementDesc: Gain the Aktion 'Focused Charge' & +5 Speed
   effects:

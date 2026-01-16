@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GainStat_StrengthBoost3
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: d473e35d9c998d443a00d04000f893e5, type: 3}
   enhancementName: Strength Boost III
   enhancementDesc: Gain +30% Strength, but lose -5% Health & -5% Endurance
   effects:

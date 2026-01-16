@@ -10,7 +10,7 @@ public class EnhancementUI : MonoBehaviour
 
     public void SetUI(Enhancement e)
     {
-        //eImage.sprite = e.EnhancementImage();
+        eImage.sprite = e.EnhancementImage();
         eName.text = e.EnhancementName();
         eDescription = e.EnhancementDesc();
     }

@@ -137,10 +137,6 @@ public class BattleManager : MonoBehaviour
             currState = BattleStates.P2attack;
         }
 
-        //if (currState == BattleStates.P2attack) 
-
-        //else if (currState == BattleStates.P1attack) 
-
     }
 
     private Coroutine currentAttackCoroutine = null;
@@ -240,6 +236,8 @@ public class BattleManager : MonoBehaviour
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer2());
 
             playerManager.GetPlayer2().DownStatChangeTimers();
+            canvasManager.UpdateStatusChangeUI(1);
+            canvasManager.UpdateStatusChangeUI(2);
 
             Debug.Log("Starting P2 turn");
         }
@@ -251,6 +249,8 @@ public class BattleManager : MonoBehaviour
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer1());
 
             playerManager.GetPlayer1().DownStatChangeTimers();
+            canvasManager.UpdateStatusChangeUI(1);
+            canvasManager.UpdateStatusChangeUI(2);
 
             Debug.Log("Starting P1 turn");
 

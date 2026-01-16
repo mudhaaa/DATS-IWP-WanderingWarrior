@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GetAktion_Heal
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: c3aab7237df394c4890e647a4ae580ea, type: 3}
   enhancementName: Emergency Aid
   enhancementDesc: Gain the Aktion 'Health Restore' & +5 Speed
   effects:

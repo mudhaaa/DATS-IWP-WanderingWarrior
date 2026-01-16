@@ -166,6 +166,7 @@ public class Character : MonoBehaviour
         ResetStatChangeTimers();
         CheckForEnhancement();
         canvasManager.UpdatePlayerBars(this);
+        turnUpdateTexts.Clear();
         Debug.Log($"HP: {currHealth}, AP: {currAP}, ST: {currStrength}, MA: {currMagic}, EN: {currEndurance}, SP: {currSpeed}");
 
     }
@@ -570,7 +571,6 @@ public class Character : MonoBehaviour
                 //Debug.Log(msg);
             }
         }
-
     }
 
     public void ResetStatChangeTimers()

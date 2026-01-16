@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
   m_Name: GainStat_MagicBoost2
   m_EditorClassIdentifier: 
-  enhancementImage: {fileID: 0}
+  enhancementImage: {fileID: 21300000, guid: cdec13907ffc75749ab2ed436bec6b14, type: 3}
   enhancementName: Magic Boost II
   enhancementDesc: Gain +20% Magic, but lose -10% Health
   effects:

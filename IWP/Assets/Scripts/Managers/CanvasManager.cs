@@ -33,6 +33,19 @@ public class CanvasManager : MonoBehaviour
     public Aktion GetP1Aktion() {  return currentAktionP1; }
     public int GetP1ListIndex() { return aktionListIndexP1; }
 
+    [Header("P1 Status Changes")]
+    [SerializeField] private Image strengthTimerImageP1;
+    [SerializeField] private TMP_Text strengthTimerTextP1;
+    [SerializeField] private Image magicTimerImageP1;
+    [SerializeField] private TMP_Text magicTimerTextP1;
+    [SerializeField] private Image enduranceTimerImageP1;
+    [SerializeField] private TMP_Text enduranceTimerTextP1;
+    [SerializeField] private Image speedTimerImageP1;
+    [SerializeField] private TMP_Text speedTimerTextP1;
+    [SerializeField] private Image critTimerImageP1;
+    [SerializeField] private TMP_Text critTimerTextP1;
+
+    [Header("P1 Others")]
     [SerializeField] private FloatingTextUI damageNumberUIP1;
     [SerializeField] private HorizontalLayoutGroup winIconsP1;
     [SerializeField] private List<GameObject> winIconsListP1;
@@ -61,6 +74,19 @@ public class CanvasManager : MonoBehaviour
     public Aktion GetP2Aktion() { return currentAktionP2; }
     public int GetP2ListIndex() { return aktionListIndexP2; }
 
+    [Header("P2 Status Changes")]
+    [SerializeField] private Image strengthTimerImageP2;
+    [SerializeField] private TMP_Text strengthTimerTextP2;
+    [SerializeField] private Image magicTimerImageP2;
+    [SerializeField] private TMP_Text magicTimerTextP2;
+    [SerializeField] private Image enduranceTimerImageP2;
+    [SerializeField] private TMP_Text enduranceTimerTextP2;
+    [SerializeField] private Image speedTimerImageP2;
+    [SerializeField] private TMP_Text speedTimerTextP2;
+    [SerializeField] private Image critTimerImageP2;
+    [SerializeField] private TMP_Text critTimerTextP2;
+
+    [Header("P2 Others")]
     [SerializeField] private FloatingTextUI damageNumberUIP2;
     [SerializeField] private HorizontalLayoutGroup winIconsP2;
     [SerializeField] private List<GameObject> winIconsListP2;
@@ -97,13 +123,12 @@ public class CanvasManager : MonoBehaviour
 
         SetAktionList();
         SetIcons();
+        UpdateStatusChangeUI(1);
+        UpdateStatusChangeUI(2);
     }
 
     public void OnFirstTurn()
     {
-        UpdatePlayerBars(playerManager.GetPlayer1());
-        UpdatePlayerBars(playerManager.GetPlayer2());
-
         healthBarP1.value = healthBarP1.maxValue = playerManager.GetPlayer1().GetOriginalHealth();
         apBarP1.value = playerManager.GetPlayer1().GetOriginalAP();
         apBarP1.maxValue = 10;
@@ -120,6 +145,9 @@ public class CanvasManager : MonoBehaviour
 
         UpdatePlayerBars(playerManager.GetPlayer1());
         UpdatePlayerBars(playerManager.GetPlayer2());
+
+        UpdateStatusChangeUI(1);
+        UpdateStatusChangeUI(2);
     }
 
     // Update is called once per frame
@@ -332,14 +360,21 @@ public class CanvasManager : MonoBehaviour
 
             if (playerManager.GetPlayer1().IsConfirmPressed())
             {
-                if (currentAktionP1 as AttackAktion != null)
+                if (currentAktionP1.GetAPCost() <= playerManager.GetPlayer1().GetAP())
                 {
-                    BattleManager.instance.ActivateBattleBarState();
-                    barManager.ActivateBattleBars(true);
+                    if (currentAktionP1 as AttackAktion != null)
+                    {
+                        BattleManager.instance.ActivateBattleBarState();
+                        barManager.ActivateBattleBars(true);
+                    }
+                    else
+                    {
+                        BattleManager.instance.EnterStatusAktionState(1);
+                    }
                 }
                 else
                 {
-                    BattleManager.instance.EnterStatusAktionState(1);
+                    ActivateDamageNumber(1, " Not enough AP!");
                 }
             }
         }
@@ -387,14 +422,21 @@ public class CanvasManager : MonoBehaviour
 
             if (playerManager.GetPlayer2().IsConfirmPressed())
             {
-                if (currentAktionP2 as AttackAktion != null)
+                if (currentAktionP2.GetAPCost() <= playerManager.GetPlayer2().GetAP())
                 {
-                    BattleManager.instance.ActivateBattleBarState();
-                    barManager.ActivateBattleBars(true);
+                    if (currentAktionP2 as AttackAktion != null)
+                    {
+                        BattleManager.instance.ActivateBattleBarState();
+                        barManager.ActivateBattleBars(true);
+                    }
+                    else
+                    {
+                        BattleManager.instance.EnterStatusAktionState(2);
+                    }
                 }
                 else
                 {
-                    BattleManager.instance.EnterStatusAktionState(2);
+                    ActivateDamageNumber(2, " Not enough AP!");
                 }
             }
         }
@@ -471,8 +513,6 @@ public class CanvasManager : MonoBehaviour
     #endregion
 
     #region Turn Update 
-
-
     public IEnumerator TurnUpdates(int n)
     {
         Debug.Log("Activating Turn Updates");
@@ -522,6 +562,158 @@ public class CanvasManager : MonoBehaviour
     }
     #endregion
 
+    #region Status Changes
+    public void UpdateStatusChangeUI(int i)
+    {
+        UpdateStrengthTimerUI(i);
+        UpdateMagicTimerUI(i);
+        UpdateEnduranceTimerUI(i);
+        UpdateSpeedTimerUI(i);
+        UpdateCritTimerUI(i);
+    }
+
+    void UpdateStrengthTimerUI(int i)
+    {
+        Character player = i == 1 ? playerManager.GetPlayer1() : playerManager.GetPlayer2();
+        Image image = i == 1 ? strengthTimerImageP1 : strengthTimerImageP2;
+        TMP_Text text = i == 1 ? strengthTimerTextP1 : strengthTimerTextP2;
+
+        // Check if stat is buffed or nerfed
+        bool strengthBuffed = player.GetStrengthBuffTimer() > 0;
+        bool strengthNerfed = player.GetStrengthNerfTimer() > 0;
+
+        // Activate image if either is true
+        GameObject imageParent = image.transform.parent.gameObject;
+        imageParent.SetActive(strengthBuffed || strengthNerfed);
+
+        // If buffed, green colour, else red
+        if (strengthNerfed)
+        {
+            image.color = Color.red;
+            // Update timer
+            text.text = player.GetStrengthNerfTimer().ToString();
+        }
+        else if (strengthBuffed)
+        {
+            image.color = Color.green;
+            // Update timer
+            text.text = player.GetStrengthBuffTimer().ToString();
+        }
+    }
+    void UpdateMagicTimerUI(int i)
+    {
+        Character player = i == 1? playerManager.GetPlayer1() : playerManager.GetPlayer2();
+        Image image = i == 1 ? magicTimerImageP1 : magicTimerImageP2;
+        TMP_Text text = i == 1 ? magicTimerTextP1 : magicTimerTextP2;
+
+        // Check if stat is buffed or nerfed
+        bool magicBuffed = player.GetMagicBuffTimer() > 0;
+        bool magicNerfed = player.GetMagicNerfTimer() > 0;
+
+        // Activate image if either is true
+        GameObject imageParent = image.transform.parent.gameObject;
+        imageParent.SetActive(magicBuffed || magicNerfed);
+
+        // If buffed, green colour, else red
+        if (magicNerfed)
+        {
+            image.color = Color.red;
+            // Update timer
+            text.text = player.GetMagicNerfTimer().ToString();
+        }
+        else if (magicBuffed)
+        {
+            image.color = Color.green;
+            // Update timer
+            text.text = player.GetMagicBuffTimer().ToString();
+        }
+    }
+    void UpdateEnduranceTimerUI(int i)
+    {
+        Character player = i == 1? playerManager.GetPlayer1() : playerManager.GetPlayer2();
+        Image image = i == 1 ? enduranceTimerImageP1 : enduranceTimerImageP2;
+        TMP_Text text = i == 1 ? enduranceTimerTextP1 : enduranceTimerTextP2;
+
+        // Check if stat is buffed or nerfed
+        bool enduranceBuffed = player.GetEnduranceBuffTimer() > 0;
+        bool enduranceNerfed = player.GetEnduranceNerfTimer() > 0;
+
+        // Activate image if either is true
+        GameObject imageParent = image.transform.parent.gameObject;
+        imageParent.SetActive(enduranceBuffed || enduranceNerfed);
+
+        // If buffed, green colour, else red
+        if (enduranceNerfed)
+        {
+            image.color = Color.red;
+            // Update timer
+            text.text = player.GetEnduranceNerfTimer().ToString();
+        }
+        else if (enduranceBuffed)
+        {
+            image.color = Color.green;
+            // Update timer
+            text.text = player.GetEnduranceBuffTimer().ToString();
+        }
+    }
+    void UpdateSpeedTimerUI(int i)
+    {
+        Character player = i == 1? playerManager.GetPlayer1() : playerManager.GetPlayer2();
+        Image image = i == 1 ? speedTimerImageP1 : speedTimerImageP2;
+        TMP_Text text = i == 1 ? speedTimerTextP1 : speedTimerTextP2;
+
+        // Check if stat is buffed or nerfed
+        bool speedBuffed = player.GetSpeedBuffTimer() > 0;
+        bool speedNerfed = player.GetSpeedNerfTimer() > 0;
+
+        // Activate image if either is true
+        GameObject imageParent = image.transform.parent.gameObject;
+        imageParent.SetActive(speedBuffed || speedNerfed);
+
+        // If buffed, green colour, else red
+        if (speedNerfed)
+        {
+            image.color = Color.red;
+            // Update timer
+            text.text = player.GetSpeedNerfTimer().ToString();
+        }
+        else if (speedBuffed)
+        {
+            image.color = Color.green;
+            // Update timer
+            text.text = player.GetSpeedBuffTimer().ToString();
+        }
+    }
+    void UpdateCritTimerUI(int i)
+    {
+        Character player = i == 1? playerManager.GetPlayer1() : playerManager.GetPlayer2();
+        Image image = i == 1 ? critTimerImageP1 : critTimerImageP2;
+        TMP_Text text = i == 1 ? critTimerTextP1 : critTimerTextP2;
+
+        // Check if stat is buffed or nerfed
+        bool critBuffed = player.GetCritBuffTimer() > 0;
+        bool critNerfed = player.GetCritNerfTimer() > 0;
+
+        // Activate image if either is true
+        GameObject imageParent = image.transform.parent.gameObject;
+        imageParent.SetActive(critBuffed || critNerfed);
+
+        // If buffed, green colour, else red
+        if (critNerfed)
+        {
+            image.color = Color.red;
+            // Update timer
+            text.text = player.GetCritNerfTimer().ToString();
+        }
+        else if (critBuffed)
+        {
+            image.color = Color.green;
+            // Update timer
+            text.text = player.GetCritBuffTimer().ToString();
+        }
+    }
+    #endregion
+
     public void ActivateDamageNumber(int i, int damage)
     {
         if (i == 1)
@@ -534,8 +726,26 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
+    public void ActivateDamageNumber(int i, string str)
+    {
+        if (i == 1)
+        {
+            damageNumberUIP1.SetText(str, 1f);
+        }
+        else if(i == 2) 
+        {
+            damageNumberUIP2.SetText(str, 1f);
+        }
+    }
+
     public IEnumerator IntroSequence()
     {
+        UpdatePlayerBars(playerManager.GetPlayer1());
+        UpdatePlayerBars(playerManager.GetPlayer2());
+
+        UpdateStatusChangeUI(1);
+        UpdateStatusChangeUI(2);
+
         canvasIntro.gameObject.SetActive(true);
         fightImage.gameObject.SetActive(false);
         readyImage.gameObject.SetActive(true);

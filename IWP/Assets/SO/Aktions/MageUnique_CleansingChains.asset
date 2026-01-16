@@ -13,21 +13,13 @@ MonoBehaviour:
   m_Name: MageUnique_CleansingChains
   m_EditorClassIdentifier: 
   aktionName: Darkness Cleanse
-  description: A Status Aktion that removes all enemy stat changes
+  description: A Status Aktion that removes all of your stat changes.
   pointCost: 1
   isUnique: 1
   aktionVFXPrefab: {fileID: 0}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
-  - changeType: 5
-    statType: 0
-    isSelfTarget: 0
-    boost:
-      timer: 0
-      uniqueEffectAmount: 0
-      uniqueBoostType: 
-      effectAmount: 0
   - changeType: 5
     statType: 0
     isSelfTarget: 1
