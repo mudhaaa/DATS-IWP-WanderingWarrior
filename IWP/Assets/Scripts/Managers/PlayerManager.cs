@@ -5,11 +5,23 @@ using static BattleManager;
 
 public class PlayerManager : MonoBehaviour
 {
+    [Header("Player 1 Characters")]
+    [SerializeField] GameObject knightP1;
+    [SerializeField] GameObject mageP1;
+    [SerializeField] GameObject bulwarkP1;
 
     [SerializeField] private Character player1;
+    [SerializeField] private CharacterKlass klassP1;
     public Character GetPlayer1() {  return player1; }
 
+
+    [Header("Player 2 Characters")]
+    [SerializeField] GameObject knightP2;
+    [SerializeField] GameObject mageP2;
+    [SerializeField] GameObject bulwarkP2;
+
     [SerializeField] private Character player2;
+    [SerializeField] private CharacterKlass klassP2;
     public Character GetPlayer2() { return player2; }
 
     private CanvasManager canvasManager;
@@ -21,8 +33,13 @@ public class PlayerManager : MonoBehaviour
         canvasManager = cm;
         aktionManager = am;
 
-        player1.OnStart(1, canvasManager, aktionManager);
-        player2.OnStart(2, canvasManager, aktionManager);
+        if (CharacterSelectManager.instance.Player1() != null) klassP1 = CharacterSelectManager.instance.Player1();
+        if (CharacterSelectManager.instance.Player2() != null) klassP2 = CharacterSelectManager.instance.Player2();
+
+        player1.OnStart(1, canvasManager, aktionManager, klassP1);
+        player2.OnStart(2, canvasManager, aktionManager, klassP2);
+
+        ActivateModels();
     }
 
     public void OnFirstTurn()
@@ -44,6 +61,50 @@ public class PlayerManager : MonoBehaviour
             BattleManager.instance.IsAttackState() ||
             BattleManager.instance.GetCurrState() == BattleStates.Enhancement) 
             player2.OnUpdate();
+    }
+
+    void ActivateModels()
+    {
+        knightP1.SetActive(false);
+        mageP1.SetActive(false);
+        //bulwarkP1.SetActive(false);
+
+        knightP2.SetActive(false);
+        mageP2.SetActive(false);
+        //bulwarkP2.SetActive(false);
+
+        if (klassP1.name.Contains("Knight"))
+        {
+            knightP1.SetActive(true);
+            player1.SetAnimator(knightP1.GetComponentInChildren<Animator>());
+        }
+        if (klassP1.name.Contains("Mage"))
+        {
+            mageP1.SetActive(true);
+            player1.SetAnimator(mageP1.GetComponentInChildren<Animator>());
+        }
+        if (klassP1.name.Contains("Bulwark"))
+        {
+            bulwarkP1.SetActive(true);
+            player1.SetAnimator(bulwarkP1.GetComponentInChildren<Animator>());
+        }
+
+        if (klassP2.name.Contains("Knight"))
+        {
+            knightP2.SetActive(true);
+            player2.SetAnimator(knightP2.GetComponentInChildren<Animator>());
+        }
+        if (klassP2.name.Contains("Mage"))
+        {
+            mageP2.SetActive(true);
+            player2.SetAnimator(mageP2.GetComponentInChildren<Animator>());
+        }
+        if (klassP2.name.Contains("Bulwark"))
+        {
+            bulwarkP2.SetActive(true);
+            player2.SetAnimator(bulwarkP2.GetComponentInChildren<Animator>());
+        }
+
     }
 
     public void MoveTowardsEnemy()

@@ -100,8 +100,10 @@ public class Character : MonoBehaviour
     [SerializeField] public CanvasManager canvasManager { private set; get; }
     [SerializeField] public  AktionManager aktionManager { private set; get; }
 
-    public void OnStart(int playerNo, CanvasManager cm, AktionManager am)
+    public void OnStart(int playerNo, CanvasManager cm, AktionManager am, CharacterKlass ck)
     {
+        if (ck != null) klass = ck;
+
         #region Stats
         // Simpan original values dari klass
         originalHealth = klass.GetHealth();
@@ -154,8 +156,6 @@ public class Character : MonoBehaviour
 
         canvasManager = cm;
         aktionManager = am;
-
-        playerAnimator = GetComponentInChildren<Animator>();
     }
 
     public void OnFirstTurn()

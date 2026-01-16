@@ -43,7 +43,8 @@ public class BattleManager : MonoBehaviour
         P1winBattle,
         P2winBattle,
         Enhancement,
-        StatusAktion
+        StatusAktion,
+        AktionAnimation
     }
 
     public void ChangeState(BattleStates state)

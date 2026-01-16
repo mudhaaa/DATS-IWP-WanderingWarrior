@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1b11f861433214e9b0883abf51d943, type: 3}
+  m_Name: GetAktion_MagicBlood
+  m_EditorClassIdentifier: 
+  enhancementImage: {fileID: 21300000, guid: 0ad2337320c1b5841ba3ceb24de6e91a, type: 3}
+  enhancementName: Demonic Powers
+  enhancementDesc: Gain the Aktion 'Blood Arts' & +10% to all stats, but lose -25%
+    Health
+  effects:
+  - enhancementType: 2
+    changedStat: 0
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
+  - enhancementType: 0
+    changedStat: 1
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.1
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
+  - enhancementType: 0
+    changedStat: 2
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.1
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
+  - enhancementType: 0
+    changedStat: 3
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.1
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
+  - enhancementType: 0
+    changedStat: 4
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.1
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
+  - enhancementType: 0
+    changedStat: 4
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0.1
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}

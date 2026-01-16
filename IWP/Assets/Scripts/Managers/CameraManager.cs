@@ -10,6 +10,7 @@ public class CameraManager : MonoBehaviour
     //[SerializeField] private CinemachineCamera cinemachine;
     [Header("Fake Cinemachine")]
     [SerializeField] private List<Transform> cameraTransforms;
+    [SerializeField] private int currIndex;
 
     [Header("Shake")]
     [SerializeField] private float shakeAmplitude = 2.0f;  // Strength of shake
@@ -29,6 +30,7 @@ public class CameraManager : MonoBehaviour
     {
         Camera.main.transform.DOLocalRotateQuaternion(cameraTransforms[i].localRotation, .5f);
         Camera.main.transform.DOMove(cameraTransforms[i].position, .5f);
+        currIndex = i;
     }
 
     // Update is called once per frame
@@ -47,6 +49,10 @@ public class CameraManager : MonoBehaviour
                  BattleManager.instance.GetCurrState() == BattleStates.StatusAktion)
         {
             ChangeCameraPos(0);
+        }
+        else if(BattleManager.instance.GetCurrState() == BattleStates.AktionAnimation)
+        {
+            ChangeCameraPos(currIndex);
         }
     }
 

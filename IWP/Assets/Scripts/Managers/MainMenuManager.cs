@@ -149,8 +149,11 @@ public class MainMenuManager : MonoBehaviour
         // Final
         if(doneSelectedP1 && doneSelectedP2)
         {
-            CharacterSelectManager.instance.SetSelectedClass(characterSelectUIs[currIndexP1].GetKlass(), characterSelectUIs[currIndexP2].GetKlass());
-            ChangeScreen("Loading");
+            CharacterKlass klass1 = characterSelectUIs[currIndexP1].GetKlass();
+            CharacterKlass klass2 = characterSelectUIs[currIndexP2].GetKlass();
+            CharacterSelectManager.instance.SetSelectedClass(klass1, klass2);
+            CharacterSelectManager.instance.StartBattle();
+            //ChangeScreen("Loading");
         }
     }
 

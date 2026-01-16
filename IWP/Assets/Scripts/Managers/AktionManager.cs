@@ -207,7 +207,7 @@ public class AktionManager : MonoBehaviour
         GameObject vfxGo = Instantiate(currentAktion.GetVFX());
         Vector3 vfxOffset = currentAktion.GetVFXOffset();
 
-        if (currentDefender == player1) vfxOffset = vfxOffset * -1;
+        //if (currentDefender == player1) vfxOffset = new Vector3(vfxOffset.x, vfxOffset.y * -1, vfxOffset.z);
 
         if (!currentAktion.IsOnUser())
         {
@@ -608,7 +608,7 @@ public class AktionManager : MonoBehaviour
 
     void OnRestoreAP(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetAP() + target.GetAP() * effect.GetBoost().GetEffectAmount());
+        int newValue = Mathf.CeilToInt(target.GetAP() + target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
 
@@ -633,7 +633,7 @@ public class AktionManager : MonoBehaviour
 
     void OnReduceAP(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetAP() - target.GetAP() * effect.GetBoost().GetEffectAmount());
+        int newValue = Mathf.CeilToInt(target.GetAP() - target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
 

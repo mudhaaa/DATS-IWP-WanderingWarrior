@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d593d8f384ff9645a717acc138df149, type: 3}
   m_Name: Bulwark
   m_EditorClassIdentifier: 
+  characterKlass: {fileID: 11400000, guid: ee9daf9bee786fa498298bdcb3496730, type: 2}
   image: {fileID: 0}
   text: The Bulwark
   desc: 'A mighty heavyweight that shrugs off any attacks that hit '
