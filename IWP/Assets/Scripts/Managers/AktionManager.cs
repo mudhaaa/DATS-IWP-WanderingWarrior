@@ -239,8 +239,14 @@ public class AktionManager : MonoBehaviour
         {
             // target is if user is player1, player2, else, player1
             target = user == player1 ? player2 : player1;
+            if (target.StatChangeImmune())
+            {
+                string msg = "Stat Change Immune!";
+                target.GetTurnUpdateLists().Add(msg);   
+                Debug.Log(msg); 
+                return;
+            }
         }
-
         if (effect.GetStatusType() == StatusType.Restore)
         {
             Debug.Log("Activating Restore effect");
@@ -281,6 +287,14 @@ public class AktionManager : MonoBehaviour
             target.ResetToOriginalStats();
 
             target.ResetStatChangeTimers();
+        }
+        else if(effect.GetStatusType() == StatusType.StatusImmune)
+        {
+            target.SetStatChangeImmune(true);
+            target.SetStatChangeImmuneTimer(effect.GetBoost().GetTimer());
+
+            string msg = $"{target.name} is immune to Stat Changes!";
+            target.GetTurnUpdateLists().Add(msg);
         }
     }
 
@@ -597,22 +611,25 @@ public class AktionManager : MonoBehaviour
     #region Restore
     void OnRestoreHealth(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetHealth() + target.GetHealth() * effect.GetBoost().GetEffectAmount());
+        int changeAmt = Mathf.CeilToInt(target.GetOriginalHealth() * effect.GetBoost().GetEffectAmount());
+
+        int newValue = Mathf.CeilToInt(target.GetHealth() + changeAmt);
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
 
-        string msg = $"{target.name}'s Health restored!";
+        string msg = $"{target.name}'s Health restored by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);
         //Debug.Log(msg);
     }
 
     void OnRestoreAP(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetAP() + target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
+        int changeAmt = Mathf.CeilToInt(target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
+        int newValue = Mathf.CeilToInt(target.GetAP() + changeAmt);
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
 
-        string msg = $"{target.name}'s AP restored!";
+        string msg = $"{target.name}'s AP restored by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);
         //Debug.Log(msg);
     }
@@ -621,23 +638,27 @@ public class AktionManager : MonoBehaviour
     #region Reduce
     void OnReduceHealth(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetHealth() - target.GetOriginalHealth() * effect.GetBoost().GetEffectAmount());
+        int changeAmt = Mathf.CeilToInt(target.GetOriginalHealth() * effect.GetBoost().GetEffectAmount());
+
+        int newValue = Mathf.CeilToInt(target.GetHealth() - changeAmt);
         target.SetHealth(newValue);
         canvasManager.UpdatePlayerBars(target);
 
         Debug.Log(newValue);
-        string msg = $"{target.name}'s Health reduced!";
+        string msg = $"{target.name}'s Health reduced by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);
         //Debug.Log(msg);
     }
 
     void OnReduceAP(Character target, StatusEffect effect)
     {
-        int newValue = Mathf.CeilToInt(target.GetAP() - target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
+        int changeAmt = Mathf.CeilToInt(target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
+
+        int newValue = Mathf.CeilToInt(target.GetAP() - changeAmt);
         target.SetAP(newValue);
         canvasManager.UpdatePlayerBars(target);
 
-        string msg = $"{target.name}'s AP reduced!";
+        string msg = $"{target.name}'s AP reduced by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);
         //Debug.Log(msg);
     }

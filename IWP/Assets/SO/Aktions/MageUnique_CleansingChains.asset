@@ -28,3 +28,11 @@ MonoBehaviour:
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0
+  - changeType: 6
+    statType: 0
+    isSelfTarget: 1
+    boost:
+      timer: 0
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

@@ -515,6 +515,12 @@ public class CanvasManager : MonoBehaviour
     #region Turn Update 
     public IEnumerator TurnUpdates(int n)
     {
+        if(n == 2)playerManager.GetPlayer1().DownStatChangeTimers();
+        if(n == 1)playerManager.GetPlayer2().DownStatChangeTimers();
+
+        UpdateStatusChangeUI(1);
+        UpdateStatusChangeUI(2);
+
         Debug.Log("Activating Turn Updates");
 
         if (playerManager.GetPlayer1().GetTurnUpdateLists().Count > 0)
@@ -712,6 +718,18 @@ public class CanvasManager : MonoBehaviour
             text.text = player.GetCritBuffTimer().ToString();
         }
     }
+    #endregion
+
+    #region Victory
+    [Header("Victory Screen")]
+    [SerializeField] private CanvasGroup victoryP1;
+    [SerializeField] private CanvasGroup victoryP2;
+    public void ActivateVictoryUI(int i)
+    {
+        if (i == 1) victoryP1.DOFade(1, 0.1f); victoryP1.gameObject.SetActive(true);
+        if (i == 2) victoryP2.DOFade(1, 0.1f); victoryP2.gameObject.SetActive(true);
+    }
+
     #endregion
 
     public void ActivateDamageNumber(int i, int damage)

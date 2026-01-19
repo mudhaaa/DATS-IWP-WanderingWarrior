@@ -17,11 +17,6 @@ MonoBehaviour:
   enhancementDesc: Gain the Aktion 'Blood Arts' & +10% to all stats, but lose -25%
     Health
   effects:
-  - enhancementType: 2
-    changedStat: 0
-    flatStatChangeValue: 0
-    percentageStatChangeValue: 0
-    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
   - enhancementType: 0
     changedStat: 1
     flatStatChangeValue: 0
@@ -42,8 +37,13 @@ MonoBehaviour:
     flatStatChangeValue: 0
     percentageStatChangeValue: 0.1
     gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
-  - enhancementType: 0
-    changedStat: 4
+  - enhancementType: 1
+    changedStat: 6
     flatStatChangeValue: 0
-    percentageStatChangeValue: 0.1
+    percentageStatChangeValue: 0.25
+    gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}
+  - enhancementType: 2
+    changedStat: 0
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0
     gainedAktion: {fileID: 11400000, guid: 4de8c524549e97d48837615cb46ac26c, type: 2}

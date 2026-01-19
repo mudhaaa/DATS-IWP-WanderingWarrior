@@ -30,7 +30,7 @@ MonoBehaviour:
       timer: 0
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0.2
+      effectAmount: 0.4
   hitEffects:
   - changeType: 4
     statType: 7
@@ -39,4 +39,4 @@ MonoBehaviour:
       timer: 0
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0.1
+      effectAmount: 0.2

@@ -71,5 +71,6 @@ public enum StatusType
     Decrease,
     Restore,
     Reduce,
-    Reset
+    Reset,
+    StatusImmune
 }

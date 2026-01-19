@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour
 {
     [Header("Screens")]
+    [SerializeField] string destination;
     [SerializeField] private CanvasGroup currentScreen;
     [SerializeField] private CanvasGroup blackScreen;
 
@@ -46,7 +47,10 @@ public class MainMenuManager : MonoBehaviour
     {
         currentScreen = null;
         blackScreen.alpha = 1;
-        ChangeScreen("Title");
+
+        destination = CharacterSelectManager.instance.CharacterSelect() == true ? "Character Select" : "Title";
+        ChangeScreen(destination);
+        CharacterSelectManager.instance.SetCharacterSelect();
 
         moveInputP1 = inputs.FindActionMap("player1").FindAction("Navigate");
         moveInputP1.Enable();
@@ -82,10 +86,15 @@ public class MainMenuManager : MonoBehaviour
         // Player 1 
 
         if (confInputP1.triggered) doneSelectedP1 = !doneSelectedP1;
-        if (doneSelectedP1)
+        if (!doneSelectedP1)
         {
             // Animate arrow
             arrowTransformP1.DOAnchorPosY(moveDistance, duration)
+                        .SetEase(Ease);
+        }
+        else
+        {
+            arrowTransformP1.DOAnchorPosY(-moveDistance, duration)
                         .SetEase(Ease);
         }
         if (!doneSelectedP1)
@@ -115,10 +124,15 @@ public class MainMenuManager : MonoBehaviour
 
         if (confInputP2.triggered) doneSelectedP2 = !doneSelectedP2;
 
-        if (doneSelectedP2)
+        if (!doneSelectedP2)
         {
             // Animate arrow
             arrowTransformP2.DOAnchorPosY(moveDistance2, duration)
+                            .SetEase(Ease);
+        }
+        else
+        {
+            arrowTransformP2.DOAnchorPosY(-moveDistance2, duration)
                             .SetEase(Ease);
         }
 
@@ -147,19 +161,29 @@ public class MainMenuManager : MonoBehaviour
         selectedCharP2.SetNativeSize();
 
         // Final
-        if(doneSelectedP1 && doneSelectedP2)
+        if (doneSelectedP1 && doneSelectedP2)
         {
             CharacterKlass klass1 = characterSelectUIs[currIndexP1].GetKlass();
             CharacterKlass klass2 = characterSelectUIs[currIndexP2].GetKlass();
             CharacterSelectManager.instance.SetSelectedClass(klass1, klass2);
-            CharacterSelectManager.instance.StartBattle();
-            //ChangeScreen("Loading");
+            StartBattle();
         }
     }
 
-    void GoToLoadingScreen()
-    {
+    bool battleStarting = false;
 
+    void StartBattle()
+    {
+        StartCoroutine(StartBattleCoroutine());
+    }
+
+    IEnumerator StartBattleCoroutine()
+    {
+        ChangeScreen("Black");
+        yield return new WaitForSeconds(1f);
+        yield return new WaitForEndOfFrame();
+        if (!battleStarting) CharacterSelectManager.instance.StartBattle();
+        battleStarting = true;
     }
     #endregion
 
@@ -177,6 +201,7 @@ public class MainMenuManager : MonoBehaviour
         else if (screenName == "Tutorial") return tutorialScreen;
         else if (screenName == "Character Select") return characterSelectScreen;
         else if (screenName == "Loading") return loadingScreen;
+        else if (screenName == "Black") return blackScreen;
         else return null;
     }
 

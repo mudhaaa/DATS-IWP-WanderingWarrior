@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bulwark
   m_EditorClassIdentifier: 
   health: 620
-  aktionPoints: 5
+  aktionPoints: 4
   strength: 80
   magic: 75
   endurance: 110

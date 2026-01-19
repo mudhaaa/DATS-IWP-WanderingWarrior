@@ -16,13 +16,13 @@ MonoBehaviour:
   enhancementName: Vessel's Technique
   enhancementDesc: Gain the Aktion 'Divergent Strike' & +5 Endurance
   effects:
-  - enhancementType: 2
-    changedStat: 0
-    flatStatChangeValue: 0
-    percentageStatChangeValue: 0
-    gainedAktion: {fileID: 11400000, guid: 74fe226545bdf6a46b4be8ba580c51b1, type: 2}
   - enhancementType: 0
     changedStat: 3
     flatStatChangeValue: 5
+    percentageStatChangeValue: 0
+    gainedAktion: {fileID: 11400000, guid: 74fe226545bdf6a46b4be8ba580c51b1, type: 2}
+  - enhancementType: 2
+    changedStat: 0
+    flatStatChangeValue: 0
     percentageStatChangeValue: 0
     gainedAktion: {fileID: 11400000, guid: 74fe226545bdf6a46b4be8ba580c51b1, type: 2}

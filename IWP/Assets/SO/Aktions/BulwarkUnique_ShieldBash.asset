@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: BulwarkUnique_ShieldBash
   m_EditorClassIdentifier: 
   aktionName: Shield Bash
-  description: A Medium Endurance attack. On Hit, it reduces enemy Speed. On Crit,
-    it reduces attacking stats.
+  description: A Medium Endurance attack. On Crit, it resets the enemy's stat changes.
   pointCost: 3
   isUnique: 1
   aktionVFXPrefab: {fileID: 0}
@@ -23,7 +22,7 @@ MonoBehaviour:
   damageMultiplier: 2
   attackType: 2
   critEffects:
-  - changeType: 2
+  - changeType: 5
     statType: 2
     isSelfTarget: 0
     boost:
@@ -31,20 +30,4 @@ MonoBehaviour:
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0
-  - changeType: 2
-    statType: 1
-    isSelfTarget: 0
-    boost:
-      timer: 2
-      uniqueEffectAmount: 0
-      uniqueBoostType: 
-      effectAmount: 0
-  hitEffects:
-  - changeType: 2
-    statType: 4
-    isSelfTarget: 0
-    boost:
-      timer: 2
-      uniqueEffectAmount: 0
-      uniqueBoostType: 
-      effectAmount: 0
+  hitEffects: []

@@ -21,6 +21,9 @@ public class CharacterSelectManager : MonoBehaviour
     [SerializeField] private CharacterKlass Player2SelectedClass;
     public CharacterKlass Player2() { return Player2SelectedClass; }
 
+    [SerializeField] private bool goToCharacterSelect = false;
+    public bool CharacterSelect() { return goToCharacterSelect; }
+    public void SetCharacterSelect() { goToCharacterSelect = false; }
 
     public void SetSelectedClass(CharacterKlass p1, CharacterKlass p2)
     {
@@ -31,6 +34,13 @@ public class CharacterSelectManager : MonoBehaviour
 
     public void StartBattle()
     {
-        SceneManager.LoadScene("Battle");
+        SceneChangeManager.instance.ChangeScene("Battle");
+    }
+
+    public void GoToCharacterSelect()
+    {
+        goToCharacterSelect = true;
+        SceneChangeManager.instance.ChangeScene("Main Menu");
+
     }
 }

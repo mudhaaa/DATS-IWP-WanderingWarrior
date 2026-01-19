@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// Manages all the battle logic flow and centralises all the other managers
 /// </summary>
@@ -20,8 +21,6 @@ public class BattleManager : MonoBehaviour
         // Set instance ini
         instance = this;
 
-        // Optional: Kalau nak persist across scenes
-        DontDestroyOnLoad(this.gameObject);
     }
     #endregion
 
@@ -93,11 +92,18 @@ public class BattleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if(cameraManager  == null) cameraManager = FindAnyObjectByType<CameraManager>();
+        if(canvasManager == null) canvasManager = FindAnyObjectByType<CanvasManager>();
+        if(barManager == null) barManager = FindAnyObjectByType<BattleBarManager>();
+        if(aktionManager == null) aktionManager = FindAnyObjectByType<AktionManager>();
+        if(enhancementManager == null) enhancementManager = FindAnyObjectByType<EnhancementManager>();
+
         playerManager.OnStart(canvasManager, aktionManager);
         enhancementManager.OnStart(playerManager, canvasManager);
         canvasManager.OnStart(playerManager, enhancementManager, barManager);
         barManager.OnStart(playerManager, aktionManager);
         aktionManager.OnStart(playerManager, barManager, canvasManager);
+
         ChangeState(BattleStates.Enhancement);
 
         //StartCoroutine(canvasManager.IntroSequence());
@@ -125,6 +131,11 @@ public class BattleManager : MonoBehaviour
         enhancementManager.OnUpdate();
     }
 
+    public void Rematch()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     public void ActivateBattleBarState()
     {
         if (currState == BattleStates.P1turn)
@@ -144,6 +155,8 @@ public class BattleManager : MonoBehaviour
 
     public void EndAttackState()
     {
+        barManager.ActivateBattleBars(false);
+
         // Guard against multiple calls
         if (currentAttackCoroutine != null)
         {
@@ -236,10 +249,6 @@ public class BattleManager : MonoBehaviour
             playerManager.GetPlayer2().SetAP(newAP);
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer2());
 
-            playerManager.GetPlayer2().DownStatChangeTimers();
-            canvasManager.UpdateStatusChangeUI(1);
-            canvasManager.UpdateStatusChangeUI(2);
-
             Debug.Log("Starting P2 turn");
         }
         else if (i == 2)
@@ -249,9 +258,7 @@ public class BattleManager : MonoBehaviour
             playerManager.GetPlayer1().SetAP(newAP);
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer1());
 
-            playerManager.GetPlayer1().DownStatChangeTimers();
-            canvasManager.UpdateStatusChangeUI(1);
-            canvasManager.UpdateStatusChangeUI(2);
+
 
             Debug.Log("Starting P1 turn");
 
@@ -289,15 +296,17 @@ public class BattleManager : MonoBehaviour
             canvasManager.UpdateWinIcons(2);
         }
 
-        yield return new WaitForSecondsRealtime(5);
+        yield return new WaitForSecondsRealtime(3);
 
         if (p1wins == 3)
         {
             currState = BattleStates.P1winBattle;
+            canvasManager.ActivateVictoryUI(1);
         }
         else if (p2wins == 3)
         {
             currState = BattleStates.P2winBattle;
+            canvasManager.ActivateVictoryUI(2);
         }
         else
         {

@@ -16,13 +16,13 @@ MonoBehaviour:
   enhancementName: Heavenly Thunder
   enhancementDesc: Gain the Aktion 'Lightning' & +5 Speed
   effects:
-  - enhancementType: 2
-    changedStat: 0
-    flatStatChangeValue: 0
-    percentageStatChangeValue: 0
-    gainedAktion: {fileID: 11400000, guid: 249c95f4f9a91c14b95a0e9bd735f673, type: 2}
   - enhancementType: 0
     changedStat: 4
     flatStatChangeValue: 5
     percentageStatChangeValue: 0
     gainedAktion: {fileID: 0}
+  - enhancementType: 2
+    changedStat: 0
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0
+    gainedAktion: {fileID: 11400000, guid: 249c95f4f9a91c14b95a0e9bd735f673, type: 2}

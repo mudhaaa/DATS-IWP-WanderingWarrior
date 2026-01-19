@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Knight
   m_EditorClassIdentifier: 
   health: 510
-  aktionPoints: 5
+  aktionPoints: 4
   strength: 130
   magic: 90
   endurance: 100

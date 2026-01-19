@@ -17,11 +17,12 @@ MonoBehaviour:
   pointCost: 3
   isUnique: 0
   aktionVFXPrefab: {fileID: 0}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 3
   attackType: 1
   critEffects:
-  - changeType: 4
+  - changeType: 2
     statType: 3
     isSelfTarget: 1
     boost:

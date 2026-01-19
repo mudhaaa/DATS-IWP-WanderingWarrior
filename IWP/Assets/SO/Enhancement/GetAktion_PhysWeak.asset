@@ -16,13 +16,13 @@ MonoBehaviour:
   enhancementName: Ancient Technique
   enhancementDesc: Gain the Aktion 'Piercing Jab'  & +5 Strength
   effects:
-  - enhancementType: 2
-    changedStat: 0
-    flatStatChangeValue: 0
-    percentageStatChangeValue: 0
-    gainedAktion: {fileID: 11400000, guid: 6fb160e1282507b45ae3c4e04a20b347, type: 2}
   - enhancementType: 0
     changedStat: 1
     flatStatChangeValue: 5
     percentageStatChangeValue: 0
     gainedAktion: {fileID: 0}
+  - enhancementType: 2
+    changedStat: 0
+    flatStatChangeValue: 0
+    percentageStatChangeValue: 0
+    gainedAktion: {fileID: 11400000, guid: 6fb160e1282507b45ae3c4e04a20b347, type: 2}

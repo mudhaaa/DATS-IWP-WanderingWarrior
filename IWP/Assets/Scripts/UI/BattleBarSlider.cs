@@ -4,6 +4,7 @@ public class BattleBarSlider : MonoBehaviour
 {
     public enum BarState
     {
+        Perfect,
         Good,
         Mid,
         Bad
@@ -26,6 +27,11 @@ public class BattleBarSlider : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //if (collision.CompareTag("PerfectBar"))
+        //{
+        //    currState = BarState.Perfect;
+        //}
+        //else
         if (collision.CompareTag("GoodBar"))
         {
             currState = BarState.Good;
@@ -38,6 +44,11 @@ public class BattleBarSlider : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        //if (collision.CompareTag("PerfectBar"))
+        //{
+        //    currState = BarState.Good;
+        //}
+        //else
         if (collision.CompareTag("MidBar"))
         {
             currState = BarState.Bad;

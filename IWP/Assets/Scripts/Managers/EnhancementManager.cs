@@ -22,6 +22,7 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] private Enhancement currChoiceP1;
     [SerializeField] private List<Enhancement> possibleChoicesP1;
     [SerializeField] private TMP_Text descriptionP1;
+    [SerializeField] private TMP_Text aktionDescriptionP1;
 
     [Header("Player 2")]
     [SerializeField] private HorizontalLayoutGroup uiChoicesGroupP2;
@@ -31,6 +32,7 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] private Enhancement currChoiceP2;
     [SerializeField] private List<Enhancement> possibleChoicesP2;
     [SerializeField] private TMP_Text descriptionP2;
+    [SerializeField] private TMP_Text aktionDescriptionP2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnStart(PlayerManager pm, CanvasManager cm)
@@ -157,20 +159,36 @@ public class EnhancementManager : MonoBehaviour
 
     void GetInput()
     {
-        if (playerManager.GetPlayer1().IsConfirmPressed() && !p1HasPressed)
+        if (playerManager.GetPlayer1().IsConfirmPressed())
         {
-            playerManager.GetPlayer1().AddEnhancement(currChoiceP1);
-            possibleChoicesP2.Remove(currChoiceP2);
-            p1HasPressed = true;
+            if (!p1HasPressed)
+            {
+                p1HasPressed = true;
+            }
+            else
+            {
+                p1HasPressed = false;
+            }
         }
-        if (playerManager.GetPlayer2().IsConfirmPressed() && !p2HasPressed)
+        if (playerManager.GetPlayer2().IsConfirmPressed())
         {
-            playerManager.GetPlayer2().AddEnhancement(currChoiceP2);
-            possibleChoicesP2.Remove(currChoiceP2);
-            p2HasPressed = true;
+            if (!p2HasPressed)
+            {
+                p2HasPressed = true;
+            }
+            else
+            {
+                p2HasPressed = false;
+            }
         }
         if (p1HasPressed && p2HasPressed)
         {
+            playerManager.GetPlayer1().AddEnhancement(currChoiceP1);
+            possibleChoicesP2.Remove(currChoiceP2);
+
+            playerManager.GetPlayer2().AddEnhancement(currChoiceP2);
+            possibleChoicesP2.Remove(currChoiceP2);
+            
             StartNextRound();
         }
     }
@@ -187,10 +205,10 @@ public class EnhancementManager : MonoBehaviour
     {
         if (BattleManager.instance.GetCurrState() == BattleManager.BattleStates.Enhancement)
         {
-            mainCanvas.DOFade(1, 0.5f);
+            mainCanvas.DOFade(1, 1f);
             UpdateEnhancementText();
         }
-        else mainCanvas.DOFade(0, 0.5f);
+        else mainCanvas.DOFade(0, 1f);
     }
 
     void SetUIList()
@@ -244,5 +262,30 @@ public class EnhancementManager : MonoBehaviour
         descriptionP1.text = uiChoicesP1[choiceIndexP1].GetDesc();
         descriptionP2.text = uiChoicesP2[choiceIndexP2].GetDesc();
 
+        foreach (EnhancementEffect effect in enhRandChoicesP1[choiceIndexP1].EnhancementEffects())
+        {
+            if(effect.GetEnhancementType() == EnhancementType.AktionGain)
+            {
+                effect.GetAktion().GetName();
+                aktionDescriptionP1.text = $"{effect.GetAktion().GetName()} - {effect.GetAktion().GetDesc()}";
+            }
+            else
+            {
+                aktionDescriptionP1.text = "";
+            }
+        }
+
+        foreach (EnhancementEffect effect in enhRandChoicesP2[choiceIndexP2].EnhancementEffects())
+        {
+            if(effect.GetEnhancementType() == EnhancementType.AktionGain)
+            {
+                effect.GetAktion().GetName();
+                aktionDescriptionP2.text = $"{effect.GetAktion().GetName()} - {effect.GetAktion().GetDesc()}";
+            }
+            else
+            {
+                aktionDescriptionP2.text = "";
+            }
+        }
     }
 }

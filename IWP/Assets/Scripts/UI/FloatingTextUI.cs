@@ -8,6 +8,12 @@ public class FloatingTextUI : MonoBehaviour
     [SerializeField] private float maxLifetime;
     [SerializeField] private float currLifetime;
     private bool textDone;
+    private Vector3 ogPos;
+
+    private void Start()
+    {
+        ogPos = transform.localPosition;
+    }
 
     public void SetText(string text, float lifetime)
     {
@@ -24,6 +30,7 @@ public class FloatingTextUI : MonoBehaviour
     {
         gameObject.SetActive(false);
         textDone = false;
+        transform.localPosition = ogPos;
     }
 
     // Update is called once per frame

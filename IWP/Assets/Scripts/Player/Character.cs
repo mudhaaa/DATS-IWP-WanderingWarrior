@@ -66,6 +66,7 @@ public class Character : MonoBehaviour
     #region Inputs
     [SerializeField] private InputActionAsset playerActionAsset;
     private InputActionMap playerActionMap;
+
     private InputAction confirmAction;
     private bool isConfirmPressed;
     public bool IsConfirmPressed() { return  isConfirmPressed; }
@@ -76,6 +77,11 @@ public class Character : MonoBehaviour
 
     private InputAction navigateAction;
     public Vector2 GetNavigateInput() { return navigateAction.ReadValue<Vector2>(); }
+
+    private InputAction statusAction;
+    private bool isStatusPressed;
+
+    public bool IsStatusPressed() { return isStatusPressed; }
     #endregion
 
     #region Animator
@@ -152,6 +158,9 @@ public class Character : MonoBehaviour
 
         navigateAction = playerActionMap.FindAction("Navigate");
         navigateAction.Enable();
+
+        statusAction = playerActionMap.FindAction("Status");
+        statusAction.Enable();
         #endregion
 
         canvasManager = cm;
@@ -328,6 +337,7 @@ public class Character : MonoBehaviour
     {
         isConfirmPressed = confirmAction.triggered;
         isHitPressed = hitAction.triggered;
+        isStatusPressed = statusAction.triggered;
     }
 
     private void FixedUpdate()
@@ -335,6 +345,7 @@ public class Character : MonoBehaviour
         CheckForBurningBlade();
     }
 
+    #region Unique States
     [SerializeField] private bool inBurningBlade;
     public bool InBurningBlade() { return inBurningBlade; }
     public void CheckForBurningBlade()
@@ -350,6 +361,14 @@ public class Character : MonoBehaviour
             inBurningBlade = false;
         }
     }
+
+    [SerializeField] private bool statChangeImmune;
+    [SerializeField] private int statChangeImmuneTimer;
+    public bool StatChangeImmune() { return statChangeImmune; }
+    public void SetStatChangeImmune(bool i) { statChangeImmune = i; }
+    public void SetStatChangeImmuneTimer(int i) { statChangeImmuneTimer = i; }
+
+    #endregion
 
     public void EnableActions()
     {
@@ -445,12 +464,27 @@ public class Character : MonoBehaviour
         currSpeed = originalSpeed;
         currCrit = originalCrit;
 
+        statChangeImmune = false;
+
         string msg = $"{name}'s stats have been reset!";
         GetTurnUpdateLists().Add(msg);
     }
 
     public void DownStatChangeTimers()
     {
+        if(statChangeImmuneTimer > 0)
+        {
+            statChangeImmuneTimer --;
+            if (statChangeImmuneTimer <= 0)
+            {
+                statChangeImmune = false;
+
+                string msg = $"{name} is no longer immune to Status Changes.";
+                turnUpdateTexts.Add(msg);
+                //Debug.Log(msg);
+            }
+        }
+
         if (strengthBuffTimer > 0)
         {
             strengthBuffTimer--;
