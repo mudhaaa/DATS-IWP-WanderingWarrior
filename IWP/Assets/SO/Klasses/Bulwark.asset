@@ -19,7 +19,6 @@ MonoBehaviour:
   endurance: 110
   speed: 55
   unique1: {fileID: 11400000, guid: cce80c2032348814d93b780ffe54d822, type: 2}
-  unique2: {fileID: 11400000, guid: 35d0fe2e0bf2ffc4597496e83227fde7, type: 2}
-  basicStrength: {fileID: 11400000, guid: 3ea41742c319fdd49a10c86216a3ac6a, type: 2}
-  basicMagic: {fileID: 11400000, guid: 22260ee9a0cb37d408c44e88db196007, type: 2}
+  unique2: {fileID: 11400000, guid: 15d85fb0d50aaa94f8b5d6b546fc0504, type: 2}
+  basic: {fileID: 11400000, guid: 3ea41742c319fdd49a10c86216a3ac6a, type: 2}
   characterPrefab: {fileID: 0}

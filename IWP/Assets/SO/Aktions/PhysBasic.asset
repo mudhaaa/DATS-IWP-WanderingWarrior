@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhysBasic
   m_EditorClassIdentifier: 
   aktionName: Basic Attack
-  description: A Weak Strength Attack.
+  description: A Weak Strength Attack. On Crit, gain +1 AP.
   pointCost: 0
   isUnique: 0
   aktionVFXPrefab: {fileID: 0}
@@ -21,5 +21,13 @@ MonoBehaviour:
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   attackType: 1
-  critEffects: []
+  critEffects:
+  - changeType: 3
+    statType: 7
+    isSelfTarget: 1
+    boost:
+      timer: 0
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0.1
   hitEffects: []

@@ -81,6 +81,10 @@ public class MainMenuManager : MonoBehaviour
 
     [SerializeField] private bool doneSelectedP1;
     [SerializeField] private bool doneSelectedP2;
+
+
+    [SerializeField] Vector2 prevInput1 = Vector2.zero;
+    [SerializeField] Vector2 prevInput2 = Vector2.zero;
     void UpdateCharacterSelect()
     {
         // Player 1 
@@ -99,17 +103,25 @@ public class MainMenuManager : MonoBehaviour
         }
         if (!doneSelectedP1)
         {
+            Vector2 currInput = moveInputP1.ReadValue<Vector2>();
+
             // Read movement input
-            if (moveInputP1.ReadValue<Vector2>() == Vector2.left)
+            if (currInput == Vector2.left && prevInput1 != Vector2.left)
             {
                 currIndexP1 = Mathf.Clamp(currIndexP1 - 1, 0, characterSelectIcons.Count - 1);
+                Debug.Log($"P1: {currIndexP1}");
+
             }
-            if (moveInputP1.ReadValue<Vector2>() == Vector2.right)
+            if (currInput == Vector2.right && prevInput1 != Vector2.right)
             {
-                currIndexP1 = Mathf.Clamp(currIndexP2 + 1, 0, characterSelectIcons.Count - 1);
+                currIndexP1 = Mathf.Clamp(currIndexP1 + 1, 0, characterSelectIcons.Count - 1);
+                Debug.Log($"P1: {currIndexP1}");
+
             }
+
+            prevInput1 = currInput;
         }
-        // Move the arrow's position to be centered to icon
+        // Move the arrow's position to be centered to iconddada
         arrowTransformP1.SetParent(characterSelectIcons[currIndexP1]);
         arrowTransformP1.DOMoveX(characterSelectIcons[currIndexP1].position.x, 0.1f);
 
@@ -138,15 +150,21 @@ public class MainMenuManager : MonoBehaviour
 
         if (!doneSelectedP2)
         {
+            Vector2 currInput = moveInputP2.ReadValue<Vector2>();
+
             // Read movement input
-            if (moveInputP2.ReadValue<Vector2>() == Vector2.left)
+            if (currInput == Vector2.left && prevInput2 != Vector2.left)
             {
                 currIndexP2 = Mathf.Clamp(currIndexP2 - 1, 0, characterSelectIcons.Count - 1);
+                Debug.Log($"P2: {currIndexP2}");
             }
-            if (moveInputP2.ReadValue<Vector2>() == Vector2.right)
+            if (currInput == Vector2.right && prevInput2 != Vector2.right)
             {
                 currIndexP2 = Mathf.Clamp(currIndexP2 + 1, 0, characterSelectIcons.Count - 1);
+                Debug.Log($"P2: {currIndexP2}");
             }
+
+            prevInput2 = currInput;
         }
 
         // Move the arrow's position to be centered to icon

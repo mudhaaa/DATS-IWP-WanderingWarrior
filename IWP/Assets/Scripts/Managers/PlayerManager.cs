@@ -67,11 +67,11 @@ public class PlayerManager : MonoBehaviour
     {
         knightP1.SetActive(false);
         mageP1.SetActive(false);
-        //bulwarkP1.SetActive(false);
+        bulwarkP1.SetActive(false);
 
         knightP2.SetActive(false);
         mageP2.SetActive(false);
-        //bulwarkP2.SetActive(false);
+        bulwarkP2.SetActive(false);
 
         if (klassP1.name.Contains("Knight"))
         {

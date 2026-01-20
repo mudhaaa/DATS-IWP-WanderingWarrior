@@ -48,7 +48,6 @@ public class Character : MonoBehaviour
 
     #region Aktion
     [SerializeField] private Aktion basic1;
-    [SerializeField] private Aktion basic2;
     [SerializeField] private Aktion unique1;
     [SerializeField] private Aktion unique2;
     [SerializeField] private List<Aktion> listOfAktions;
@@ -136,12 +135,10 @@ public class Character : MonoBehaviour
         unique1 = klass.GetUnique1();
         unique2 = klass.GetUnique2();
         basic1 = klass.GetBasic1();
-        basic2 = klass.GetBasic2();
 
         listOfAktions = new List<Aktion>
         {
             basic1,
-            basic2,
             unique1,
             unique2
         };
@@ -184,7 +181,6 @@ public class Character : MonoBehaviour
     {
         listOfAktions.Clear();
         listOfAktions.Add(basic1);
-        listOfAktions.Add(basic2);
         listOfAktions.Add(unique1);
         listOfAktions.Add(unique2);
     }

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aktionName: Piercing Jab
   description: A Weak Strength attack. On Hit, it reduces enemy Endurance.
-  pointCost: 0
+  pointCost: 1
   isUnique: 0
-  aktionVFXPrefab: {fileID: 1096893136476370, guid: 24b82347924701148a13c746edfb6b22, type: 3}
+  aktionVFXPrefab: {fileID: 4766502839703528682, guid: 1fce4af393582d84aa9486aee33c15c9, type: 3}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   attackType: 1

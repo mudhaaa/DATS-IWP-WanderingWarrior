@@ -18,6 +18,6 @@ public class AktionSlotUI : MonoBehaviour
         name = aktion.GetName();
         aktionName.text = aktion.GetName();
         aktionCost.text = "Cost: " + cost + "AP";
-        aktionDesc.text = aktion.GetDesc();
     }
+
 }

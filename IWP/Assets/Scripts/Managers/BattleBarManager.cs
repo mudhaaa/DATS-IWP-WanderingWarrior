@@ -50,10 +50,20 @@ public class BattleBarManager : MonoBehaviour
 
     bool p1barMax = false;
     bool p2barMax = false;
+    [SerializeField] private float barSpeedP1;
+    [SerializeField] private float barSpeedP2;
     void BattleBarSliderMoving()
     {
         if (BattleManager.instance.IsAttackState())
         {
+            AttackAktion attack = aktionManager.currentAktion as AttackAktion;
+            float p1mult = aktionManager.currentAttacker == playerManager.GetPlayer1() ?
+                           attack.GetDamageMultiplier() : 1;
+            barSpeedP1 = 100 / (playerManager.GetPlayer1().GetSpeed() / 2 / p1mult);
+            float p2mult = aktionManager.currentAttacker == playerManager.GetPlayer2() ?
+                           attack.GetDamageMultiplier() : 1;
+            barSpeedP2 = 100 / (playerManager.GetPlayer2().GetSpeed() / 2 / p2mult);
+
             if (battleBarP1.gameObject.activeSelf && battleBarP2.gameObject.activeSelf)
             {
                 if (!p1pressed)
@@ -61,9 +71,9 @@ public class BattleBarManager : MonoBehaviour
                     if (battleBarP1.value >= battleBarP1.maxValue) p1barMax = true;
                     else if (battleBarP1.value <= battleBarP1.minValue) p1barMax = false;
                     if (!p1barMax)
-                        battleBarP1.value += Time.deltaTime * 100 / (playerManager.GetPlayer1().GetSpeed() /2);
+                        battleBarP1.value += Time.deltaTime * barSpeedP1;
                     else
-                        battleBarP1.value -= Time.deltaTime * 100 / (playerManager.GetPlayer1().GetSpeed() / 2);
+                        battleBarP1.value -= Time.deltaTime * barSpeedP1;
                 }
 
                 if (!p2pressed)
@@ -72,9 +82,9 @@ public class BattleBarManager : MonoBehaviour
                     else if (battleBarP2.value <= battleBarP2.minValue) p2barMax = false;
 
                     if (!p2barMax)
-                        battleBarP2.value += Time.deltaTime * 100 / (playerManager.GetPlayer2().GetSpeed() / 2);
+                        battleBarP2.value += Time.deltaTime * barSpeedP2;
                     else
-                        battleBarP2.value -= Time.deltaTime * 100 / (playerManager.GetPlayer2().GetSpeed() / 2);
+                        battleBarP2.value -= Time.deltaTime * barSpeedP2;
                 }
 
             }

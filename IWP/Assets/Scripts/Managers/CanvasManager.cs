@@ -22,13 +22,13 @@ public class CanvasManager : MonoBehaviour
 
     [SerializeField] private CanvasGroup aktionListP1;
     [SerializeField] private VerticalLayoutGroup vlgP1;
-    [SerializeField] private ScrollRect scrollRectP1;
     [SerializeField] private RectTransform viewportP1;
 
     [SerializeField] private int aktionListIndexP1;
     [SerializeField] private Aktion currentAktionP1;
     [SerializeField] private List<RectTransform> aktionUIListP1;
-    [SerializeField] private float moveDistanceP1 = 100f;
+    [SerializeField] private TMP_Text aktionDescP1;
+    [SerializeField] private RectTransform aktionArrowP1;
 
     public Aktion GetP1Aktion() {  return currentAktionP1; }
     public int GetP1ListIndex() { return aktionListIndexP1; }
@@ -63,13 +63,14 @@ public class CanvasManager : MonoBehaviour
 
     [SerializeField] private CanvasGroup aktionListP2;
     [SerializeField] private VerticalLayoutGroup vlgP2;
-    [SerializeField] private ScrollRect scrollRectP2;
     [SerializeField] private RectTransform viewportP2;
 
     [SerializeField] private int aktionListIndexP2;
     [SerializeField] private Aktion currentAktionP2;
     [SerializeField] private List<RectTransform> aktionUIListP2;
-    [SerializeField] private float moveDistanceP2 = 100f;
+
+    [SerializeField] private TMP_Text aktionDescP2;
+    [SerializeField] private RectTransform aktionArrowP2;
 
     public Aktion GetP2Aktion() { return currentAktionP2; }
     public int GetP2ListIndex() { return aktionListIndexP2; }
@@ -221,12 +222,9 @@ public class CanvasManager : MonoBehaviour
             ui.SetText(playerManager.GetPlayer1().GetAktion(i));
         }
 
-        RectTransform aktionListRTP1 = aktionListP1.GetComponent<RectTransform>();
-        //Vector3 ogPos = new Vector3(aktionListRTP1.localPosition.x, aktionListRTP1.localPosition.y - 100, 0);
-        //aktionListRTP1.SetLocalPositionAndRotation(ogPos, aktionListP2.transform.localRotation);
-        moveDistanceP1 = aktionUIListP1[0].rect.height * 0.5f + vlgP1.spacing * 0.25f;
-
         aktionUIListP1.Reverse();
+        aktionArrowP1.SetParent(aktionUIListP1[0].transform);
+        aktionArrowP1.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
 
         //player 2
         for (int x = playerManager.GetPlayer2().GetAktionList().Count - 1; x >= 0; x--)
@@ -245,12 +243,9 @@ public class CanvasManager : MonoBehaviour
             ui2.SetText(playerManager.GetPlayer2().GetAktion(x));
         }
 
-        RectTransform aktionListRTP2 = aktionListP2.GetComponent<RectTransform>();
-        //ogPos = new Vector3(aktionListRTP2.localPosition.x, aktionListRTP2.localPosition.y - 100, 0);
-        //aktionListRTP2.SetLocalPositionAndRotation(ogPos, aktionListP2.transform.localRotation);
-        moveDistanceP2 = aktionUIListP2[0].rect.height * 0.5f + vlgP2.spacing * 0.25f;
-
         aktionUIListP2.Reverse();
+        aktionArrowP2.SetParent(aktionUIListP2[0].transform);
+        aktionArrowP2.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
 
     }
 
@@ -276,44 +271,7 @@ public class CanvasManager : MonoBehaviour
 
     public bool reachedTopP2 = true;
     public bool reachedBotP2 = false;
-    //void ScrollToIndex(int index, bool isPlayer1)
-    //{
-    //    ScrollRect scrollRect = isPlayer1 ? scrollRectP1 : scrollRectP2;
-    //    RectTransform content = isPlayer1 ? aktionListP1.GetComponent<RectTransform>() : aktionListP2.GetComponent<RectTransform>();
-    //    RectTransform viewport = isPlayer1 ? viewportP1 : viewportP2;
-    //    List<RectTransform> uiList = isPlayer1 ? aktionUIListP1 : aktionUIListP2;
 
-    //    if (uiList.Count == 0) return;
-
-    //    Canvas.ForceUpdateCanvases();
-
-    //    RectTransform targetItem = uiList[index];
-
-    //    // Get the item's position relative to the content's top
-    //    // (anchoredPosition.y is negative, so we make it positive)
-    //    float itemPositionInContent = Mathf.Abs(targetItem.anchoredPosition.y);
-
-    //    // Get dimensions
-    //    float itemHeight = targetItem.rect.height;
-    //    float viewportHeight = viewport.rect.height;
-    //    float contentHeight = content.rect.height;
-
-    //    // Calculate where the item's CENTER is in the content
-    //    float itemCenterInContent = itemPositionInContent + (itemHeight / 2f);
-
-    //    // To center this item in viewport, content needs to move so that:
-    //    // itemCenterInContent appears at viewportHeight/2
-    //    float targetContentY = itemCenterInContent - (viewportHeight / 2f);
-
-    //    // Clamp to valid scroll range
-    //    float maxScroll = Mathf.Max(0, contentHeight - viewportHeight);
-    //    targetContentY = Mathf.Clamp(targetContentY, 0, maxScroll);
-
-    //    Debug.Log($"Item {index}: itemPos={itemPositionInContent}, itemCenter={itemCenterInContent}, targetY={targetContentY}");
-
-    //    // Move content to this position
-    //    content.DOAnchorPosY(targetContentY, 0.2f).SetEase(Ease.OutCubic);
-    //}
     void UpdateSelectionAktionList()
     {
         if (BattleManager.instance.GetCurrState() == BattleStates.P1turn)
@@ -326,12 +284,14 @@ public class CanvasManager : MonoBehaviour
                 aktionListIndexP1 -= 1;
                 aktionListIndexP1 = Mathf.Clamp(aktionListIndexP1, 0, aktionUIListP1.Count - 1);
 
+                // Arrow move to selected Aktion
+                aktionArrowP1.SetParent(aktionUIListP1[aktionListIndexP1].transform);
+                aktionArrowP1.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
+
                 if (aktionListIndexP1 >= 0 && !reachedTopP1)
                 {
                     if (aktionListIndexP1 == 0) reachedTopP1 = true;
                     reachedBotP1 = false;
-                    float newY = aktionListP1.transform.position.y - moveDistanceP1;
-                    aktionListP1.GetComponent<RectTransform>().DOMoveY(newY, 0.2f);
                 }
             }
             else if (currentInputP1 == Vector2.down && previousInputP1 != Vector2.down)
@@ -339,21 +299,21 @@ public class CanvasManager : MonoBehaviour
                 aktionListIndexP1 += 1;
                 aktionListIndexP1 = Mathf.Clamp(aktionListIndexP1, 0, aktionUIListP1.Count - 1);
 
+                // Arrow move to selected Aktion
+                aktionArrowP1.SetParent(aktionUIListP1[aktionListIndexP1].transform);
+                aktionArrowP1.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
+
                 if (aktionListIndexP1 <= aktionListP1.transform.childCount && !reachedBotP1)
                 {
                     if (aktionListIndexP1 == aktionListP1.transform.childCount - 1) reachedBotP1 = true;
                     reachedTopP1 = false;
-                    float newY = aktionListP1.transform.position.y + moveDistanceP1;
-                    aktionListP1.GetComponent<RectTransform>().DOMoveY(newY, 0.2f);
                 }
             }
-            aktionUIListP1[aktionListIndexP1].transform.DOScale(Vector3.one, 0.2f);
-            foreach (RectTransform go in aktionUIListP1)
-            {
-                if (go != aktionUIListP1[aktionListIndexP1]) go.transform.DOScale(Vector3.one * 0.75f, 0.2f);
-            }
 
+
+            // Set Description
             currentAktionP1 = playerManager.GetPlayer1().GetAktion(aktionListIndexP1);
+            aktionDescP1.text = currentAktionP1.GetDesc();
 
             // Store current input for next frame
             previousInputP1 = currentInputP1;
@@ -388,12 +348,14 @@ public class CanvasManager : MonoBehaviour
                 aktionListIndexP2 -= 1;
                 aktionListIndexP2 = Mathf.Clamp(aktionListIndexP2, 0, aktionUIListP2.Count - 1);
 
+                // Arrow move to selected Aktion
+                aktionArrowP2.SetParent(aktionUIListP2[aktionListIndexP2].transform);
+                aktionArrowP2.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
+
                 if (aktionListIndexP2 >= 0 && !reachedTopP2)
                 {
                     if (aktionListIndexP2 == 0) reachedTopP2 = true;
                     reachedBotP2 = false;
-                    float newY = aktionListP2.transform.position.y - moveDistanceP2;
-                    aktionListP2.GetComponent<RectTransform>().DOMoveY(newY, 0.2f);
                 }
             }
             else if (currentInputP2 == Vector2.down && previousInputP2 != Vector2.down)
@@ -401,21 +363,22 @@ public class CanvasManager : MonoBehaviour
                 aktionListIndexP2 += 1;
                 aktionListIndexP2 = Mathf.Clamp(aktionListIndexP2, 0, aktionUIListP2.Count - 1);
 
+                // Arrow move to selected Aktion
+                aktionArrowP2.SetParent(aktionUIListP2[aktionListIndexP2].transform);
+                aktionArrowP2.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
+
                 if (aktionListIndexP2 <= aktionListP2.transform.childCount && !reachedBotP2)
                 {
                     if (aktionListIndexP2 == aktionListP2.transform.childCount - 1) reachedBotP2 = true;
                     reachedTopP2 = false;
-                    float newY = aktionListP2.transform.position.y + moveDistanceP2;
-                    aktionListP2.GetComponent<RectTransform>().DOMoveY(newY, 0.2f);
                 }
             }
-            aktionUIListP2[aktionListIndexP2].transform.DOScale(Vector3.one, 0.2f);
-            foreach (RectTransform go in aktionUIListP2)
-            {
-                if (go != aktionUIListP2[aktionListIndexP2]) go.transform.DOScale(Vector3.one * 0.75f, 0.2f);
-            }
 
+
+            // Set Description
             currentAktionP2 = playerManager.GetPlayer2().GetAktion(aktionListIndexP2);
+
+            aktionDescP2.text = currentAktionP2.GetDesc();
 
             // Store current input for next frame
             previousInputP2 = currentInputP2;
@@ -462,24 +425,14 @@ public class CanvasManager : MonoBehaviour
     {
         viewportP1.gameObject.SetActive(p1 == 1);
         aktionListP1.DOFade(p1, 1f);
-
-        if (p1 == 0)
-        {
-            foreach (RectTransform t in aktionUIListP1)
-            {
-                t.localScale = Vector3.one;
-            }
-        }
+        aktionArrowP1.gameObject.SetActive(p1 == 1);
+        aktionArrowP1.GetComponent<Image>().enabled = p1 == 1;
 
         viewportP2.gameObject.SetActive(p2 == 1);
         aktionListP2.DOFade(p2, 1f);
-        if (p2 == 0)
-        {
-            foreach (RectTransform t in aktionUIListP2)
-            {
-                t.localScale = Vector3.one;
-            }
-        }
+        aktionArrowP2.gameObject.SetActive(p2 == 1);
+        aktionArrowP2.GetComponent<Image>().enabled = p2 == 1;
+
     }
     #endregion
 
