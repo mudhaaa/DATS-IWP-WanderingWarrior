@@ -11142,7 +11142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'W/S: up/down
+  m_text: 'a/d: left/right
 
     e: confirm'
   m_isRightToLeft: 0
@@ -20219,7 +20219,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'j/k: left/right
+  m_text: 'j/l: left/right
 
     o: confirm'
   m_isRightToLeft: 0
