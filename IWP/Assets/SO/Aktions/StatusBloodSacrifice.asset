@@ -17,8 +17,9 @@ MonoBehaviour:
     cost of 15% Health.
   pointCost: 0
   isUnique: 0
+  animationName: Magic
   aktionVFXPrefab: {fileID: 0}
-  isOnUser: 0
+  isOnUser: 1
   vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
   - changeType: 1

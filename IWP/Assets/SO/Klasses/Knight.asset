@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c6e37c219b5554d8f3bd37f8797ba7, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: 
-  health: 510
-  aktionPoints: 4
+  health: 550
+  aktionPoints: 3
   strength: 130
-  magic: 90
-  endurance: 100
-  speed: 80
+  magic: 80
+  endurance: 95
+  speed: 95
   unique1: {fileID: 11400000, guid: 5d0bca80eb6e3c44ba6520d3fc7d042e, type: 2}
   unique2: {fileID: 11400000, guid: 2cb7675aa84949d48bc1cbd989b85be5, type: 2}
   basic: {fileID: 11400000, guid: 3ea41742c319fdd49a10c86216a3ac6a, type: 2}

@@ -16,8 +16,10 @@ MonoBehaviour:
   description: A Weak Magic attack. On Hit, it increases your Speed.
   pointCost: 1
   isUnique: 0
-  aktionVFXPrefab: {fileID: 0}
-  vfxOffset: {x: 0, y: 0, z: 0}
+  animationName: Magic
+  aktionVFXPrefab: {fileID: 2765443656615285045, guid: ecbcbff41727c7b4ea94a3097fe35639, type: 3}
+  isOnUser: 0
+  vfxOffset: {x: 0, y: 2, z: 0}
   damageMultiplier: 1
   attackType: 3
   critEffects: []

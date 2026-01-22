@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class PlayerAnimationController : MonoBehaviour
 {
@@ -38,6 +37,13 @@ public class PlayerAnimationController : MonoBehaviour
          if (aktionManager.currentAktion as AttackAktion == null) return;
 
         aktionManager.AttackAktionFeedback();
+    }
+
+    public void StatusAktionFeedback()
+    {
+         if (aktionManager.currentAktion as StatusAktion == null) return;
+
+        aktionManager.StatusAktionFeedback();
     }
 
     public void BurningBladeVFX()

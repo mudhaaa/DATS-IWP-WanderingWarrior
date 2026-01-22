@@ -16,8 +16,10 @@ MonoBehaviour:
   description: A Medium Magic attack. On Crit, it decreases enemy Strength.
   pointCost: 3
   isUnique: 0
-  aktionVFXPrefab: {fileID: 0}
-  vfxOffset: {x: 0, y: 0, z: 0}
+  animationName: Magic
+  aktionVFXPrefab: {fileID: 1600146438408411185, guid: 5de52c3dfa6151f45850468dbbf6e14b, type: 3}
+  isOnUser: 0
+  vfxOffset: {x: -1, y: 0, z: 0}
   damageMultiplier: 2
   attackType: 3
   critEffects:

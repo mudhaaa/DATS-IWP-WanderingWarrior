@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 /// Manages each Player character's in-game stats & input handling
@@ -363,7 +362,7 @@ public class Character : MonoBehaviour
     public bool StatChangeImmune() { return statChangeImmune; }
     public void SetStatChangeImmune(bool i) { statChangeImmune = i; }
     public void SetStatChangeImmuneTimer(int i) { statChangeImmuneTimer = i; }
-
+    public int GetImmuneTimer() { return statChangeImmuneTimer; }
     #endregion
 
     public void EnableActions()

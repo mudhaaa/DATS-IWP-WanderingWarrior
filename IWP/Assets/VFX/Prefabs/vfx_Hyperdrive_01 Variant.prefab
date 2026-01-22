@@ -48,9 +48,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4963015851933009569, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5749441552287667129, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
       propertyPath: m_Name
       value: vfx_Hyperdrive_01 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6387223140208095078, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7123853702983496459, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
+      propertyPath: looping
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

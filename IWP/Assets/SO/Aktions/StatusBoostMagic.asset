@@ -16,7 +16,9 @@ MonoBehaviour:
   description: A Status Aktion that increases Magic
   pointCost: 2
   isUnique: 0
+  animationName: Magic
   aktionVFXPrefab: {fileID: 0}
+  isOnUser: 1
   vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
   - changeType: 1

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Bulwark
   m_EditorClassIdentifier: 
   health: 620
-  aktionPoints: 4
-  strength: 80
-  magic: 75
-  endurance: 110
-  speed: 55
+  aktionPoints: 3
+  strength: 75
+  magic: 65
+  endurance: 115
+  speed: 65
   unique1: {fileID: 11400000, guid: cce80c2032348814d93b780ffe54d822, type: 2}
-  unique2: {fileID: 11400000, guid: 15d85fb0d50aaa94f8b5d6b546fc0504, type: 2}
-  basic: {fileID: 11400000, guid: 3ea41742c319fdd49a10c86216a3ac6a, type: 2}
+  unique2: {fileID: 11400000, guid: b6aadd1e5679c8f418b58aee38bbbd32, type: 2}
+  basic: {fileID: 11400000, guid: 99868ff446644144d969474c5c46e020, type: 2}
   characterPrefab: {fileID: 0}

@@ -16,9 +16,11 @@ public class Aktion : ScriptableObject
     public virtual bool IsUnique() { return isUnique; }
 
     [Header("VFX")]
+    [SerializeField] private string animationName;
     [SerializeField] private GameObject aktionVFXPrefab;
     [SerializeField] private bool isOnUser; // bool to check for if the vfx plays on the user or not
     [SerializeField] private Vector3 vfxOffset;
+    public virtual string GetAnimName() { return animationName; }
     public virtual bool IsOnUser() { return isOnUser; }
     public virtual GameObject GetVFX() { return aktionVFXPrefab; }
     public virtual Vector3 GetVFXOffset() { return vfxOffset; }

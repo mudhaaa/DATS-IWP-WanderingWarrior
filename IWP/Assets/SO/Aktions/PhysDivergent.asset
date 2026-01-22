@@ -15,9 +15,10 @@ MonoBehaviour:
   aktionName: Divergent Strike
   description: A Medium Strength attack. On Hit, decrease enemy AP. On Crit, decreases
     more AP.
-  pointCost: 2
+  pointCost: 4
   isUnique: 0
-  aktionVFXPrefab: {fileID: 0}
+  animationName: Strength
+  aktionVFXPrefab: {fileID: 1650601721277096698, guid: f7164020bf05b8548b6e89cb2ccee676, type: 3}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 2
@@ -30,13 +31,5 @@ MonoBehaviour:
       timer: 0
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0.4
-  hitEffects:
-  - changeType: 4
-    statType: 7
-    isSelfTarget: 0
-    boost:
-      timer: 0
-      uniqueEffectAmount: 0
-      uniqueBoostType: 
       effectAmount: 0.2
+  hitEffects: []

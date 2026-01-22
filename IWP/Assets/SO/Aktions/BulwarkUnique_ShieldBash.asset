@@ -12,22 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
   m_Name: BulwarkUnique_ShieldBash
   m_EditorClassIdentifier: 
-  aktionName: Shield Bash
-  description: A Medium Endurance attack. On Crit, it resets the enemy's stat changes.
-  pointCost: 3
+  aktionName: Raging Dive
+  description: A Heavy Endurance attack. On Hit, it grants Immunity to Stat Drops
+    for 3 turns. On Crit, it increases Endurance for 3 turns.
+  pointCost: 4
   isUnique: 1
-  aktionVFXPrefab: {fileID: 0}
+  animationName: UniqueAttack1
+  aktionVFXPrefab: {fileID: 6570346431000153135, guid: bd501a82acd82ae449c9e875e22aa6ce, type: 3}
   isOnUser: 0
-  vfxOffset: {x: 0, y: 0, z: 0}
-  damageMultiplier: 2
+  vfxOffset: {x: -1, y: 1, z: 0}
+  damageMultiplier: 3
   attackType: 2
   critEffects:
-  - changeType: 5
-    statType: 2
-    isSelfTarget: 0
+  - changeType: 1
+    statType: 3
+    isSelfTarget: 1
     boost:
-      timer: 2
+      timer: 3
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0
-  hitEffects: []
+  hitEffects:
+  - changeType: 6
+    statType: 0
+    isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

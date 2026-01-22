@@ -17,7 +17,9 @@ MonoBehaviour:
     but reduces your Endurance.
   pointCost: 4
   isUnique: 1
+  animationName: UniqueMagic
   aktionVFXPrefab: {fileID: 0}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   statusEffects:
   - changeType: 1

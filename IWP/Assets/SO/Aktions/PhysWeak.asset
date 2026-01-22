@@ -16,20 +16,13 @@ MonoBehaviour:
   description: A Weak Strength attack. On Hit, it reduces enemy Endurance.
   pointCost: 1
   isUnique: 0
+  animationName: Strength
   aktionVFXPrefab: {fileID: 4766502839703528682, guid: 1fce4af393582d84aa9486aee33c15c9, type: 3}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   attackType: 1
-  critEffects:
-  - changeType: 2
-    statType: 3
-    isSelfTarget: 0
-    boost:
-      timer: 2
-      uniqueEffectAmount: 0
-      uniqueBoostType: 
-      effectAmount: 0
+  critEffects: []
   hitEffects:
   - changeType: 2
     statType: 3

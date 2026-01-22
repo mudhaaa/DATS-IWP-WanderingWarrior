@@ -1,6 +1,4 @@
 using DG.Tweening;
-using DG.Tweening.Core;
-using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -44,6 +42,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private TMP_Text speedTimerTextP1;
     [SerializeField] private Image critTimerImageP1;
     [SerializeField] private TMP_Text critTimerTextP1;
+    [SerializeField] private Image immuneTimerImageP1;
+    [SerializeField] private TMP_Text immuneTimerTextP1;
 
     [Header("P1 Others")]
     [SerializeField] private FloatingTextUI damageNumberUIP1;
@@ -86,6 +86,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private TMP_Text speedTimerTextP2;
     [SerializeField] private Image critTimerImageP2;
     [SerializeField] private TMP_Text critTimerTextP2;
+    [SerializeField] private Image immuneTimerImageP2;
+    [SerializeField] private TMP_Text immuneTimerTextP2;
 
     [Header("P2 Others")]
     [SerializeField] private FloatingTextUI damageNumberUIP2;
@@ -245,7 +247,7 @@ public class CanvasManager : MonoBehaviour
 
         aktionUIListP2.Reverse();
         aktionArrowP2.SetParent(aktionUIListP2[0].transform);
-        aktionArrowP2.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
+        aktionArrowP2.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
 
     }
 
@@ -529,6 +531,7 @@ public class CanvasManager : MonoBehaviour
         UpdateEnduranceTimerUI(i);
         UpdateSpeedTimerUI(i);
         UpdateCritTimerUI(i);
+        UpdateImmuneTimerUI(i);
     }
 
     void UpdateStrengthTimerUI(int i)
@@ -669,6 +672,26 @@ public class CanvasManager : MonoBehaviour
             image.color = Color.green;
             // Update timer
             text.text = player.GetCritBuffTimer().ToString();
+        }
+    }
+    void UpdateImmuneTimerUI(int i)
+    {
+        Character player = i == 1? playerManager.GetPlayer1() : playerManager.GetPlayer2();
+        Image image = i == 1 ? immuneTimerImageP1 : immuneTimerImageP2;
+        TMP_Text text = i == 1 ? immuneTimerTextP1 : immuneTimerTextP2;
+
+        // Check if stat is buffed or nerfed
+        bool immuneBuffed = player.GetImmuneTimer() > 0;
+
+        // Activate image if either is true
+        GameObject imageParent = image.transform.parent.gameObject;
+        imageParent.SetActive(immuneBuffed);
+
+        // If buffed, green colour, else red
+        if (immuneBuffed)
+        {
+            // Update timer
+            text.text = player.GetImmuneTimer().ToString();
         }
     }
     #endregion

@@ -97,9 +97,7 @@ public class AktionManager : MonoBehaviour
                 StatusMove(effect, player, effect.IsSelfTarget());
             }
 
-            if (status.IsUnique()) player.PlayAnimation("UniqueStatus");
-           
-            else player.PlayAnimation("Magic");
+            player.PlayAnimation(aktion.GetAnimName());
         }
     }
 
@@ -160,26 +158,23 @@ public class AktionManager : MonoBehaviour
     IEnumerator AttackAktionFeedback(AttackAktion attack, Character attacker, Character defender, int damage, BattleBarSlider.BarState defenceSlider)
     {
         // animation play
-        if(attack.IsUnique())
+        if (attack.GetName() == "Raging Dive" && currentAttackerState == BattleBarSlider.BarState.Good)
         {
-            attacker.PlayAnimation("UniqueAttack");
+            attacker.PlayAnimation("UniqueAttack2");
+            Debug.Log("Yeehaw");
         }
-        else if (attack.GetAttackType() == AttackAktion.AttackType.Strength || attack.GetAttackType() == AttackAktion.AttackType.Endurance)
+        else
         {
-            attacker.PlayAnimation("Strength");
-        }
-        else if (attack.GetAttackType() == AttackAktion.AttackType.Magic)
-        {
-            attacker.PlayAnimation("Magic");
+            attacker.PlayAnimation(attack.GetAnimName());
         }
 
         yield return new WaitForSeconds(1f);
-
-        
+                
     }
 
     public void AttackAktionFeedback()
     {
+        canvasManager.UpdatePlayerBars(currentAttacker);
         canvasManager.UpdatePlayerBars(currentDefender);
 
         canvasManager.ActivateDamageNumber(currentDefender == player1 ? 1 : 2, currentDamageDealt);
@@ -205,6 +200,11 @@ public class AktionManager : MonoBehaviour
     void PlayVFX()
     {
         GameObject vfxGo = Instantiate(currentAktion.GetVFX());
+        VisualEffect vfx = vfxGo.GetComponent<VisualEffect>();
+        ParticleSystem ps = vfxGo.GetComponentInChildren<ParticleSystem>();
+
+        Destroy(vfxGo, 5);
+
         Vector3 vfxOffset = currentAktion.GetVFXOffset();
 
         //if (currentDefender == player1) vfxOffset = new Vector3(vfxOffset.x, vfxOffset.y * -1, vfxOffset.z);
@@ -220,16 +220,28 @@ public class AktionManager : MonoBehaviour
             vfxGo.transform.LookAt(currentDefender.transform);
         }
 
-        VisualEffect vfx = vfxGo.GetComponent<VisualEffect>();
         if (vfx != null) vfx.Play();
 
-        ParticleSystem ps = vfxGo.GetComponentInChildren<ParticleSystem>();
         if (ps != null) ps.Play();
+    }
+
+    public void StatusAktionFeedback()
+    {
+        canvasManager.UpdatePlayerBars(currentAttacker);
+        canvasManager.UpdatePlayerBars(currentDefender);
+            
+        if (currentAktion.GetVFX() != null)
+        {
+            PlayVFX();
+        }
     }
 
     void StatusMove(StatusEffect effect, Character user, bool isSelfTarget)
     {
         Character target;
+        currentAttacker = user == player1 ? player1 : player2;
+        currentDefender = user == player2 ? player1 : player2;
+
         if (isSelfTarget)
         {
             // target is if user is player1, player1, else, player2
@@ -614,8 +626,8 @@ public class AktionManager : MonoBehaviour
         int changeAmt = Mathf.CeilToInt(target.GetOriginalHealth() * effect.GetBoost().GetEffectAmount());
 
         int newValue = Mathf.CeilToInt(target.GetHealth() + changeAmt);
+        newValue = Mathf.Clamp(newValue, 0, target.GetOriginalHealth());
         target.SetHealth(newValue);
-        canvasManager.UpdatePlayerBars(target);
 
         string msg = $"{target.name}'s Health restored by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);
@@ -626,8 +638,8 @@ public class AktionManager : MonoBehaviour
     {
         int changeAmt = Mathf.CeilToInt(target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
         int newValue = Mathf.CeilToInt(target.GetAP() + changeAmt);
+        newValue = Mathf.Clamp(newValue, 0, 10);
         target.SetAP(newValue);
-        canvasManager.UpdatePlayerBars(target);
 
         string msg = $"{target.name}'s AP restored by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);
@@ -642,7 +654,6 @@ public class AktionManager : MonoBehaviour
 
         int newValue = Mathf.CeilToInt(target.GetHealth() - changeAmt);
         target.SetHealth(newValue);
-        canvasManager.UpdatePlayerBars(target);
 
         Debug.Log(newValue);
         string msg = $"{target.name}'s Health reduced by {changeAmt}!";
@@ -655,8 +666,7 @@ public class AktionManager : MonoBehaviour
         int changeAmt = Mathf.CeilToInt(target.GetOriginalAP() * effect.GetBoost().GetEffectAmount());
 
         int newValue = Mathf.CeilToInt(target.GetAP() - changeAmt);
-        target.SetAP(newValue);
-        canvasManager.UpdatePlayerBars(target);
+        target.SetAP(Mathf.Clamp(newValue, 0, 10));
 
         string msg = $"{target.name}'s AP reduced by {changeAmt}!";
         target.GetTurnUpdateLists().Add(msg);

@@ -16,7 +16,9 @@ MonoBehaviour:
   description: A Medium Strength attack. On Crit, it increases your speed.
   pointCost: 1
   isUnique: 0
-  aktionVFXPrefab: {fileID: 0}
+  animationName: Strength
+  aktionVFXPrefab: {fileID: 91643519604607583, guid: 41022e22e624e444196d4015a9d38b01, type: 3}
+  isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   damageMultiplier: 2
   attackType: 1

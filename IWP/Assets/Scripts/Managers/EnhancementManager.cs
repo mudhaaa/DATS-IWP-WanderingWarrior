@@ -23,6 +23,7 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] private List<Enhancement> possibleChoicesP1;
     [SerializeField] private TMP_Text descriptionP1;
     [SerializeField] private TMP_Text aktionDescriptionP1;
+    [SerializeField] private RectTransform arrowP1;
 
     [Header("Player 2")]
     [SerializeField] private HorizontalLayoutGroup uiChoicesGroupP2;
@@ -33,6 +34,7 @@ public class EnhancementManager : MonoBehaviour
     [SerializeField] private List<Enhancement> possibleChoicesP2;
     [SerializeField] private TMP_Text descriptionP2;
     [SerializeField] private TMP_Text aktionDescriptionP2;
+    [SerializeField] private RectTransform arrowP2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnStart(PlayerManager pm, CanvasManager cm)
@@ -115,6 +117,10 @@ public class EnhancementManager : MonoBehaviour
                 ui.gameObject.transform.DOScale(Vector3.one * .75f, .2f);
             }
 
+            arrowP1.SetParent(uiChoicesP1[choiceIndexP1].gameObject.transform);
+            arrowP1.DOAnchorPos(new Vector2(0, 200), .2f);
+            arrowP1.DOScale(new Vector3(.9f, .9f, 1.2f), 0.1f);
+
             currChoiceP1 = enhRandChoicesP1[choiceIndexP1];
 
             // Store current input for next frame
@@ -145,7 +151,10 @@ public class EnhancementManager : MonoBehaviour
             {
                 ui.gameObject.transform.DOScale(Vector3.one * .75f, .2f);
             }
-            
+            arrowP2.SetParent(uiChoicesP2[choiceIndexP2].gameObject.transform);
+            arrowP2.DOAnchorPos(new Vector2(0, 200), .2f);
+            arrowP2.DOScale(new Vector3(.9f, .9f, 1.2f), 0.1f);
+
             currChoiceP2 = enhRandChoicesP2[choiceIndexP2];
 
             // Store current input for next frame
@@ -267,7 +276,7 @@ public class EnhancementManager : MonoBehaviour
             if(effect.GetEnhancementType() == EnhancementType.AktionGain)
             {
                 effect.GetAktion().GetName();
-                aktionDescriptionP1.text = $"{effect.GetAktion().GetName()} - {effect.GetAktion().GetDesc()}";
+                aktionDescriptionP1.text = $"{effect.GetAktion().GetName()} : Cost {effect.GetAktion().GetDesc()} AP - {effect.GetAktion().GetDesc()}";
             }
             else
             {
@@ -280,7 +289,7 @@ public class EnhancementManager : MonoBehaviour
             if(effect.GetEnhancementType() == EnhancementType.AktionGain)
             {
                 effect.GetAktion().GetName();
-                aktionDescriptionP2.text = $"{effect.GetAktion().GetName()} - {effect.GetAktion().GetDesc()}";
+                aktionDescriptionP2.text = $"{effect.GetAktion().GetName()} : Cost {effect.GetAktion().GetAPCost()} AP - {effect.GetAktion().GetDesc()}";
             }
             else
             {

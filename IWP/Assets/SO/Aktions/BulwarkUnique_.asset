@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
+  m_Name: BulwarkUnique_
+  m_EditorClassIdentifier: 
+  aktionName: Tenacious Roar
+  description: A Heavy Magic Attack. On Hit, decrease enemy Speed for 2 turns. On
+    Crit, also decreases Strength & Magic for 2 turns.
+  pointCost: 3
+  isUnique: 1
+  animationName: UniqueMagic
+  aktionVFXPrefab: {fileID: 0}
+  isOnUser: 0
+  vfxOffset: {x: 0, y: 0, z: 0}
+  damageMultiplier: 3
+  attackType: 3
+  critEffects:
+  - changeType: 2
+    statType: 1
+    isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
+  - changeType: 2
+    statType: 2
+    isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
+  hitEffects:
+  - changeType: 2
+    statType: 4
+    isSelfTarget: 0
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

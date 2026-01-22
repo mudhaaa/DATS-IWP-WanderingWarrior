@@ -57,12 +57,10 @@ public class BattleBarManager : MonoBehaviour
         if (BattleManager.instance.IsAttackState())
         {
             AttackAktion attack = aktionManager.currentAktion as AttackAktion;
-            float p1mult = aktionManager.currentAttacker == playerManager.GetPlayer1() ?
-                           attack.GetDamageMultiplier() : 1;
-            barSpeedP1 = 100 / (playerManager.GetPlayer1().GetSpeed() / 2 / p1mult);
-            float p2mult = aktionManager.currentAttacker == playerManager.GetPlayer2() ?
-                           attack.GetDamageMultiplier() : 1;
-            barSpeedP2 = 100 / (playerManager.GetPlayer2().GetSpeed() / 2 / p2mult);
+
+            barSpeedP1 = 100 / (playerManager.GetPlayer1().GetSpeed() / 2.5f );
+
+            barSpeedP2 = 100 / (playerManager.GetPlayer2().GetSpeed() / 2.5f );
 
             if (battleBarP1.gameObject.activeSelf && battleBarP2.gameObject.activeSelf)
             {

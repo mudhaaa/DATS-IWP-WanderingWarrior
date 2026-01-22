@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance { get; private set; }
+    public static AudioManager instance { get; private set; }
 
     [SerializeField] private AudioSource audioSourcePrefab; // Reference to the AudioSource prefab
     [SerializeField] private List<AudioData> audioDatas;    // List of audio data objects
@@ -15,9 +15,9 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
             InitializeAudioDictionary();
         }

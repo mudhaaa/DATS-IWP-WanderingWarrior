@@ -16,9 +16,10 @@ MonoBehaviour:
   description: A Weak Magic Attack. On Crit, gain +1 AP.
   pointCost: 0
   isUnique: 0
+  animationName: Magic
   aktionVFXPrefab: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df, type: 3}
   isOnUser: 0
-  vfxOffset: {x: 0, y: 0, z: 0}
+  vfxOffset: {x: -1, y: 0, z: 0}
   damageMultiplier: 1
   attackType: 3
   critEffects:

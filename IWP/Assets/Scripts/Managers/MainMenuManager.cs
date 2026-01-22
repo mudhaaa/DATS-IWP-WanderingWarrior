@@ -73,6 +73,12 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private AudioData mainMenuBGM;
+    public void MainMenuBGM()
+    {
+        AudioManager.instance.PlayAudio(mainMenuBGM);
+    }
+
     #region Character Select
     [SerializeField] private float moveDistance;
     [SerializeField] private float moveDistance2;
