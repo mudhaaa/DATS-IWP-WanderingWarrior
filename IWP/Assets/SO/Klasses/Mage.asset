@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 440
   aktionPoints: 5
   strength: 80
-  magic: 160
+  magic: 150
   endurance: 77
   speed: 115
   unique1: {fileID: 11400000, guid: 385cc60eb8e6dca4188ade38347c1f7f, type: 2}
