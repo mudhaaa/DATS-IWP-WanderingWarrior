@@ -50,16 +50,14 @@ public class AktionManager : MonoBehaviour
             if (sliderP1.GetBarState() == BattleBarSlider.BarState.Bad)
             {
                 Debug.Log("Player 1 failed the attack");
-
-                return;
             }
+
         }
         else if (player == player2 && aktion as AttackAktion != null)
         {
             if (sliderP2.GetBarState() == BattleBarSlider.BarState.Bad)
             {
                 Debug.Log("Player 2 failed the attack");
-                return;
             }
         }
 
@@ -724,11 +722,11 @@ public class AktionManager : MonoBehaviour
         {
             // full damage
             case BattleBarSlider.BarState.Bad:
-                defenceBar = 1.5f;
+                defenceBar = 1f;
                 break;
             // block
             case BattleBarSlider.BarState.Mid:
-                defenceBar = 1f;
+                defenceBar = .75f;
                 break;
             // full block
             case BattleBarSlider.BarState.Good:
@@ -736,9 +734,15 @@ public class AktionManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Damage Dealt:" + Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 1, 999));
-        return Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 1, 999);
+        Debug.Log("Damage Dealt:" + Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 5, 999));
+        if (a == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return Mathf.Clamp(Mathf.CeilToInt((1 + ((a * d) - e) * attackBar) * defenceBar), 5, 999);
+        }
     }
-
 
 }

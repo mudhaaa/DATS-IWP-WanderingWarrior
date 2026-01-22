@@ -609,6 +609,7 @@ public class Character : MonoBehaviour
         enduranceBuffTimer = 0;
         speedBuffTimer = 0;
         critBuffTimer = 0;
+        statChangeImmuneTimer = 0;
 
         strengthNerfTimer = 0;
         magicNerfTimer = 0;

@@ -15,7 +15,7 @@ MonoBehaviour:
   aktionName: Hell Blast
   description: A Massive Magic attack. On Hit, it reduces Magic. On Crit, it reduces
     Health.
-  pointCost: 5
+  pointCost: 6
   isUnique: 1
   animationName: UniqueAttack
   aktionVFXPrefab: {fileID: 1775016962210819838, guid: 5e90cd1ff9b40c74d9faa74f9fd1a6ff, type: 3}

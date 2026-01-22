@@ -15,7 +15,7 @@ MonoBehaviour:
   aktionName: Health Restore
   description: A Status Aktion that restores 10% Health
   pointCost: 2
-  isUnique: 0
+  isUnique: 1
   animationName: Magic
   aktionVFXPrefab: {fileID: 8593464584776411535, guid: b21d155ec7ea5a349a0e36106f913148, type: 3}
   isOnUser: 1
