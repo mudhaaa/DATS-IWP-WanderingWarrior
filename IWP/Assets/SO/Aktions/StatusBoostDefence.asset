@@ -17,10 +17,10 @@ MonoBehaviour:
   pointCost: 2
   isUnique: 0
   animationName: Magic
-  aktionVFXPrefab: {fileID: 0}
-  isOnUser: 0
-  vfxOffset: {x: 0, y: 0, z: 0}
-  LookAtTarget: 1
+  aktionVFXPrefab: {fileID: 4503581091549821763, guid: 198a2d4b5f72e194195488de25125612, type: 3}
+  isOnUser: 1
+  vfxOffset: {x: 0, y: 1, z: 0}
+  LookAtTarget: 0
   statusEffects:
   - changeType: 1
     statType: 3

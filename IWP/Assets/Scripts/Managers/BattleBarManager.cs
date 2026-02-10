@@ -110,7 +110,8 @@ public class BattleBarManager : MonoBehaviour
             }
             if (p1pressed && p2pressed)
             {
-                BattleManager.instance.EndAttackState();
+                if(currentCoroutine == null) currentCoroutine = StartCoroutine(ExitBarState());
+                endingAttack = true;
             }
         }
         else
@@ -138,7 +139,7 @@ public class BattleBarManager : MonoBehaviour
         else if (barState == BattleBarSlider.BarState.Mid) l = .65f;
         else l = .55f;
 
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(.1f);
 
         if (i == 1)
         {
@@ -148,6 +149,18 @@ public class BattleBarManager : MonoBehaviour
         {
             floatingTextP2.SetText(barState.ToString(), l);
         }
+    }
 
+    public Coroutine currentCoroutine;
+    bool endingAttack;
+    IEnumerator ExitBarState()
+    {
+        yield return new WaitForSeconds(2);
+        if (endingAttack && BattleManager.instance.IsAttackState())
+        {
+            endingAttack = false;
+            BattleManager.instance.EndAttackState();
+        }
+        Debug.Log("Entering Attack State");
     }
 }

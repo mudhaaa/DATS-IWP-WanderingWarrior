@@ -209,6 +209,7 @@ public class BattleManager : MonoBehaviour
         barManager.SetInputAcceptState(2, false);
 
         currentAttackCoroutine = null;
+        barManager.currentCoroutine = null;
     }
 
     public void EnterStatusAktionState(int i)

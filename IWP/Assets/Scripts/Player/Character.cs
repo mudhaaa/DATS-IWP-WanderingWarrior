@@ -201,8 +201,10 @@ public class Character : MonoBehaviour
                     {
                         if (effect.GetEnhancementType() == EnhancementType.AktionGain)
                         {
-                            listOfAktions.Add(effect.GetAktion());
+                            if(!listOfAktions.Contains(effect.GetAktion())) listOfAktions.Add(effect.GetAktion());
+
                             canvasManager.ResetList();
+                            
                             Debug.Log($"Added Aktion Gain type Enhancement of name {enhancement.EnhancementName()}");
                         }
                         if (effect.GetEnhancementType() == EnhancementType.StatBoost)
