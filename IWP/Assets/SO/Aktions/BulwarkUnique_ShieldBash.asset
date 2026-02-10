@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: BulwarkUnique_ShieldBash
   m_EditorClassIdentifier: 
   aktionName: Raging Dive
-  description: A Heavy Endurance attack. On Hit, it grants Immunity to Stat Drops
-    for 3 turns. On Crit, it increases Endurance for 3 turns.
+  description: A Heavy Defence attack. On Crit, increase Defence & gain Immunity
+    to Stat Drops for 3 turns.
   pointCost: 4
   isUnique: 1
   animationName: UniqueAttack1
   aktionVFXPrefab: {fileID: 6570346431000153135, guid: bd501a82acd82ae449c9e875e22aa6ce, type: 3}
   isOnUser: 0
   vfxOffset: {x: -1, y: 1, z: 0}
+  LookAtTarget: 1
   damageMultiplier: 3
   attackType: 2
   critEffects:
@@ -32,7 +33,6 @@ MonoBehaviour:
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0
-  hitEffects:
   - changeType: 6
     statType: 0
     isSelfTarget: 1
@@ -41,3 +41,4 @@ MonoBehaviour:
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0
+  hitEffects: []

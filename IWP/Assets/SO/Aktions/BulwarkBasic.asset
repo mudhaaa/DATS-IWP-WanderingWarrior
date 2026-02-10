@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: BulwarkBasic
   m_EditorClassIdentifier: 
   aktionName: Basic Bash
-  description: A Weak Endurance Attack. On Hit, gain +1 AP.
+  description: A Weak Defence Attack. On Hit, gain +1 AP.
   pointCost: 0
   isUnique: 0
   animationName: Strength
   aktionVFXPrefab: {fileID: 7226583673155636401, guid: a2ab56839e1c9504ea9d141e95d0b16b, type: 3}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
   damageMultiplier: 1
   attackType: 2
   critEffects: []

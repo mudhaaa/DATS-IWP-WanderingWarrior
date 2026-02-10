@@ -67,8 +67,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.6888889
-        functionName: StatusAktionFeedback
+      - time: 0.094240844
+        functionName: TauntCamera1
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.59424084
+        functionName: TauntCamera2
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

@@ -13,16 +13,11 @@ MonoBehaviour:
   m_Name: GainStat_EnduranceBoost
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 21300000, guid: c46d83f2b73aaa141bd5015819342d81, type: 3}
-  enhancementName: Endurance Boost
-  enhancementDesc: Gain +10% Endurance, but lose -5% Speed
+  enhancementName: Defence Boost I
+  enhancementDesc: Gain +10% Defence
   effects:
   - enhancementType: 0
     changedStat: 3
     flatStatChangeValue: 0
     percentageStatChangeValue: 0.1
-    gainedAktion: {fileID: 0}
-  - enhancementType: 1
-    changedStat: 4
-    flatStatChangeValue: 0
-    percentageStatChangeValue: 0.05
     gainedAktion: {fileID: 0}

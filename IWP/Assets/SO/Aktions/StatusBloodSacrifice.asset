@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: StatusBloodSacrifice
   m_EditorClassIdentifier: 
   aktionName: Blood Sacrifice
-  description: A Status Aktion that increases Strength & Magic for 5 turns at the
-    cost of 15% Health.
+  description: A Status Aktion that increases Strength, Magic & Defence for 5 turns
+    at the cost of 15% Health.
   pointCost: 0
   isUnique: 0
   animationName: Magic
-  aktionVFXPrefab: {fileID: 0}
+  aktionVFXPrefab: {fileID: 2327984849949265508, guid: 38f6743ed2c5a14448c2ac88e7d5f597, type: 3}
   isOnUser: 1
   vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
   statusEffects:
   - changeType: 1
     statType: 1
     isSelfTarget: 1
     boost:
-      timer: 3
+      timer: 5
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0
@@ -34,7 +35,15 @@ MonoBehaviour:
     statType: 2
     isSelfTarget: 1
     boost:
-      timer: 3
+      timer: 5
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
+  - changeType: 1
+    statType: 3
+    isSelfTarget: 1
+    boost:
+      timer: 5
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0

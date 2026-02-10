@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
+  m_Name: StatusBoostDefence
+  m_EditorClassIdentifier: 
+  aktionName: Defence Up
+  description: A Status Aktion that increases Defence for 3 turns.
+  pointCost: 2
+  isUnique: 0
+  animationName: Magic
+  aktionVFXPrefab: {fileID: 0}
+  isOnUser: 0
+  vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
+  statusEffects:
+  - changeType: 1
+    statType: 3
+    isSelfTarget: 1
+    boost:
+      timer: 3
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0

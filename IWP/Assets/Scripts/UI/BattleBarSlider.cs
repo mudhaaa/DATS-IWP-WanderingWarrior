@@ -40,6 +40,10 @@ public class BattleBarSlider : MonoBehaviour
         {
             currState = BarState.Mid;
         }
+        else  if (collision.CompareTag("BadBar"))
+        {
+            currState = BarState.Bad;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -53,7 +57,7 @@ public class BattleBarSlider : MonoBehaviour
         {
             currState = BarState.Bad;
         }
-        else if (collision.CompareTag("GoodBar"))
+        else if (collision.CompareTag("GoodBar") || collision.CompareTag("BadBar"))
         {
             currState = BarState.Mid;
         }

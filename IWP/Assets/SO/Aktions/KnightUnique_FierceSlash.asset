@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: KnightUnique_FierceSlash
   m_EditorClassIdentifier: 
   aktionName: Fierce Slash
-  description: A Heavy Strength attack. On Crit, it increases Strength.
+  description: A Heavy Strength attack. On Crit, increase Strength for 3 turns.
   pointCost: 3
   isUnique: 1
   animationName: UniqueAttack
   aktionVFXPrefab: {fileID: 5545173171955001552, guid: 7ac879c2caac1ca41b6c438e77d8b25d, type: 3}
   isOnUser: 0
   vfxOffset: {x: 1, y: 0, z: 0}
+  LookAtTarget: 1
   damageMultiplier: 3
   attackType: 1
   critEffects:

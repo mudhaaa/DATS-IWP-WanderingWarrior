@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c6e37c219b5554d8f3bd37f8797ba7, type: 3}
   m_Name: Bulwark
   m_EditorClassIdentifier: 
-  health: 620
+  health: 500
   aktionPoints: 4
-  strength: 85
+  strength: 95
   magic: 75
-  endurance: 125
-  speed: 65
+  endurance: 130
+  speed: 75
   unique1: {fileID: 11400000, guid: cce80c2032348814d93b780ffe54d822, type: 2}
   unique2: {fileID: 11400000, guid: b6aadd1e5679c8f418b58aee38bbbd32, type: 2}
   basic: {fileID: 11400000, guid: 99868ff446644144d969474c5c46e020, type: 2}

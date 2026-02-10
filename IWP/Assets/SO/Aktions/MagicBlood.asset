@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: MagicBlood
   m_EditorClassIdentifier: 
   aktionName: Blood Arts
-  description: A Medium Magic attack. On Hit, Restore 10% Health.
+  description: A Medium Magic attack. On Hit, restore 7% Health.
   pointCost: 3
   isUnique: 0
   animationName: Magic
   aktionVFXPrefab: {fileID: 0}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
   damageMultiplier: 2
   attackType: 3
   critEffects: []
@@ -31,4 +32,4 @@ MonoBehaviour:
       timer: 0
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0.1
+      effectAmount: 0.07

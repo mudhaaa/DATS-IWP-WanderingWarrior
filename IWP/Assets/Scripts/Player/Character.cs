@@ -91,10 +91,12 @@ public class Character : MonoBehaviour
     public void PlayAnimation(string animationName)
     {
         playerAnimator.CrossFade(animationName, 0.2f);
+        Debug.Log($"Playing {animationName}");
     }
     public void PlayAnimation(string animationName, float transition)
     {
         playerAnimator.CrossFade(animationName, transition);
+        Debug.Log($"Playing {animationName}");
     }
 
     #endregion
@@ -618,4 +620,10 @@ public class Character : MonoBehaviour
         critNerfTimer = 0;
     }
     #endregion
+
+
+    private int roundWins;
+
+    public int GetWins() {  return roundWins; }
+    public void IncreaseWins() {  roundWins++; }
 }

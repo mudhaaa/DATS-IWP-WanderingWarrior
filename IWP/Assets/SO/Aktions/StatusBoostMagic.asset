@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: StatusBoostMagic
   m_EditorClassIdentifier: 
   aktionName: Magic Up
-  description: A Status Aktion that increases Magic
+  description: A Status Aktion that increases Magic for 3 turns.
   pointCost: 2
   isUnique: 0
   animationName: Magic
   aktionVFXPrefab: {fileID: 0}
   isOnUser: 1
   vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
   statusEffects:
   - changeType: 1
     statType: 2

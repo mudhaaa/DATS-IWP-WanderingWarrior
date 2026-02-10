@@ -1,22 +1,23 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using Unity.Cinemachine;
-using Unity.Mathematics;
 using UnityEngine;
-using static BattleManager;
+using
+    static BattleManager;
 
 public class CameraManager : MonoBehaviour
 {
     //[SerializeField] private CinemachineCamera cinemachine;
     [Header("Fake Cinemachine")]
     [SerializeField] private List<Transform> cameraTransforms;
+    [SerializeField] private List<Vector3> OGcameraPositions;
     [SerializeField] private int currIndex;
 
     [Header("Shake")]
-    [SerializeField] private float shakeAmplitude = 2.0f;  // Strength of shake
-    [SerializeField] private float shakeFrequency = 2.0f;  // Speed of shake
-    [SerializeField] private float shakeDuration = 0.2f;   // Duration of shake
-    private CinemachineBasicMultiChannelPerlin noise;
+    private Vector3 originalPos;
+    private Vector3 shakeOffset;
+    [SerializeField] private float shakeAmplitude = 0.1f;
+    [SerializeField] private float shakeDuration = 0.1f;
+    private float shakeRemainingTime = 0.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnStart()
@@ -24,6 +25,13 @@ public class CameraManager : MonoBehaviour
         Camera.main.transform.DOLocalRotateQuaternion(cameraTransforms[0].localRotation, 0.5f);
         Camera.main.transform.DOMove(cameraTransforms[0].position, 0.5f);
         Camera.main.transform.LookAt(cameraTransforms[0]);
+        
+        foreach(Transform t in cameraTransforms)
+        {
+            OGcameraPositions.Add(t.localPosition);
+        }
+
+        currIndex = 0;
     }
 
     public void ChangeCameraPos(int i)
@@ -58,40 +66,28 @@ public class CameraManager : MonoBehaviour
 
     public void OnLateUpdate()
     {
-        //CameraShake();
+        CameraShake();
+    }
+    void CameraShake()
+    {
+        if (shakeRemainingTime > 0)
+        {
+            shakeRemainingTime -= Time.deltaTime;
+            shakeOffset = Random.insideUnitSphere * shakeAmplitude;
+        }
+        else
+        {
+            shakeOffset = Vector3.zero;
+        }
+
+        if (OGcameraPositions.Count > 0) cameraTransforms[currIndex].localPosition = OGcameraPositions[currIndex] + shakeOffset;
     }
 
-    //void CameraShake()
-    //{
-    //    if (shakeTimer > 0)
-    //    {
-    //        shakeTimer -= Time.unscaledDeltaTime;
-    //        if (shakeTimer <= 0)
-    //        {
-    //            StopShake();
-    //        }
-    //    }
-    //}
-    //public void ActivateShake(float amp, float freq)
-    //{
-    //    if (!cameraShakeToggle) return;
+    public void ActivateShake(float d, float a)
+    {
+        shakeAmplitude = a;
+        shakeRemainingTime = d;
 
-    //    StopShake();
-
-    //    shakeTimer = shakeDuration;
-
-    //    if (noise != null)
-    //    {
-    //        noise.m_AmplitudeGain = amp;
-    //        noise.m_FrequencyGain = freq;
-    //    }
-    //}
-    //public void StopShake()
-    //{
-    //    if (noise != null)
-    //    {
-    //        noise.m_AmplitudeGain = 0f;
-    //        noise.m_FrequencyGain = 0f;
-    //    }
-    //}
+        Debug.Log("Activating Shake!");
+    }
 }

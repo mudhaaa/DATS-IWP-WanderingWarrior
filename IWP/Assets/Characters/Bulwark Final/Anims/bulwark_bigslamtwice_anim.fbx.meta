@@ -60,7 +60,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.1632653
+      - time: 0.17340729
         functionName: PlayerAttackFeedback
         data: 
         objectReferenceParameter: {instanceID: 0}

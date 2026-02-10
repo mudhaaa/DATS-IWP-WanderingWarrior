@@ -276,7 +276,7 @@ public class EnhancementManager : MonoBehaviour
             if(effect.GetEnhancementType() == EnhancementType.AktionGain)
             {
                 effect.GetAktion().GetName();
-                aktionDescriptionP1.text = $"{effect.GetAktion().GetName()} : Cost {effect.GetAktion().GetDesc()} AP - {effect.GetAktion().GetDesc()}";
+                aktionDescriptionP1.text = $"{effect.GetAktion().GetName()} : Cost {effect.GetAktion().GetAPCost()} AP - {effect.GetAktion().GetDesc()}";
             }
             else
             {

@@ -15,12 +15,13 @@ MonoBehaviour:
   aktionName: Flaming Honour
   description: Status Aktion that increases your Critical Hit multiplier & Magic,
     but reduces your Endurance.
-  pointCost: 4
+  pointCost: 2
   isUnique: 1
   animationName: UniqueMagic
   aktionVFXPrefab: {fileID: 0}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
   statusEffects:
   - changeType: 1
     statType: 5

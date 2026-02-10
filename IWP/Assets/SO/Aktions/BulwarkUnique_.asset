@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
   m_Name: BulwarkUnique_
   m_EditorClassIdentifier: 
-  aktionName: Tenacious Roar
+  aktionName: Taunting Intimidation
   description: A Heavy Magic Attack. On Hit, decrease enemy Speed for 2 turns. On
-    Crit, also decreases Strength & Magic for 2 turns.
+    Crit, decrease Strength & Magic for 2 turns.
   pointCost: 3
   isUnique: 1
   animationName: UniqueMagic
   aktionVFXPrefab: {fileID: 0}
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
+  LookAtTarget: 1
   damageMultiplier: 3
   attackType: 3
   critEffects:

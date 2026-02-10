@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static BattleBarSlider;
 
 public class BattleBarManager : MonoBehaviour
 {
@@ -127,23 +128,26 @@ public class BattleBarManager : MonoBehaviour
 
     void SetBarResultText(int i, BattleBarSlider.BarState barState)
     {
-        if (i == 1) 
-        {
-            float l;
-            if (barState == BattleBarSlider.BarState.Good) l = .75f;
-            else if (barState == BattleBarSlider.BarState.Mid) l = .65f;
-            else l = .55f;
+        StartCoroutine(BarResult(i, barState));
+    }
 
+    IEnumerator BarResult(int i, BattleBarSlider.BarState barState)
+    {
+        float l;
+        if (barState == BattleBarSlider.BarState.Good) l = .75f;
+        else if (barState == BattleBarSlider.BarState.Mid) l = .65f;
+        else l = .55f;
+
+        yield return new WaitForEndOfFrame();
+
+        if (i == 1)
+        {
             floatingTextP1.SetText(barState.ToString(), l);
         }
-        else if (i == 2) 
+        else if (i == 2)
         {
-            float l;
-            if (barState == BattleBarSlider.BarState.Good) l = .75f;
-            else if (barState == BattleBarSlider.BarState.Mid) l = .65f;
-            else l = .55f;
-
             floatingTextP2.SetText(barState.ToString(), l);
         }
+
     }
 }

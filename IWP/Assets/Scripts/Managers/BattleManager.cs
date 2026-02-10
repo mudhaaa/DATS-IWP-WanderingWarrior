@@ -70,7 +70,8 @@ public class BattleManager : MonoBehaviour
     public PlayerManager PlayerManager() { return playerManager; }
 
 
-
+    [SerializeField] private int maxWins;
+    public int GetMaxWins() { return maxWins;}
     [SerializeField] private bool player1start;
 
 
@@ -106,6 +107,8 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleStates.Enhancement);
 
+        maxWins = 1;
+
         //StartCoroutine(canvasManager.IntroSequence());
     }
 
@@ -129,6 +132,11 @@ public class BattleManager : MonoBehaviour
         cameraManager.OnUpdate();
         aktionManager.OnUpdate();
         enhancementManager.OnUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        cameraManager.OnLateUpdate();
     }
 
     public void Rematch()
@@ -175,6 +183,7 @@ public class BattleManager : MonoBehaviour
         {
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
             yield return new WaitForSeconds(4);
+            CheckForRoundWinner();
             if (currentCoroutine == null)
             {
                 currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(1));
@@ -184,6 +193,7 @@ public class BattleManager : MonoBehaviour
         {
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
             yield return new WaitForSeconds(4);
+            CheckForRoundWinner();
             if (currentCoroutine == null)
             {
                 currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(2));
@@ -199,10 +209,6 @@ public class BattleManager : MonoBehaviour
         barManager.SetInputAcceptState(2, false);
 
         currentAttackCoroutine = null;
-
-        playerManager.GetPlayer1().PlayAnimation("Idle");
-        playerManager.GetPlayer2().PlayAnimation("Idle");
-
     }
 
     public void EnterStatusAktionState(int i)
@@ -242,6 +248,8 @@ public class BattleManager : MonoBehaviour
     public void EndOfTurn(int i)
     {
         currentCoroutine = null;
+
+        CheckForRoundWinner();
         if (i == 1)
         {
             currState = BattleStates.P2turn;
@@ -264,20 +272,40 @@ public class BattleManager : MonoBehaviour
 
         }
         turnCounter = turnCounter + 1;
-
-        CheckForRoundWinner();
     }
 
     public void CheckForRoundWinner()
     {
-        if (playerManager.GetPlayer1().GetHealth() <= 0)
+        if (currState == BattleStates.P2attack || currState == BattleStates.P2turn)
         {
-            StartCoroutine(EndRound(2));
-        }
-        else if (playerManager.GetPlayer2().GetHealth() <= 0)
-        {
-            StartCoroutine(EndRound(1));
+            if (playerManager.GetPlayer1().GetHealth() <= 0)
+            {
+                currentCoroutine = StartCoroutine(EndRound(2));
+                Debug.Log("P2 win");
+            }
+            else if (playerManager.GetPlayer2().GetHealth() <= 0)
+            {
+                playerManager.GetPlayer2().PlayAnimation("Death");
+                currentCoroutine = StartCoroutine(EndRound(1));
+                Debug.Log("P1 win");
 
+            }
+        }
+        else if (currState == BattleStates.P1attack || currState == BattleStates.P1turn)
+        {
+            if (playerManager.GetPlayer2().GetHealth() <= 0)
+            {
+                currentCoroutine = StartCoroutine(EndRound(1));
+                Debug.Log("P1 win");
+
+            }
+            else if (playerManager.GetPlayer1().GetHealth() <= 0)
+            {
+                playerManager.GetPlayer1().PlayAnimation("Death");
+                currentCoroutine = StartCoroutine(EndRound(2)); 
+                Debug.Log("P2 win");
+
+            }
         }
     }
 
@@ -287,23 +315,25 @@ public class BattleManager : MonoBehaviour
         {
             currState = BattleStates.P1winRound;
             p1wins++;
+            playerManager.GetPlayer1().IncreaseWins();
             canvasManager.UpdateWinIcons(1);
         }
         else if (i == 2)
         {
             currState = BattleStates.P2winRound;
             p2wins++;
+            playerManager.GetPlayer2().IncreaseWins();
             canvasManager.UpdateWinIcons(2);
         }
 
         yield return new WaitForSecondsRealtime(3);
 
-        if (p1wins == 3)
+        if (playerManager.GetPlayer1().GetWins() == maxWins)
         {
             currState = BattleStates.P1winBattle;
             canvasManager.ActivateVictoryUI(1);
         }
-        else if (p2wins == 3)
+        else if (playerManager.GetPlayer2().GetWins() == maxWins)
         {
             currState = BattleStates.P2winBattle;
             canvasManager.ActivateVictoryUI(2);
@@ -311,6 +341,9 @@ public class BattleManager : MonoBehaviour
         else
         {
             currState = BattleStates.Enhancement;
+
+            playerManager.GetPlayer1().PlayAnimation("Idle");
+            playerManager.GetPlayer2().PlayAnimation("Idle");
         }
     }
 }

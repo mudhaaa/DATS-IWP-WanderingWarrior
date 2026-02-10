@@ -151,6 +151,9 @@ public class CanvasManager : MonoBehaviour
 
         UpdateStatusChangeUI(1);
         UpdateStatusChangeUI(2);
+
+        aktionListIndexP1 = 0;
+        aktionListIndexP2 = 0;
     }
 
     // Update is called once per frame
@@ -288,7 +291,7 @@ public class CanvasManager : MonoBehaviour
 
                 // Arrow move to selected Aktion
                 aktionArrowP1.SetParent(aktionUIListP1[aktionListIndexP1].transform);
-                aktionArrowP1.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
+                aktionArrowP1.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
 
                 if (aktionListIndexP1 >= 0 && !reachedTopP1)
                 {
@@ -303,7 +306,7 @@ public class CanvasManager : MonoBehaviour
 
                 // Arrow move to selected Aktion
                 aktionArrowP1.SetParent(aktionUIListP1[aktionListIndexP1].transform);
-                aktionArrowP1.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
+                aktionArrowP1.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
 
                 if (aktionListIndexP1 <= aktionListP1.transform.childCount && !reachedBotP1)
                 {
@@ -352,7 +355,7 @@ public class CanvasManager : MonoBehaviour
 
                 // Arrow move to selected Aktion
                 aktionArrowP2.SetParent(aktionUIListP2[aktionListIndexP2].transform);
-                aktionArrowP2.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
+                aktionArrowP2.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
 
                 if (aktionListIndexP2 >= 0 && !reachedTopP2)
                 {
@@ -367,7 +370,7 @@ public class CanvasManager : MonoBehaviour
 
                 // Arrow move to selected Aktion
                 aktionArrowP2.SetParent(aktionUIListP2[aktionListIndexP2].transform);
-                aktionArrowP2.DOAnchorPos(new Vector3(-60, 0, 0), 0.1f);
+                aktionArrowP2.DOAnchorPos(new Vector3(60, 0, 0), 0.1f);
 
                 if (aktionListIndexP2 <= aktionListP2.transform.childCount && !reachedBotP2)
                 {

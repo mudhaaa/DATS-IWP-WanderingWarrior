@@ -182,15 +182,30 @@ public class AktionManager : MonoBehaviour
             PlayVFX();
         }
 
-
-        if (currentDefenderState == BattleBarSlider.BarState.Bad || currentDefender.GetHealth() <= currentDamageDealt)
+        bool endBattle = currentAttacker.GetWins() +1 >= BattleManager.instance.GetMaxWins();
+        if (currentDefender.GetHealth() <= 0 && endBattle)
+        {
+            currentDefender.PlayAnimation("Death");
+            Debug.Log("IT WORKED!");
+        }
+        else if (currentDefenderState == BattleBarSlider.BarState.Bad || currentDefender.GetHealth() <= currentDamageDealt)
         {
             currentDefender.PlayAnimation("Block Fail");
         }
-        else
+        else if (currentDefender.GetHealth() >= 0)
         {
             currentDefender.PlayAnimation("Block Success", 0.05f);
         }
+
+        float shakeAmp = 5;
+        float shakeDur = 0.2f;
+        AttackAktion attack = currentAktion as AttackAktion;
+        shakeAmp = shakeAmp * Mathf.Clamp(currentDamageDealt/100, .1f, 3);
+        shakeDur = shakeDur * attack.GetDamageMultiplier();
+
+        Debug.Log($"Amplitude at {shakeAmp} for duration: {shakeDur}");
+
+        BattleManager.instance.CameraManager().ActivateShake(shakeDur, shakeAmp);
 
         currentAktionCoroutine = null;
     }
@@ -210,12 +225,12 @@ public class AktionManager : MonoBehaviour
         if (!currentAktion.IsOnUser())
         {
             vfxGo.transform.position = currentDefender.transform.position - vfxOffset;
-            vfxGo.transform.LookAt(currentDefender.transform);
+            if (currentAktion.IsLookAt()) vfxGo.transform.LookAt(currentDefender.transform);
         }
         else
         {
             vfxGo.transform.position = currentAttacker.transform.position - vfxOffset;
-            vfxGo.transform.LookAt(currentDefender.transform);
+            if (currentAktion.IsLookAt()) vfxGo.transform.LookAt(currentDefender.transform);
         }
 
         if (vfx != null) vfx.Play();

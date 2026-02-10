@@ -16,7 +16,7 @@ MonoBehaviour:
   aktionPoints: 5
   strength: 80
   magic: 150
-  endurance: 77
+  endurance: 75
   speed: 115
   unique1: {fileID: 11400000, guid: 385cc60eb8e6dca4188ade38347c1f7f, type: 2}
   unique2: {fileID: 11400000, guid: b1bab15c7f0fec74d9424f6c16c7245b, type: 2}

@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: MageUnique_HellBlast
   m_EditorClassIdentifier: 
   aktionName: Hell Blast
-  description: A Massive Magic attack. On Hit, it reduces Magic. On Crit, it reduces
-    Health.
-  pointCost: 6
+  description: A Massive Magic attack. On Hit, decrease Magic for 3 turns. On Crit,
+    reduce -15% Health.
+  pointCost: 5
   isUnique: 1
   animationName: UniqueAttack
   aktionVFXPrefab: {fileID: 1775016962210819838, guid: 5e90cd1ff9b40c74d9faa74f9fd1a6ff, type: 3}
   isOnUser: 1
   vfxOffset: {x: 0, y: -1, z: 0}
+  LookAtTarget: 1
   damageMultiplier: 4
   attackType: 3
   critEffects:

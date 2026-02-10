@@ -20,10 +20,12 @@ public class Aktion : ScriptableObject
     [SerializeField] private GameObject aktionVFXPrefab;
     [SerializeField] private bool isOnUser; // bool to check for if the vfx plays on the user or not
     [SerializeField] private Vector3 vfxOffset;
+    [SerializeField] bool LookAtTarget = true;
     public virtual string GetAnimName() { return animationName; }
     public virtual bool IsOnUser() { return isOnUser; }
     public virtual GameObject GetVFX() { return aktionVFXPrefab; }
     public virtual Vector3 GetVFXOffset() { return vfxOffset; }
+    public virtual bool IsLookAt() { return LookAtTarget; } 
 }
 
 [Serializable]

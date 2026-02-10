@@ -80,9 +80,24 @@ public class PlayerAnimationController : MonoBehaviour
         BattleManager.instance.CameraManager().ChangeCameraPos(player);
     }
 
+    public void TauntCamera1()
+    {
+        BattleManager.instance.ChangeState(BattleManager.BattleStates.AktionAnimation);
+        int player = character == playerManager.GetPlayer1() ? 7 : 8;
+        BattleManager.instance.CameraManager().ChangeCameraPos(player);
+    }
+
+    public void TauntCamera2()
+    {
+        BattleManager.instance.ChangeState(BattleManager.BattleStates.AktionAnimation);
+        int player = character == playerManager.GetPlayer1() ? 1 : 2;
+        BattleManager.instance.CameraManager().ChangeCameraPos(player);
+    }
+
     public void ChangeCameraPos(int i)
     {
         BattleManager.instance.CameraManager().ChangeCameraPos(i);
         BattleManager.instance.ChangeState(BattleManager.BattleStates.AktionAnimation);
     }
+
 }
