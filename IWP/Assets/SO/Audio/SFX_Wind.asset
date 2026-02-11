@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 721649aa63715b64d9510d5047bf797d, type: 3}
-  m_Name: BGM_Battle
+  m_Name: SFX_Wind
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: f693bead5af84f9438fdeb36b4ae29b5, type: 3}
-  mixergroup: {fileID: 3583408579671445894, guid: 30ab50c429e511e40b096979f3b7d573, type: 2}
-  volume: 0.5
+  clip: {fileID: 8300000, guid: 7608480b18a6e7849a529d36e72e9e0f, type: 3}
+  mixergroup: {fileID: 7032328557875937750, guid: 30ab50c429e511e40b096979f3b7d573, type: 2}
+  volume: 1
   pitch: 1
-  loop: 1
+  loop: 0

@@ -20,6 +20,8 @@ MonoBehaviour:
   aktionVFXPrefab: {fileID: 2765443656615285045, guid: ecbcbff41727c7b4ea94a3097fe35639, type: 3}
   isOnUser: 0
   vfxOffset: {x: 0, y: 2, z: 0}
+  LookAtTarget: 1
+  sfxAudio: {fileID: 11400000, guid: d7a134e8a9d8d7744a032bc08f3457b8, type: 2}
   damageMultiplier: 1
   attackType: 3
   critEffects: []

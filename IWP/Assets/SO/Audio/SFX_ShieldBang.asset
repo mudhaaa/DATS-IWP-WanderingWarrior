@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721649aa63715b64d9510d5047bf797d, type: 3}
   m_Name: SFX_ShieldBang
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 90092eaa6f7d0d5499452427d6dbbbee, type: 3}
+  clip: {fileID: 8300000, guid: b6c01cd1bfed09d429099eaad70472c9, type: 3}
   mixergroup: {fileID: 7032328557875937750, guid: 30ab50c429e511e40b096979f3b7d573, type: 2}
   volume: 1
   pitch: 1

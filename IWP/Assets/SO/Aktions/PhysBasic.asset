@@ -21,7 +21,7 @@ MonoBehaviour:
   isOnUser: 0
   vfxOffset: {x: 0.5, y: 0, z: 0}
   LookAtTarget: 1
-  sfxAudio: {fileID: 0}
+  sfxAudio: {fileID: 11400000, guid: e89733fcda9cea64996dce98195d45bd, type: 2}
   damageMultiplier: 1
   attackType: 1
   critEffects:
