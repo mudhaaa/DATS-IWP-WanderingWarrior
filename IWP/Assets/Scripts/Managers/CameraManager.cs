@@ -44,11 +44,11 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     public void OnUpdate()
     {
-        if (BattleManager.instance.GetCurrState() == BattleStates.P1turn || BattleManager.instance.GetCurrState() == BattleStates.P1winRound)
+        if (BattleManager.instance.GetCurrState() == BattleStates.P1turn)
         {
             ChangeCameraPos(1);
         }
-        else if (BattleManager.instance.GetCurrState() == BattleStates.P2turn || BattleManager.instance.GetCurrState() == BattleStates.P2winRound)
+        else if (BattleManager.instance.GetCurrState() == BattleStates.P2turn)
         {
             ChangeCameraPos(2);
         }
@@ -61,6 +61,14 @@ public class CameraManager : MonoBehaviour
         else if(BattleManager.instance.GetCurrState() == BattleStates.AktionAnimation)
         {
             ChangeCameraPos(currIndex);
+        }
+        else if(BattleManager.instance.GetCurrState() == BattleStates.P1winRound)
+        {
+            ChangeCameraPos(10);
+        }
+        else if(BattleManager.instance.GetCurrState() == BattleStates.P2winRound)
+        {
+            ChangeCameraPos(6);
         }
     }
 

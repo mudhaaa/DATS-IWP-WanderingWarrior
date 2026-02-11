@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -74,9 +75,11 @@ public class MainMenuManager : MonoBehaviour
     }
 
     [SerializeField] private AudioData mainMenuBGM;
+    [SerializeField] private VideoPlayer video;
     public void MainMenuBGM()
     {
         AudioManager.instance.PlayAudio(mainMenuBGM);
+        video.Play();
     }
 
     #region Character Select

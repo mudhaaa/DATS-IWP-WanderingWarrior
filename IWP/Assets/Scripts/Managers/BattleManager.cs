@@ -90,6 +90,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private EnhancementManager enhancementManager;
     public EnhancementManager EnhancementManager() { return enhancementManager; }
 
+
+    [SerializeField] private AudioData audio;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -109,6 +111,9 @@ public class BattleManager : MonoBehaviour
 
         maxWins = 1;
 
+        AudioManager.instance.PlayAudio(audio);
+
+        Time.timeScale = 1;
         //StartCoroutine(canvasManager.IntroSequence());
     }
 
@@ -250,7 +255,6 @@ public class BattleManager : MonoBehaviour
     {
         currentCoroutine = null;
 
-        CheckForRoundWinner();
         if (i == 1)
         {
             currState = BattleStates.P2turn;
@@ -333,11 +337,13 @@ public class BattleManager : MonoBehaviour
         {
             currState = BattleStates.P1winBattle;
             canvasManager.ActivateVictoryUI(1);
+            playerManager.GetPlayer1().PlayAnimation("Victory");
         }
         else if (playerManager.GetPlayer2().GetWins() == maxWins)
         {
             currState = BattleStates.P2winBattle;
             canvasManager.ActivateVictoryUI(2);
+            playerManager.GetPlayer2().PlayAnimation("Victory");
         }
         else
         {

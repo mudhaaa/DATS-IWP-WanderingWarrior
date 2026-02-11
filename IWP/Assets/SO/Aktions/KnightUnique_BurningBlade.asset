@@ -22,6 +22,7 @@ MonoBehaviour:
   isOnUser: 0
   vfxOffset: {x: 0, y: 0, z: 0}
   LookAtTarget: 1
+  sfxAudio: {fileID: 11400000, guid: a94c4de2981e33341b344e5bffe4e475, type: 2}
   statusEffects:
   - changeType: 1
     statType: 5

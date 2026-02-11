@@ -229,7 +229,7 @@ public class CanvasManager : MonoBehaviour
 
         aktionUIListP1.Reverse();
         aktionArrowP1.SetParent(aktionUIListP1[0].transform);
-        aktionArrowP1.anchoredPosition = new Vector3(60, 0, 0);
+        aktionArrowP1.anchoredPosition = new Vector3(-60, 0, 0);
 
         //player 2
         for (int x = playerManager.GetPlayer2().GetAktionList().Count - 1; x >= 0; x--)
@@ -250,7 +250,7 @@ public class CanvasManager : MonoBehaviour
 
         aktionUIListP2.Reverse();
         aktionArrowP2.SetParent(aktionUIListP2[0].transform);
-        aktionArrowP2.anchoredPosition = new Vector3(-60, 0, 0);
+        aktionArrowP2.anchoredPosition = new Vector3(60, 0, 0);
 
     }
 

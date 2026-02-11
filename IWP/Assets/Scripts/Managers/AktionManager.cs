@@ -182,6 +182,8 @@ public class AktionManager : MonoBehaviour
             PlayVFX();
         }
 
+        //currentAktion.PlayAudio();
+
         bool endBattle = currentAttacker.GetWins() +1 >= BattleManager.instance.GetMaxWins();
         if (currentDefender.GetHealth() <= 0 && endBattle)
         {
@@ -666,7 +668,7 @@ public class AktionManager : MonoBehaviour
         int changeAmt = Mathf.CeilToInt(target.GetOriginalHealth() * effect.GetBoost().GetEffectAmount());
 
         int newValue = Mathf.CeilToInt(target.GetHealth() - changeAmt);
-        target.SetHealth(newValue);
+        target.SetHealth(Mathf.Clamp(newValue, 1, target.GetOriginalHealth()));
 
         Debug.Log(newValue);
         string msg = $"{target.name}'s Health reduced by {changeAmt}!";

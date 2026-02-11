@@ -50,6 +50,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         knightBurningBlade.gameObject.SetActive(true);
         knightBurningBlade.Play();
+        aktionManager.currentAktion.PlayAudio();
     }
 
     public void BurningBladeCamera1()
@@ -69,7 +70,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void FierceSlashCamera1()
     {
         BattleManager.instance.ChangeState(BattleManager.BattleStates.AktionAnimation);
-        int player = character == playerManager.GetPlayer1() ? 4 : 6;
+        int player = character == playerManager.GetPlayer1() ? 10 : 6;
         BattleManager.instance.CameraManager().ChangeCameraPos(player);
     }
 
@@ -100,4 +101,21 @@ public class PlayerAnimationController : MonoBehaviour
         BattleManager.instance.ChangeState(BattleManager.BattleStates.AktionAnimation);
     }
 
+    public void PlaySFX()
+    { 
+        aktionManager.currentAktion.PlayAudio();
+    }
+
+    public void PlayParryBlockSFX()
+    {
+        if(aktionManager.currentDefenderState == BattleBarSlider.BarState.Perfect)
+        {
+
+        }
+    }
+
+    public void StopTime()
+    {
+        Time.timeScale = 0;
+    }
 }

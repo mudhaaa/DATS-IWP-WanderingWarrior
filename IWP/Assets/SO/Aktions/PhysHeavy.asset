@@ -17,10 +17,11 @@ MonoBehaviour:
   pointCost: 3
   isUnique: 0
   animationName: Strength
-  aktionVFXPrefab: {fileID: 5302839453715564791, guid: 66d5513feee5e9d46b7b94e19412b062, type: 3}
+  aktionVFXPrefab: {fileID: 1116249604692860204, guid: 8a02c4042c68dd244abad8cf394dab42, type: 3}
   isOnUser: 1
   vfxOffset: {x: 0, y: 0, z: 0}
   LookAtTarget: 1
+  sfxAudio: {fileID: 0}
   damageMultiplier: 3
   attackType: 1
   critEffects:

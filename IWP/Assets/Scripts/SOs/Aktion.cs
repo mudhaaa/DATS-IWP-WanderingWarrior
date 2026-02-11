@@ -25,7 +25,14 @@ public class Aktion : ScriptableObject
     public virtual bool IsOnUser() { return isOnUser; }
     public virtual GameObject GetVFX() { return aktionVFXPrefab; }
     public virtual Vector3 GetVFXOffset() { return vfxOffset; }
-    public virtual bool IsLookAt() { return LookAtTarget; } 
+    public virtual bool IsLookAt() { return LookAtTarget; }
+
+    [Header("SFX")]
+    [SerializeField] private AudioData sfxAudio;
+    public void PlayAudio()
+    {
+        if(sfxAudio != null) AudioManager.instance.PlayAudio(sfxAudio);
+    }
 }
 
 [Serializable]

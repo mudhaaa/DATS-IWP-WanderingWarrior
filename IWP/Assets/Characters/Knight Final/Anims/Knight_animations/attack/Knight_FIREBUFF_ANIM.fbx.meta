@@ -65,6 +65,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 3
         messageOptions: 0
+      - time: 0.47278124
+        functionName: PlaySFX
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 4
+        messageOptions: 0
       - time: 0.49367088
         functionName: BurningBladeVFX
         data: 
@@ -72,7 +79,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.51140064
+      - time: 0.51748586
         functionName: BurningBladeCamera2
         data: 
         objectReferenceParameter: {instanceID: 0}

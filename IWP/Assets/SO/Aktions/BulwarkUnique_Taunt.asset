@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1658986f0840f4f409bc6aa67c4afcfa, type: 3}
-  m_Name: BulwarkUnique_
+  m_Name: BulwarkUnique_Taunt
   m_EditorClassIdentifier: 
   aktionName: Taunting Intimidation
   description: A Heavy Magic Attack. On Hit, decrease enemy Speed for 2 turns. On
