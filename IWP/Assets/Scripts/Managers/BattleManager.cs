@@ -109,7 +109,7 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleStates.Enhancement);
 
-        maxWins = 1;
+        maxWins = 3;
 
         AudioManager.instance.PlayAudio(audio);
 
