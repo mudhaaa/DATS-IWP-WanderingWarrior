@@ -339,7 +339,7 @@ public class CanvasManager : MonoBehaviour
                 }
                 else
                 {
-                    ActivateDamageNumber(1, " Not enough AP!");
+                    ActivateDamageNumber(1, "Not enough AP!");
                 }
             }
         }
@@ -404,7 +404,7 @@ public class CanvasManager : MonoBehaviour
                 }
                 else
                 {
-                    ActivateDamageNumber(2, " Not enough AP!");
+                    ActivateDamageNumber(2, "Not enough AP!");
                 }
             }
         }

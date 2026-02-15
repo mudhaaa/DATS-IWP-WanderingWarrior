@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enhancementImage: {fileID: 21300000, guid: cdec13907ffc75749ab2ed436bec6b14, type: 3}
   enhancementName: Magic Boost III
-  enhancementDesc: Gain +30% Magic, but lose -20% Health & -5% Endurance
+  enhancementDesc: Gain +30% Magic, but lose -20% Health & -5% Defence
   effects:
   - enhancementType: 0
     changedStat: 2

@@ -92,26 +92,30 @@ public class BattleBarManager : MonoBehaviour
 
     bool p1pressed = false;
     bool p2pressed = false;
+    public Coroutine currentCoroutine;
+    bool endingAttack = false;
     public void WaitForInput()
     {
         if (BattleManager.instance.IsAttackState())
         {
-            if (playerManager.GetPlayer1().IsHitPressed())
+            if (playerManager.GetPlayer1().IsHitPressed() && !p1pressed) // Add !p1pressed check
             {
-                SetInputAcceptState(1, true);
+                p1pressed = true;
                 Debug.Log("P1: " + bbSliderP1.GetBarState().ToString());
                 SetBarResultText(1, bbSliderP1.GetBarState());
             }
-            if (playerManager.GetPlayer2().IsHitPressed())
+            if (playerManager.GetPlayer2().IsHitPressed() && !p2pressed) // Add !p2pressed check
             {
-                SetInputAcceptState(2, true);
+                p2pressed = true;
                 Debug.Log("P2: " + bbSliderP2.GetBarState().ToString());
                 SetBarResultText(2, bbSliderP2.GetBarState());
             }
-            if (p1pressed && p2pressed)
+
+            if (p1pressed && p2pressed && !endingAttack) // Check !endingAttack instead of coroutine
             {
-                if(currentCoroutine == null) currentCoroutine = StartCoroutine(ExitBarState());
                 endingAttack = true;
+                currentCoroutine = StartCoroutine(ExitBarState());
+                Debug.Log("Both players pressed, starting exit coroutine");
             }
         }
         else
@@ -125,6 +129,17 @@ public class BattleBarManager : MonoBehaviour
     {
         if (i == 1) p1pressed = b;
         else if (i == 2) p2pressed = b;
+
+        // Reset when both are set to false (new round)
+        if (!p1pressed && !p2pressed)
+        {
+            endingAttack = false;
+            if (currentCoroutine != null)
+            {
+                StopCoroutine(currentCoroutine);
+                currentCoroutine = null;
+            }
+        }
     }
 
     void SetBarResultText(int i, BattleBarSlider.BarState barState)
@@ -151,16 +166,16 @@ public class BattleBarManager : MonoBehaviour
         }
     }
 
-    public Coroutine currentCoroutine;
-    bool endingAttack;
     IEnumerator ExitBarState()
     {
+        Debug.Log("Waiting 2 seconds before ending attack state...");
         yield return new WaitForSeconds(2);
-        if (endingAttack && BattleManager.instance.IsAttackState())
-        {
-            endingAttack = false;
-            BattleManager.instance.EndAttackState();
-        }
-        Debug.Log("Entering Attack State");
+
+        Debug.Log("Exiting Attack State");
+        BattleManager.instance.EndAttackState();
+
+        // Reset flags
+        currentCoroutine = null;
+        endingAttack = false;
     }
 }

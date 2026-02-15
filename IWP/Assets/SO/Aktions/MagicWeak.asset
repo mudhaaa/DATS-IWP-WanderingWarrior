@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: MagicWeak
   m_EditorClassIdentifier: 
   aktionName: Tailwind
-  description: A Weak Magic attack. On Hit, it increases your Speed.
+  description: A Weak Magic attack. On Hit, it increases your Speed. On Crit, Speed
+    decrease is extended.
   pointCost: 1
   isUnique: 0
   animationName: Magic
@@ -24,7 +25,15 @@ MonoBehaviour:
   sfxAudio: {fileID: 11400000, guid: d7a134e8a9d8d7744a032bc08f3457b8, type: 2}
   damageMultiplier: 1
   attackType: 3
-  critEffects: []
+  critEffects:
+  - changeType: 1
+    statType: 4
+    isSelfTarget: 1
+    boost:
+      timer: 2
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0
   hitEffects:
   - changeType: 1
     statType: 4

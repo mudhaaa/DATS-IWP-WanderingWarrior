@@ -184,29 +184,56 @@ public class BattleManager : MonoBehaviour
     Coroutine currentCoroutine = null;
     IEnumerator EndOfAttackState()
     {
-        if (currState == BattleStates.P1attack)
+        BattleStates stateBeforeCheck = currState; // Save state before check
+
+        // If state changed to win state, dont continue turn flow
+        if (currState == BattleStates.P1winRound || currState == BattleStates.P2winRound)
+        {
+            Debug.Log("Round ended, skipping turn continuation");
+            currentAttackCoroutine = null;
+            yield break; 
+        }
+
+        // Only continue if round didnt end
+        if (stateBeforeCheck == BattleStates.P1attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
             yield return new WaitForSeconds(4);
+
             CheckForRoundWinner();
-            if (currentCoroutine == null)
+
+            yield return null;
+
+            // Double check again after waiting
+            if (currState != BattleStates.P1winRound && currState != BattleStates.P2winRound)
             {
-                currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(1));
+                if (currentCoroutine == null)
+                {
+                    currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(1));
+                }
             }
         }
-        else if (currState == BattleStates.P2attack)
+        else if (stateBeforeCheck == BattleStates.P2attack)
         {
             aktionManager.AktionEffect(playerManager.GetPlayer2(), canvasManager.GetP2Aktion());
             yield return new WaitForSeconds(4);
+
             CheckForRoundWinner();
-            if (currentCoroutine == null)
+
+            yield return null;
+
+            // Double check again after waiting
+            if (currState != BattleStates.P1winRound && currState != BattleStates.P2winRound)
             {
-                currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(2));
+                if (currentCoroutine == null)
+                {
+                    currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(2));
+                }
             }
         }
         else
         {
-            Debug.LogWarning($"[EndOfAttackState] Unexpected state: {currState}");
+            Debug.LogWarning($"[EndOfAttackState] Unexpected state: {stateBeforeCheck}");
         }
 
         barManager.ActivateBattleBars(false);
@@ -225,12 +252,21 @@ public class BattleManager : MonoBehaviour
     IEnumerator StatusAktion(int i)
     {
         currState = BattleStates.StatusAktion;
+
         if (i == 1)
         {
             Debug.Log("P1 status move");
             aktionManager.AktionEffect(playerManager.GetPlayer1(), canvasManager.GetP1Aktion());
-            
+
             yield return new WaitForSeconds(4);
+
+            // Check if round ended during the effect
+            if (currState == BattleStates.P1winRound || currState == BattleStates.P2winRound)
+            {
+                Debug.Log("Round ended during status effect");
+                currentCoroutine = null;
+                yield break; 
+            }
 
             if (currentCoroutine == null)
             {
@@ -244,6 +280,14 @@ public class BattleManager : MonoBehaviour
 
             yield return new WaitForSeconds(4);
 
+            // Check if round ended during the effect
+            if (currState == BattleStates.P1winRound || currState == BattleStates.P2winRound)
+            {
+                Debug.Log("Round ended during status effect");
+                currentCoroutine = null;
+                yield break; 
+            }
+
             if (currentCoroutine == null)
             {
                 currentCoroutine = StartCoroutine(canvasManager.TurnUpdates(i));
@@ -253,6 +297,16 @@ public class BattleManager : MonoBehaviour
 
     public void EndOfTurn(int i)
     {
+        // Don't process turn end if round already ended
+        if (currState == BattleStates.P1winRound ||
+            currState == BattleStates.P2winRound ||
+            currState == BattleStates.P1winBattle ||
+            currState == BattleStates.P2winBattle)
+        {
+            Debug.Log("Round/Battle already ended, skipping EndOfTurn");
+            return;
+        }
+
         currentCoroutine = null;
 
         if (i == 1)
@@ -271,18 +325,17 @@ public class BattleManager : MonoBehaviour
             playerManager.GetPlayer1().SetAP(newAP);
             canvasManager.UpdatePlayerBars(playerManager.GetPlayer1());
 
-
-
             Debug.Log("Starting P1 turn");
-
         }
+
         turnCounter = turnCounter + 1;
     }
 
     public void CheckForRoundWinner()
     {
-        if (currState == BattleStates.P2attack || currState == BattleStates.P2turn)
+        if (currState == BattleStates.P2attack || currState == BattleStates.P2turn || currState == BattleStates.AktionAnimation)
         {
+            Debug.Log("Checking for winner  during P2");
             if (playerManager.GetPlayer1().GetHealth() <= 0)
             {
                 currentCoroutine = StartCoroutine(EndRound(2));
@@ -296,8 +349,10 @@ public class BattleManager : MonoBehaviour
 
             }
         }
-        else if (currState == BattleStates.P1attack || currState == BattleStates.P1turn)
+        else if (currState == BattleStates.P1attack || currState == BattleStates.P1turn || currState == BattleStates.AktionAnimation)
         {
+            Debug.Log("Checking for winner  during P1");
+
             if (playerManager.GetPlayer2().GetHealth() <= 0)
             {
                 currentCoroutine = StartCoroutine(EndRound(1));

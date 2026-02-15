@@ -44,14 +44,25 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private int currIndexP2;
     private InputAction moveInputP2;
     private InputAction confInputP2;
+
+    [SerializeField] private AudioData uiSFX;
+    [SerializeField] private AudioData uiSelectSFX;
+
     private void Start()
     {
+        Time.timeScale = 1.0f;
+
         currentScreen = null;
         blackScreen.alpha = 1;
 
-        destination = CharacterSelectManager.instance.CharacterSelect() == true ? "Character Select" : "Title";
+        destination = CharacterSelectManager.instance.CharacterSelect() == true ? "Character Select" : 
+                      CharacterSelectManager.instance.MainMenu() ? "MainMenu" : "Title";
+
+        if (CharacterSelectManager.instance.CharacterSelect() || CharacterSelectManager.instance.MainMenu()) MainMenuBGM();
+
         ChangeScreen(destination);
         CharacterSelectManager.instance.SetCharacterSelect();
+        CharacterSelectManager.instance.SetMainMenu();
 
         moveInputP1 = inputs.FindActionMap("player1").FindAction("Navigate");
         moveInputP1.Enable();
@@ -117,6 +128,7 @@ public class MainMenuManager : MonoBehaviour
             // Read movement input
             if (currInput == Vector2.left && prevInput1 != Vector2.left)
             {
+               
                 currIndexP1 = Mathf.Clamp(currIndexP1 - 1, 0, characterSelectIcons.Count - 1);
                 Debug.Log($"P1: {currIndexP1}");
 
@@ -238,6 +250,7 @@ public class MainMenuManager : MonoBehaviour
         canvas.interactable = false;
         canvas.blocksRaycasts = false;
 
+
         yield return new WaitForSeconds(1f);
 
         canvas.alpha = 1;
@@ -251,6 +264,8 @@ public class MainMenuManager : MonoBehaviour
         currentScreen = canvas;
         currentScreen.interactable = true;
         currentScreen.blocksRaycasts = true;
+
+        Debug.Log("Changing Screens success");
     }
     #endregion
 

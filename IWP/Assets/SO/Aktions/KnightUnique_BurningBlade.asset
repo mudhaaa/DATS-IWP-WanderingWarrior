@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f227487763c2b49ac9e2392e88a9d4, type: 3}
   m_Name: KnightUnique_BurningBlade
   m_EditorClassIdentifier: 
-  aktionName: Flaming Honour
+  aktionName: Burning Blade
   description: Status Aktion that increases your Critical Hit multiplier & Magic,
-    but reduces your Endurance.
+    but reduces your Defence.
   pointCost: 2
   isUnique: 1
   animationName: UniqueMagic

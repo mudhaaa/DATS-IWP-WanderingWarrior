@@ -25,6 +25,10 @@ public class CharacterSelectManager : MonoBehaviour
     public bool CharacterSelect() { return goToCharacterSelect; }
     public void SetCharacterSelect() { goToCharacterSelect = false; }
 
+    [SerializeField] private bool goToMainMenu = false;
+    public bool MainMenu() { return goToMainMenu; }
+    public void SetMainMenu() { goToMainMenu = false; }
+
     public void SetSelectedClass(CharacterKlass p1, CharacterKlass p2)
     {
         Debug.Log("FEIn");
@@ -41,6 +45,15 @@ public class CharacterSelectManager : MonoBehaviour
     {
         goToCharacterSelect = true;
         SceneChangeManager.instance.ChangeScene("Main Menu");
-
     }
+
+    public void GoToMainMenu()
+    {
+        goToMainMenu = true;
+        SceneChangeManager.instance.ChangeScene("Main Menu");
+    }
+
+    public int noOfWins { private set; get; }
+    public void SetWins(int wins) { noOfWins = wins; }
+
 }

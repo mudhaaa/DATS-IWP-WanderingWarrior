@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c6e37c219b5554d8f3bd37f8797ba7, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: 
-  health: 520
+  health: 460
   aktionPoints: 3
   strength: 130
   magic: 80

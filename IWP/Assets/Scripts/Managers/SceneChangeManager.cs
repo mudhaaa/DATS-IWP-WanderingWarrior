@@ -43,6 +43,11 @@ public class SceneChangeManager : MonoBehaviour
         CharacterSelectManager.instance.GoToCharacterSelect();
     }
 
+    public void GoToMainMenu()
+    {
+        CharacterSelectManager.instance.GoToMainMenu();
+    }
+
     public void ChangeSceneAsync(string str)
     {
         StartCoroutine(LoadSceneCoroutine(str));

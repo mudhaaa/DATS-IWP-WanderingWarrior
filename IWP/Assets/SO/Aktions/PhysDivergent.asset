@@ -33,6 +33,14 @@ MonoBehaviour:
       uniqueEffectAmount: 0
       uniqueBoostType: 
       effectAmount: 0.2
+  - changeType: 3
+    statType: 7
+    isSelfTarget: 1
+    boost:
+      timer: 0
+      uniqueEffectAmount: 0
+      uniqueBoostType: 
+      effectAmount: 0.2
   hitEffects:
   - changeType: 4
     statType: 7
@@ -41,4 +49,4 @@ MonoBehaviour:
       timer: 0
       uniqueEffectAmount: 0
       uniqueBoostType: 
-      effectAmount: 0.2
+      effectAmount: 0.1
